@@ -1,0 +1,50 @@
+#keep damage as define??
+
+
+Tile
+    type(s/f/o/-)
+    sprite
+    has_tower
+    position
+
+parent Balloon
+    speed
+    position
+    sprite
+    is_destroyed
+    score
+    is_freezed ??
+child Balloon
+ 
+Attack wave
+    enemies count
+    attacking plan
+
+parent Tower
+    position
+    sprite
+    price
+    radius
+    cool_down
+child Tower
+
+parent Projectile
+    position
+    speed
+    sprite
+child Projectile
+
+
+struct player
+    money
+    score 
+
+Game
+    Map
+    attack wave
+
+Map    
+    vector<Balloon>
+    vector<Tower>
+    vector<Tile>
+
