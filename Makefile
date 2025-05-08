@@ -22,6 +22,9 @@ build/texturemanager.o: src/texturemanager.cpp include/texturemanager.hpp
 build/tile.o: src/tile.cpp include/tile.hpp include/constants.hpp
 	$(CXX) -c $< -o $@
 
+build/balloon.o: src/balloon.cpp include/balloon.hpp
+	$(CXX) -c $< -o $@
+
 .PHONY: all clean help
 
 clean:

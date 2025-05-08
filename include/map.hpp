@@ -8,6 +8,7 @@
 #include "texturemanager.hpp"
 #include "tile.hpp"
 #include "constants.hpp"
+#include "balloon.hpp"
 
 using namespace std;
 using namespace sf;
@@ -23,6 +24,7 @@ private:
     vector<shared_ptr<Tile>> tiles;
     int map_height;
     int map_width;
+    vector<shared_ptr<Balloon>> balloons;
 };
 
 #endif // define MAP_HPP
