@@ -2,7 +2,7 @@
 
 Game::Game()
 {
-    ifstream input("map.txt");
+    ifstream input(MAP_FILENAME);
     string line;
     vector<string> map;
 
@@ -12,8 +12,8 @@ Game::Game()
     int map_height = map.size();
     int map_width = map[0].size();
 
-    window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + MENU_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Tower Defence");
-    
+    window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + SHOP_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Tower Defence");
+
     gameMap = make_shared<Map>(map_width, map_height);
     gameMap->constructTiles(map);
 
