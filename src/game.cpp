@@ -14,15 +14,15 @@ Game::Game()
 
     window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + SHOP_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Tower Defence");
 
-    gameMap = make_shared<Map>(map_width, map_height);
-    gameMap->constructTiles(map);
+    game_map = make_shared<Map>(map_width, map_height);
+    game_map->constructTiles(map);
 
     input.close();
 }
 
 void Game::updateWindow()
 {
-    gameMap->drawTiles(window);
+    game_map->drawTiles(window);
 }
 
 void Game::run()

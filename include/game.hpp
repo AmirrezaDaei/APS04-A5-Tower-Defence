@@ -18,7 +18,7 @@ public:
 
 private:
     void updateWindow();
-    shared_ptr<Map> gameMap;
+    shared_ptr<Map> game_map;
     RenderWindow window;
 };
 
