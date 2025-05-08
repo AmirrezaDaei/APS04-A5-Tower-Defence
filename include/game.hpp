@@ -7,6 +7,7 @@
 #include <memory>
 #include "map.hpp"
 #include "tile.hpp"
+#include "balloon.hpp"
 
 using namespace std;
 

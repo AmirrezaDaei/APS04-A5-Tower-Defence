@@ -4,16 +4,16 @@ LFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 all: TD
 
-TD: build/main.o build/game.o build/map.o build/texturemanager.o build/tile.o
+TD: build/main.o build/game.o build/map.o build/texturemanager.o build/tile.o build/balloon.o
 	$(CXX) $^ -o $@ $(LFLAGS)
 
-build/main.o: src/main.cpp include/game.hpp include/map.hpp include/texturemanager.hpp include/tile.hpp include/constants.hpp
+build/main.o: src/main.cpp include/game.hpp include/map.hpp include/texturemanager.hpp include/tile.hpp include/constants.hpp include/balloon.hpp
 	$(CXX) -c $< -o $@
 
-build/game.o: src/game.cpp include/game.hpp include/map.hpp include/tile.hpp include/texturemanager.hpp include/constants.hpp
+build/game.o: src/game.cpp include/game.hpp include/map.hpp include/tile.hpp include/texturemanager.hpp include/constants.hpp include/balloon.hpp
 	$(CXX) -c $< -o $@
 
-build/map.o: src/map.cpp include/texturemanager.hpp include/tile.hpp include/constants.hpp
+build/map.o: src/map.cpp include/texturemanager.hpp include/tile.hpp include/constants.hpp include/balloon.hpp
 	$(CXX) -c $< -o $@
 
 build/texturemanager.o: src/texturemanager.cpp include/texturemanager.hpp
@@ -22,7 +22,7 @@ build/texturemanager.o: src/texturemanager.cpp include/texturemanager.hpp
 build/tile.o: src/tile.cpp include/tile.hpp include/constants.hpp
 	$(CXX) -c $< -o $@
 
-build/balloon.o: src/balloon.cpp include/balloon.hpp
+build/balloon.o: src/balloon.cpp include/balloon.hpp include/constants.hpp
 	$(CXX) -c $< -o $@
 
 .PHONY: all clean help

@@ -31,8 +31,19 @@ void Map::constructTiles(vector<string> map)
     }
 }
 
+void Map::constructBalloons(Vector2f position) {
+    Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
+    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, 2, 2);
+    balloons.push_back(new_balloon);
+}
+
 void Map::drawTiles(RenderWindow &window)
 {
     for (auto tile : tiles)
         tile->draw(window);
+}
+
+void Map::drawBalloons(RenderWindow &window) {
+    for(auto balloon : balloons)
+        balloon->draw(window);
 }

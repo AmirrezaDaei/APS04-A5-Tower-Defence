@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <vector>
 #include <memory>
 #include "texturemanager.hpp"
@@ -18,13 +19,15 @@ class Map
 public:
     Map(int map_width_, int map_height_);
     void constructTiles(vector<string> map);
+    void constructBalloons(Vector2f position);
     void drawTiles(RenderWindow& window);
+    void drawBalloons(RenderWindow& window);
 private:
     shared_ptr<TextureManager> texture_manager;
     vector<shared_ptr<Tile>> tiles;
+    vector<shared_ptr<Balloon>> balloons;
     int map_height;
     int map_width;
-    vector<shared_ptr<Balloon>> balloons;
 };
 
 #endif // define MAP_HPP
