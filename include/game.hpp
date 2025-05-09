@@ -20,6 +20,7 @@ private:
     void updateWindow();
     shared_ptr<Map> game_map;
     RenderWindow window;
+    GameState state;
 };
 
 #endif // define GAME_HPP

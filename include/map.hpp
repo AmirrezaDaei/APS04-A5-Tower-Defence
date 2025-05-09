@@ -15,8 +15,7 @@ using namespace sf;
 class Map
 {
 public:
-    Map(int map_width_, int map_height_);
-    void constructTiles(vector<string> map);
+    Map(int map_width_, int map_height_, vector<string> map);
     void drawTiles(RenderWindow& window);
 private:
     shared_ptr<TextureManager> texture_manager;

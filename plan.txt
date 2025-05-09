@@ -41,7 +41,15 @@ struct player
 
 Game
     Map
+    state (in_game, paused, game_win, menu)
     attack wave
+
+shop
+    tower_types
+    handel clicking
+
+scoreboard
+    
 
 Map    
     vector<Balloon>

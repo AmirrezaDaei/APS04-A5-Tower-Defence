@@ -14,8 +14,9 @@ Game::Game()
 
     window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + SHOP_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Tower Defence");
 
-    game_map = make_shared<Map>(map_width, map_height);
-    game_map->constructTiles(map);
+    window.setPosition(sf::Vector2i(WINDOW_POS_X, WINDOW_POS_Y));
+
+    game_map = make_shared<Map>(map_width, map_height, map);
 
     input.close();
 }
@@ -23,6 +24,8 @@ Game::Game()
 void Game::updateWindow()
 {
     game_map->drawTiles(window);
+    game_map->drawGameStatus;
+    game_map->drawShop;
 }
 
 void Game::run()
@@ -32,11 +35,11 @@ void Game::run()
         Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
                 window.close();
         }
 
-        updateWindow();
+        window.clear(Color::White);
         window.display();
     }
 }
