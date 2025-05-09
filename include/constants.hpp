@@ -9,6 +9,7 @@ const float TOWER_SIZE = 45.f;
 const float HEART_SIZE = 40.f;
 const float HEALTHBAR_LENGTH = 160.F;
 const float HEALTHBAR_WIDTH =  20.F;
+const float DESCRIPTION_HEIGHT = 150.f;
 const unsigned int SHOP_WIDTH = 250;
 const unsigned int SCORE_BOARD_HEIGHT = 180;
 
@@ -21,6 +22,7 @@ const string TOWERS_FILENAME = "towers.csv";
 const string MAP_FILENAME = "map.txt";
 
 const string SCORE_BOARD_FONT_FILENAME = "assets/sprites/fonts/Orbitron.ttf";
+const string DESCRIBTION_FONT_FILENAME = SCORE_BOARD_FONT_FILENAME;
 
 const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";

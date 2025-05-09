@@ -1,6 +1,6 @@
 #include "../include/shop.hpp"
 
-Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow& window) : texture_manager(texture_manager_)
+Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow& window) : texture_manager(texture_manager_), hovered_tower(nullptr)
 {
     ifstream input(TOWERS_FILENAME);
     string line;
@@ -20,7 +20,7 @@ Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow& window) : 
         Vector2f position(static_cast<float>(window.getSize().x - SHOP_WIDTH) + count * size, static_cast<float>(SCORE_BOARD_HEIGHT));
 
         shared_ptr<ShopTower> new_tower = make_shared<ShopTower>(position, words[t_info::NAME], 
-        stoi(words[t_info::PRICE]), stof(words[t_info::RADIUS]), size, stoi(words[t_info::COOLDOWN]), texture);
+        stoi(words[t_info::PRICE]), stof(words[t_info::RADIUS]), size, stof(words[t_info::COOLDOWN]), texture);
         
         towers_in_shop.push_back(new_tower);
         count ++;
@@ -31,5 +31,20 @@ Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow& window) : 
 void Shop::drawShop(RenderWindow& window)
 {
     for (auto tower : towers_in_shop)
+    {
+        if (tower == hovered_tower)
+            tower->handleBeingHovered(window);
         tower->draw(window);
+    }
+}
+
+void Shop::handleTowerBeingHovered(Vector2f mouse_pos)
+{
+    for (auto tower : towers_in_shop)
+        if(tower->checkBeingHovered(mouse_pos))
+        {
+            hovered_tower = tower;
+            return;
+        }
+    hovered_tower = nullptr;
 }

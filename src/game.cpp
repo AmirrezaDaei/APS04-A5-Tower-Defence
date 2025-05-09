@@ -34,7 +34,7 @@ void Game::updateWindow()
     game_map->drawTiles(window);
     score_board->draw(window, player_stats);
     game_shop->drawShop(window);
-    game_map->drawBalloons(window);
+    //game_map->drawBalloons(window);
 }
 
 void Game::run()
@@ -46,7 +46,12 @@ void Game::run()
         {
             if (event.type == Event::Closed)
                 window.close();
+            
         }
+
+        Vector2i mousePixelPos = Mouse::getPosition(window);
+        Vector2f mouse_pos = window.mapPixelToCoords(mousePixelPos);
+        game_shop->handleTowerBeingHovered(mouse_pos);
         
         window.clear(Color(200, 200, 200));
         updateWindow();

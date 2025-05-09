@@ -2,6 +2,8 @@
 #define TOWER_HPP
 
 #include <SFML/Graphics.hpp>
+#include <sstream>
+#include <iomanip>
 #include "constants.hpp"
 using namespace sf;
 
@@ -14,7 +16,6 @@ protected:
     Vector2f position;
     int price;
     float radius;
-    float size;
     float cool_down;
     Texture texture;
     Sprite sprite;
@@ -29,6 +30,8 @@ public:
     float getRadius();
     float getCoolDownTime();
     Texture& getTexture();
+    bool checkBeingHovered(Vector2f mouse_pos);
+    void handleBeingHovered(RenderWindow& window);
 private:
     string name;
     float size;
