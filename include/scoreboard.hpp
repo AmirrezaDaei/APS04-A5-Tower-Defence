@@ -9,10 +9,9 @@ class ScoreBoard
 {
 public:
     ScoreBoard(RenderWindow& window);
-    void draw(RenderWindow& window);
+    void draw(RenderWindow& window, PlayerStats player_stats);
 
 private:
-    PlayerStats player_stats;
     Font font;
     Texture heart_texture;
     Sprite heart;

@@ -13,11 +13,12 @@ ScoreBoard::ScoreBoard(RenderWindow &window)
     heart.setTexture(heart_texture);
     Vector2u tex_size = heart_texture.getSize();
     heart.setScale(HEART_SIZE / tex_size.x, HEART_SIZE / tex_size.y);
-    heart.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH) + 10, static_cast<float>(SCORE_BOARD_HEIGHT) - 1.5 * HEART_SIZE);
+    heart.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH - SHOP_WIDTH / 25),
+    static_cast<float>(SCORE_BOARD_HEIGHT) - 1.5 * HEART_SIZE);
 
     board.setSize(Vector2f(static_cast<float>(SHOP_WIDTH), static_cast<float>(SCORE_BOARD_HEIGHT)));
     board.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH), 0);
-    board.setFillColor(Color(220, 179, 46));
+    board.setFillColor(Color(238, 204, 91));
     board.setOutlineThickness(-5);
     board.setOutlineColor(Color::Black);
 
@@ -26,16 +27,18 @@ ScoreBoard::ScoreBoard(RenderWindow &window)
     text.setFillColor(Color::Black);
 }
 
-void ScoreBoard::draw(RenderWindow &window)
+void ScoreBoard::draw(RenderWindow &window, PlayerStats player_stats)
 {
     FloatRect textBounds = text.getLocalBounds();
     text.setOrigin(textBounds.width / 2, textBounds.height / 2);
-    text.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH) / 2, 50);
+    text.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH) / 2, static_cast<float>(SHOP_WIDTH) / 5);
     text.setString("Round  " + to_string(player_stats.round) + "\nMoney:   " + to_string(player_stats.money));
 
     RectangleShape healthBarBackground(Vector2f(HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
     healthBarBackground.setFillColor(Color(211, 211, 211));
-    healthBarBackground.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH) + HEART_SIZE + 20, static_cast<float>(SCORE_BOARD_HEIGHT) - 1.3 * HEART_SIZE);
+    FloatRect bounds = heart.getGlobalBounds();
+    healthBarBackground.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH - SHOP_WIDTH / 10) + HEART_SIZE,
+    bounds.top + bounds.width / 2 - HEALTHBAR_WIDTH / 2);
     healthBarBackground.setOutlineThickness(3);
     healthBarBackground.setOutlineColor(Color::Black);
 

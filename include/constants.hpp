@@ -4,14 +4,12 @@
 #include <iostream>
 using namespace std;
 
-const float TILE_SIZE = 80.f;
+const float TILE_SIZE = 75.f;
 const float HEART_SIZE = 40.f;
-const float HEALTHBAR_LENGTH = 150.F;
+const float HEALTHBAR_LENGTH = 160.F;
 const float HEALTHBAR_WIDTH =  20.F;
 const unsigned int SHOP_WIDTH = 250;
 const unsigned int SCORE_BOARD_HEIGHT = 180;
-const unsigned int WINDOW_POS_X = 300;
-const unsigned int WINDOW_POS_Y = 100;
 
 const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/buildable_tile.png";
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";
