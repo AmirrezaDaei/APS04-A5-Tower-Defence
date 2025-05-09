@@ -12,11 +12,16 @@ Game::Game()
     int map_height = map.size();
     int map_width = map[0].size();
 
-    window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + SHOP_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Tower Defence");
-
+    window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + SHOP_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Tower Defence",
+    Style::Titlebar | Style::Close);
     window.setPosition(sf::Vector2i(WINDOW_POS_X, WINDOW_POS_Y));
 
+
     game_map = make_shared<Map>(map_width, map_height, map);
+
+    score_board = make_shared<ScoreBoard>(window);
+
+
 
     input.close();
 }
@@ -24,8 +29,8 @@ Game::Game()
 void Game::updateWindow()
 {
     game_map->drawTiles(window);
-    game_map->drawGameStatus;
-    game_map->drawShop;
+    score_board->draw(window);
+    //game_map->drawShop;
 }
 
 void Game::run()
@@ -39,7 +44,8 @@ void Game::run()
                 window.close();
         }
 
-        window.clear(Color::White);
+        window.clear(Color(200, 200, 200));
+        updateWindow();
         window.display();
     }
 }

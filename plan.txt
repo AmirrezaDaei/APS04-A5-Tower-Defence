@@ -35,9 +35,10 @@ parent Projectile
 child Projectile
 
 
-struct player
+struct gamesatats
+    round
     money
-    score 
+    health
 
 Game
     Map
@@ -49,10 +50,11 @@ shop
     handel clicking
 
 scoreboard
-    
+
 
 Map    
     vector<Balloon>
     vector<Tower>
     vector<Tile>
+
 

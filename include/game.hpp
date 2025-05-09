@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include "map.hpp"
+#include "scoreboard.hpp"
 #include "tile.hpp"
 
 using namespace std;
@@ -19,7 +20,9 @@ public:
 private:
     void updateWindow();
     shared_ptr<Map> game_map;
+    shared_ptr<ScoreBoard> score_board;
     RenderWindow window;
+    PlayerStats player_stats;
     GameState state;
 };
 
