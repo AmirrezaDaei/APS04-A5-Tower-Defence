@@ -29,7 +29,7 @@ Map::Map(int map_width_, int map_height_, vector<string> map) : map_width(map_wi
 
 void Map::constructBalloons(Vector2f position) {
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, 2, 2);
+    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, 75, 2);
     balloons.push_back(new_balloon);
 }
 
@@ -39,7 +39,9 @@ void Map::drawTiles(RenderWindow &window)
         tile->draw(window);
 }
 
-void Map::drawBalloons(RenderWindow &window) {
-    for(auto balloon : balloons)
+void Map::drawBalloons(RenderWindow &window, float dt) {
+    for(auto balloon : balloons) {
+        balloon->moveRight(dt);
         balloon->draw(window);
+    }
 }

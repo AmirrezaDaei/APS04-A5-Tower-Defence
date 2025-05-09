@@ -19,7 +19,7 @@ public:
     void run();
 
 private:
-    void updateWindow();
+    void updateWindow(float dt);
     shared_ptr<Map> game_map;
     shared_ptr<ScoreBoard> score_board;
     RenderWindow window;

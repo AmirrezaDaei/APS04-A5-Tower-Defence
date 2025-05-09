@@ -8,10 +8,14 @@ using namespace sf;
 
 class Balloon {
     public:
-        Balloon(Texture& texture_, Vector2f position_, int speed_, int point_);
+        Balloon(Texture& texture_, Vector2f position_, float speed_, int point_);
         void draw(RenderWindow& window);
+        void moveUp(float dt);
+        void moveDown(float dt);
+        void moveRight(float dt);
+        void moveLeft(float dt);
     private:
-        int speed;
+        float speed;
         int point;
         Vector2f position;
         Texture texture;

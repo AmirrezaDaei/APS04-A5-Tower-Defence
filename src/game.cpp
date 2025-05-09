@@ -20,23 +20,22 @@ Game::Game()
     game_map = make_shared<Map>(map_width, map_height, map);
 
     score_board = make_shared<ScoreBoard>(window);
-    game_map->constructTiles(map);
-    Vector2f position(200.f, 200.f); // temporary. We should add a start point getter to map then get a random position within estimated coordinates
+    Vector2f position(TILE_SIZE * 0.5f, TILE_SIZE * 3.5f); // temporary. We should add a start point getter to map then get a random position within estimated coordinates
     game_map->constructBalloons(position);
     input.close();
 }
 
-void Game::updateWindow()
+void Game::updateWindow(float dt)
 {
-    window.clear();
     game_map->drawTiles(window);
     score_board->draw(window, player_stats);
-    //game_map->drawShop;
-    game_map->drawBalloons(window);
+    // game_map->drawShop;
+    game_map->drawBalloons(window, dt);
 }
 
 void Game::run()
 {
+    Clock clock;
     while (window.isOpen())
     {
         Event event;
@@ -45,9 +44,9 @@ void Game::run()
             if (event.type == Event::Closed)
                 window.close();
         }
-        
+        float dt = clock.restart().asSeconds();
         window.clear(Color(200, 200, 200));
-        updateWindow();
+        updateWindow(dt);
         window.display();
     }
 }
