@@ -8,6 +8,7 @@
 #include "map.hpp"
 #include "scoreboard.hpp"
 #include "tile.hpp"
+#include "balloon.hpp"
 
 using namespace std;
 

@@ -18,6 +18,7 @@ const string ICE_SHOOTER_FILENAME = "assets/sprites/ice_shooter.png";
 const string CANNON_FILENAME = "assets/sprites/cannon.png";
 const string HEART_FILENAME = "assets/sprites/heart.png";
 const string MAP_FILENAME = "map.txt";
+const string BALLOON_FILENAME = "assets/sprites/balloon.png";
 
 const string SCORE_BOARD_FONT_FILENAME = "assets/sprites/fonts/Orbitron.ttf";
 
