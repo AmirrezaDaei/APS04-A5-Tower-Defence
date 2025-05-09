@@ -1,7 +1,7 @@
 #include "../include/shop.hpp"
 
-Shop::shop()
+Shop::Shop()
 {
     texture_manager = make_shared<TextureManager>();
-    
+
 }

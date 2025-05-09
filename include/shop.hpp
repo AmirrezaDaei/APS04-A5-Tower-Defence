@@ -8,7 +8,7 @@
 class Shop
 {
 public:
-    shop();
+    Shop();
 private:
     vector<Tower> tower_types;
     shared_ptr<TextureManager> texture_manager;
