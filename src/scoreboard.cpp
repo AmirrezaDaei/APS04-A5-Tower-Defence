@@ -37,7 +37,7 @@ void ScoreBoard::draw(RenderWindow &window, PlayerStats player_stats)
     RectangleShape healthBarBackground(Vector2f(HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
     healthBarBackground.setFillColor(Color(211, 211, 211));
     FloatRect bounds = heart.getGlobalBounds();
-    healthBarBackground.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH - SHOP_WIDTH / 10) + HEART_SIZE,
+    healthBarBackground.setPosition(window.getSize().x - static_cast<float>(SHOP_WIDTH) + 1.5 * HEART_SIZE,
     bounds.top + bounds.width / 2 - HEALTHBAR_WIDTH / 2);
     healthBarBackground.setOutlineThickness(3);
     healthBarBackground.setOutlineColor(Color::Black);

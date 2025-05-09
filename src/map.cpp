@@ -1,8 +1,8 @@
 #include "../include/map.hpp"
 
-Map::Map(int map_width_, int map_height_, vector<string> map) : map_width(map_width_), map_height(map_height_)
+Map::Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager_) : 
+map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_)
 {
-    texture_manager = make_shared<TextureManager>();
     for (int i = 0; i < map_height; i++)
     {
         for (int j = 0; j < map_width; j++)

@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include "map.hpp"
+#include "shop.hpp"
 #include "scoreboard.hpp"
 #include "tile.hpp"
 #include "balloon.hpp"
@@ -21,6 +22,7 @@ public:
 private:
     void updateWindow();
     shared_ptr<Map> game_map;
+    shared_ptr<Shop> game_shop;
     shared_ptr<ScoreBoard> score_board;
     RenderWindow window;
     PlayerStats player_stats;
