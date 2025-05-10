@@ -17,13 +17,13 @@ const unsigned int SCORE_BOARD_HEIGHT = 180;
 const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/buildable_tile.png";
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";
 const string SHOOTERS_FILEPATH = "assets/sprites/";
-const string HEART_FILENAME = "assets/sprites/heart.png";
+const string HEART_FILENAME = "assets/sprites/heart2.png";
 const string BALLOON_FILENAME = "assets/sprites/normal.png";
 const string TOWERS_FILENAME = "towers.csv";
 const string MAP_FILENAME = "map.txt";
 
-const string SCORE_BOARD_FONT_FILENAME = "assets/sprites/fonts/Orbitron.ttf";
-const string DESCRIBTION_FONT_FILENAME = SCORE_BOARD_FONT_FILENAME;
+const string SCORE_BOARD_FONT_FILENAME = "assets/sprites/fonts/anton.ttf";
+const string DESCRIBTION_FONT_FILENAME = "assets/sprites/fonts/PressStart2P.ttf";
 
 const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";

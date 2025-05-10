@@ -10,13 +10,14 @@
 class Shop
 {
 public:
-    Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow& window);
+    Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow& window, int& money_);
     void drawShop(RenderWindow& window);
     void handleTowerBeingHovered(Vector2f mouse_pos);
 private:
     vector<shared_ptr<ShopTower>> towers_in_shop;
     shared_ptr<TextureManager> texture_manager;
     shared_ptr<ShopTower> hovered_tower;
+    int& money;
 };
 
 #endif // define SHOP_HPP

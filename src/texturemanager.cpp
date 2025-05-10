@@ -1,4 +1,4 @@
-#include "../include/texturemanager.hpp"
+#include "texturemanager.hpp"
 
 Texture& TextureManager::getTexture(string filename)
 {

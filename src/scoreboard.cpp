@@ -1,4 +1,4 @@
-#include "../include/scoreboard.hpp"
+#include "scoreboard.hpp"
 
 ScoreBoard::ScoreBoard(RenderWindow &window)
 {

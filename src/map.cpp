@@ -1,4 +1,4 @@
-#include "../include/map.hpp"
+#include "map.hpp"
 
 Map::Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager_) : 
 map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_)

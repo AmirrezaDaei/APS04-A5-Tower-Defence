@@ -18,7 +18,6 @@ class Balloon {
         void move(float dt) {
             sprite.move(v_dir.x * dt * speed, v_dir.y * dt * speed);
             position = sprite.getPosition();
-            // cout << position.x << " " << position.y << endl;
         }
     private:
         Vector2i v_dir;

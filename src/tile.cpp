@@ -1,4 +1,4 @@
-#include "../include/tile.hpp"
+#include "tile.hpp"
 
 Tile::Tile(char type_, Vector2f position_, Texture& texture_) : type(type_), 
 position(position_), texture(texture_), has_tower(false) 

@@ -1,4 +1,4 @@
-#include "../include/balloon.hpp"
+#include "balloon.hpp"
 
 Balloon::Balloon(Texture& texture_, Vector2f position_, Vector2i v_dir_, float speed_, int point_) : 
     texture(texture_), position(position_), v_dir(v_dir_), speed(speed_), point(point_) {
@@ -15,6 +15,7 @@ void Balloon::draw(RenderWindow& window) {
 
 void Balloon::turnLeft() {
     Vector2i new_dir;
+    
     new_dir.x = v_dir.y;
     new_dir.y = -v_dir.x;
     v_dir = new_dir;
