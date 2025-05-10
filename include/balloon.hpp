@@ -8,13 +8,20 @@ using namespace sf;
 
 class Balloon {
     public:
-        Balloon(Texture& texture_, Vector2f position_, float speed_, int point_);
+        Balloon(Texture& texture_, Vector2f position_, Vector2i v_dir, float speed, int point_);
+        Vector2f getPosition() {return position;}
+        Vector2i getVDir() {return v_dir;}
+        float getSpeed() {return speed;}
         void draw(RenderWindow& window);
-        void moveUp(float dt);
-        void moveDown(float dt);
-        void moveRight(float dt);
-        void moveLeft(float dt);
+        void turnLeft();
+        void turnRight();
+        void move(float dt) {
+            sprite.move(v_dir.x * dt * speed, v_dir.y * dt * speed);
+            position = sprite.getPosition();
+            // cout << position.x << " " << position.y << endl;
+        }
     private:
+        Vector2i v_dir;
         float speed;
         int point;
         Vector2f position;

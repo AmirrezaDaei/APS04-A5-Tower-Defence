@@ -9,6 +9,8 @@ class Tile
 {
 public:
     Tile(char type_, Vector2f position_, Texture& texture_);
+    Sprite getSprite() {return sprite;}
+    Vector2f getPosition() {return position;}
     void draw(RenderWindow& window);
 private:
     char type;

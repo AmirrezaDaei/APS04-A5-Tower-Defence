@@ -20,8 +20,7 @@ Game::Game()
     game_map = make_shared<Map>(map_width, map_height, map);
 
     score_board = make_shared<ScoreBoard>(window);
-    Vector2f position(TILE_SIZE * 0.5f, TILE_SIZE * 3.5f); // temporary. We should add a start point getter to map then get a random position within estimated coordinates
-    game_map->constructBalloons(position);
+    game_map->constructBalloons(game_map->getStartPoint());
     input.close();
 }
 

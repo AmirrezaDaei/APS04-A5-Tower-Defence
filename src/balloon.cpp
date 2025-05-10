@@ -1,7 +1,7 @@
 #include "../include/balloon.hpp"
 
-Balloon::Balloon(Texture& texture_, Vector2f position_, float speed_, int point_) : 
-    texture(texture_), position(position_), speed(speed_), point(point_) {
+Balloon::Balloon(Texture& texture_, Vector2f position_, Vector2i v_dir_, float speed_, int point_) : 
+    texture(texture_), position(position_), v_dir(v_dir_), speed(speed_), point(point_) {
         Vector2u tex_size = texture.getSize();
         sprite.setTexture(texture);
         sprite.setPosition(position);
@@ -13,18 +13,16 @@ void Balloon::draw(RenderWindow& window) {
     window.draw(this->sprite);
 }
 
-void Balloon::moveUp(float dt) {
-    this->sprite.move(0, -dt * speed);
+void Balloon::turnLeft() {
+    Vector2i new_dir;
+    new_dir.x = v_dir.y;
+    new_dir.y = -v_dir.x;
+    v_dir = new_dir;
 }
 
-void Balloon::moveDown(float dt) {
-    this->sprite.move(0, dt * speed);
-}
-
-void Balloon::moveRight(float dt) {
-    this->sprite.move(dt * speed, 0);
-}
-
-void Balloon::moveLeft(float dt) {
-    this->sprite.move(-dt * speed, 0);
+void Balloon::turnRight() {
+    Vector2i new_dir;
+    new_dir.x = -v_dir.y;
+    new_dir.y = v_dir.x;
+    v_dir = new_dir;
 }
