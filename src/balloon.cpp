@@ -13,6 +13,11 @@ void Balloon::draw(RenderWindow& window) {
     window.draw(this->sprite);
 }
 
+void Balloon::move(float dt) {
+    sprite.move(v_dir.x * dt * speed, v_dir.y * dt * speed);
+    position = sprite.getPosition();
+}
+
 void Balloon::turnLeft() {
     Vector2i new_dir;
     new_dir.x = v_dir.y;
