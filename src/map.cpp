@@ -14,12 +14,11 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
             {
                 Texture &texture = texture_manager->getTexture(PATH_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
+                path_tiles.push_back(new_tile);
                 if(map[i][j] == 'S')
                     start_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
                 if(map[i][j] == 'F')
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
-                if(map[i][j] == 'O')
-                    path_tiles.push_back(new_tile);
             }
 
             else if (map[i][j] == '-')
@@ -46,59 +45,26 @@ void Map::drawTiles(RenderWindow &window)
 }
 
 void Map::drawBalloons(RenderWindow &window, float dt) {
-    // for(auto& balloon : balloons) {
-    //     balloon->move(dt);
-    //     Vector2f pos = balloon->getPosition();
-    //     Vector2i current_dir = balloon->getVDir();
-
-    //     if(!this->isPath(pos, current_dir)) {
-    //         Vector2i right_dir;
-    //         right_dir.x = -current_dir.y;
-    //         right_dir.y = current_dir.x;
-    //         if(this->isPath(pos, right_dir)) {
-    //             cout << "right" << endl;
-    //             balloon->turnRight();
-    //         }
-    //         else {
-    //             cout << "left" << endl;
-    //             balloon->turnLeft();
-    //         }
-    // }
-    // balloon->draw(window);
-    // }
-
     for (auto& balloon : balloons) {
         balloon->move(dt);
         Vector2f pos = balloon->getPosition();
         Vector2i current_dir = balloon->getVDir();
-        // cout << pos.x << " " << pos.y << endl;
-        // if (this->isCenteredOnTile(pos)) {
             if (!this->isPath(pos, current_dir)) {
-
                 Vector2i right_dir = Vector2i(-current_dir.y, current_dir.x);
                 Vector2i left_dir  = Vector2i(current_dir.y, -current_dir.x);
-                // cout << "right dir: " << right_dir.x << " " << right_dir.y << " " << "left dir: " << left_dir.x << " " << left_dir.y << endl;
-                bool right_valid = this->isPath(pos, right_dir);
-                bool left_valid = this->isPath(pos, left_dir);
-                // cout << "left: "  << left_valid << " " << "right: " << right_valid << endl;
-                if (right_valid) {
-                    // cout << "right" << endl;
+                if (this->isPath(pos, right_dir))
                     balloon->turnRight();
-                }
-                else if (left_valid) {
-                    // cout << "left" << endl;
+                else if (this->isPath(pos, left_dir))
                     balloon->turnLeft();
-                } 
             }
-        // }
         balloon->draw(window);
     }
 }
 
 bool Map::isPath(Vector2f position, Vector2i v_dir) {
     Vector2f check_pos;
-    check_pos.x = position.x + v_dir.x * (TILE_SIZE / 2) + 1;
-    check_pos.y = position.y + v_dir.y * (TILE_SIZE / 2) + 1;
+    check_pos.x = position.x + v_dir.x * TILE_SIZE / 2 + v_dir.x;
+    check_pos.y = position.y + v_dir.y * TILE_SIZE / 2 + v_dir.y;
     for(auto& tile : path_tiles) {
         if(tile->getSprite().getGlobalBounds().contains(check_pos)) {
             return true;
