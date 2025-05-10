@@ -17,8 +17,10 @@ Game::Game()
     VideoMode desktop = VideoMode::getDesktopMode();
     window.setPosition(Vector2i((desktop.width - window.getSize().x) /  2 , (desktop.height - window.getSize().y) / 2));
 
-    game_map = make_shared<Map>(map_width, map_height, map);
+    shared_ptr<TextureManager> texture_manager = make_shared<TextureManager>();
 
+    game_map = make_shared<Map>(map_width, map_height, map, texture_manager);
+    game_shop = make_shared<Shop>(texture_manager, window);
     score_board = make_shared<ScoreBoard>(window);
     game_map->constructBalloons(game_map->getStartPoint());
     input.close();
@@ -28,7 +30,7 @@ void Game::updateWindow(float dt)
 {
     game_map->drawTiles(window);
     score_board->draw(window, player_stats);
-    // game_map->drawShop;
+    game_shop->drawShop(window); 
     game_map->drawBalloons(window, dt);
 }
 
@@ -42,8 +44,12 @@ void Game::run()
         {
             if (event.type == Event::Closed)
                 window.close();
+            
         }
         float dt = clock.restart().asSeconds();
+        Vector2i mousePixelPos = Mouse::getPosition(window);
+        Vector2f mouse_pos = window.mapPixelToCoords(mousePixelPos);
+        game_shop->handleTowerBeingHovered(mouse_pos);
         window.clear(Color(200, 200, 200));
         updateWindow(dt);
         window.display();
