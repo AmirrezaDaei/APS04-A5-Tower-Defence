@@ -15,7 +15,6 @@ class Balloon {
         void move(float dt);
         void turnLeft();
         void turnRight();
-        void move(float dt);
     private:
         Vector2i v_dir;
         float speed;

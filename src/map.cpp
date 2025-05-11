@@ -16,7 +16,7 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
                 path_tiles.push_back(new_tile);
                 if(map[i][j] == 'S')
-                    start_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
+                    start_point = Vector2f(j * TILE_SIZE, i * TILE_SIZE);
                 if(map[i][j] == 'F')
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
             }
@@ -32,10 +32,16 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
     }
 }
 
-void Map::constructBalloons(Vector2f position) {
+void Map::constructBalloons(Vector2f position, vector<AttackWave> wave) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> rnd(0, 75);
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, Vector2i(1, 0), 225, 2);
-    balloons.push_back(new_balloon);
+    // if(balloonClock.getElapsedTime().asSeconds() >= 1) {
+        shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position + Vector2f(rnd(gen) % 75, rnd(gen) % 75), Vector2i(1, 0), 150, 2);
+        balloons.push_back(new_balloon);
+        balloonClock.restart();
+    // }
 }
 
 void Map::drawTiles(RenderWindow &window)

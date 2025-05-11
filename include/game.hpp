@@ -10,6 +10,7 @@
 #include "scoreboard.hpp"
 #include "tile.hpp"
 #include "balloon.hpp"
+#include "wave_configs.hpp"
 
 using namespace std;
 
