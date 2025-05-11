@@ -44,19 +44,23 @@ void Game::run()
         {
             if (event.type == Event::Closed)
                 window.close();
-            /*if (event.type == Event::MouseButtonPressed)
+            if (event.type == Event::MouseButtonPressed)
             {
                 if (event.mouseButton.button == Mouse::Left)
                 {
                     Vector2i mousePos = Mouse::getPosition(window);
-                    game_shop->handleTowerBeingBought(mousePos);
+                    chosen_tower = game_shop->handleBuyingTower(mousePos);
                 }
-            }*/
+                if (event.mouseButton.button == Mouse::Right)
+                {
+                    chosen_tower = nullptr;
+                    game_shop->abortBuying();
+                }
+            }
         }
         float dt = clock.restart().asSeconds();
 
-        Vector2i mousePixelPos = Mouse::getPosition(window);
-        Vector2f mouse_pos = window.mapPixelToCoords(mousePixelPos);
+        Vector2i mouse_pos = Mouse::getPosition(window);
         game_shop->handleTowerBeingHovered(mouse_pos);
 
         window.clear(Color(200, 200, 200));

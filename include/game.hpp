@@ -27,6 +27,7 @@ private:
     RenderWindow window;
     PlayerStats player_stats;
     GameState state;
+    shared_ptr<ShopTower> chosen_tower = nullptr;
 };
 
 #endif // define GAME_HPP

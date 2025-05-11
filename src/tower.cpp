@@ -37,7 +37,7 @@ float ShopTower::getCoolDownTime() { return cool_down; }
 
 Texture &ShopTower::getTexture() { return texture; }
 
-bool ShopTower::checkBeingHovered(Vector2f mouse_pos)
+bool ShopTower::containsMouse(Vector2i mouse_pos)
 {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
     float centerWidth = spriteBounds.width * 0.5f; 
@@ -47,7 +47,7 @@ bool ShopTower::checkBeingHovered(Vector2f mouse_pos)
 
     sf::FloatRect centerRect(centerX, centerY, centerWidth, centerHeight);
 
-    return centerRect.contains(mouse_pos);
+    return centerRect.contains(mouse_pos.x, mouse_pos.y);
 }
 
 void ShopTower::handleBeingHovered(RenderWindow &window)
@@ -93,4 +93,17 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
 void ShopTower::setAvaliblity(bool status)
 {
     avalible = status;
+}
+
+void ShopTower::highlight(RenderWindow& window)
+{
+    FloatRect bounds = sprite.getGlobalBounds();
+
+    RectangleShape highlightRect;
+    highlightRect.setSize(Vector2f(bounds.width, bounds.height));
+    highlightRect.setPosition(bounds.left, bounds.top);
+    highlightRect.setFillColor(Color::Transparent);
+    highlightRect.setOutlineColor(Color::White);
+    highlightRect.setOutlineThickness(3.f);
+    window.draw(highlightRect);
 }

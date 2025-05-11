@@ -1,7 +1,7 @@
 #include "../include/shop.hpp"
 
-Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow &window, int& money_) : texture_manager(texture_manager_), hovered_tower(nullptr),
-money(money_)
+Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow &window, int &money_) : texture_manager(texture_manager_), hovered_tower(nullptr),
+                                                                                             money(money_)
 {
     ifstream input(TOWERS_FILENAME);
     string line;
@@ -20,7 +20,7 @@ money(money_)
         Texture &texture = texture_manager->getTexture(SHOOTERS_FILEPATH + words[t_info::NAME] + ".png");
         Vector2f position(static_cast<float>(window.getSize().x - SHOP_WIDTH) + count * size, static_cast<float>(SCORE_BOARD_HEIGHT));
         shared_ptr<ShopTower> new_tower = make_shared<ShopTower>(position, words[t_info::NAME],
-        stoi(words[t_info::PRICE]),size, stof(words[t_info::COOLDOWN]), texture, stof(words[t_info::RADIUS]));
+                                                                 stoi(words[t_info::PRICE]), size, stof(words[t_info::COOLDOWN]), texture, stof(words[t_info::RADIUS]));
 
         towers_in_shop.push_back(new_tower);
         count++;
@@ -34,6 +34,10 @@ void Shop::drawShop(RenderWindow &window)
     {
         if (tower == hovered_tower)
             tower->handleBeingHovered(window);
+
+        if (tower == tower_to_buy)
+            tower->highlight(window);
+
         if (tower->getPrice() > money)
             tower->setAvaliblity(false);
         else
@@ -42,10 +46,10 @@ void Shop::drawShop(RenderWindow &window)
     }
 }
 
-void Shop::handleTowerBeingHovered(Vector2f mouse_pos)
+void Shop::handleTowerBeingHovered(Vector2i mouse_pos)
 {
     for (auto tower : towers_in_shop)
-        if (tower->checkBeingHovered(mouse_pos))
+        if (tower->containsMouse(mouse_pos))
         {
             hovered_tower = tower;
             return;
@@ -53,4 +57,19 @@ void Shop::handleTowerBeingHovered(Vector2f mouse_pos)
     hovered_tower = nullptr;
 }
 
-//void Shop
+shared_ptr<ShopTower> Shop::handleBuyingTower(Vector2i mouse_pos)
+{
+    for (auto tower : towers_in_shop)
+        if (tower->containsMouse(mouse_pos))
+        {
+            if (tower->getPrice() <= money)
+                tower_to_buy = tower;
+            
+        }
+    return tower_to_buy;
+}
+
+void Shop::abortBuying()
+{
+    tower_to_buy = nullptr;
+}
