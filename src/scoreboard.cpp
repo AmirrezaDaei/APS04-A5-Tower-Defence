@@ -27,7 +27,7 @@ ScoreBoard::ScoreBoard(RenderWindow &window)
     text.setFillColor(Color::Black);
 }
 
-void ScoreBoard::draw(RenderWindow &window, PlayerStats player_stats)
+void ScoreBoard::drawScoreBoard(RenderWindow &window, PlayerStats player_stats)
 {
     FloatRect textBounds = text.getLocalBounds();
     text.setOrigin(textBounds.width / 2, textBounds.height / 2);

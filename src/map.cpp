@@ -44,6 +44,14 @@ void Map::drawTiles(RenderWindow &window)
         tile->draw(window);
 }
 
+void Map::drawTowers(RenderWindow& window)
+{
+    for (auto tower : towers)
+    {
+        tower->draw(window);
+    }
+}
+
 void Map::drawBalloons(RenderWindow &window, float dt) {
     for(auto it = balloons.begin(); it != balloons.end();) {
         auto& balloon = *it;
@@ -75,6 +83,26 @@ bool Map::isPath(Vector2f position, Vector2i v_dir) {
         if(tile->getSprite().getGlobalBounds().contains(check_pos)) {
             return true;
         }
+    }
+    return false;
+}
+
+bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
+{
+    for (auto tile : tiles)
+    {
+        if (tile->contains(mouspos))
+            if (tile->canPlantTower() == true)
+            {
+                Vector2f position = tile->getPosition();
+                position.x = position.x;
+                position.y = position.y;
+                shared_ptr<Tower> new_tower = make_shared<Tower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());
+                towers.push_back(new_tower);
+                tile->plantTower(new_tower);
+                return true;
+            }
     }
     return false;
 }

@@ -39,9 +39,9 @@ void Shop::drawShop(RenderWindow &window)
             tower->highlight(window);
 
         if (tower->getPrice() > money)
-            tower->setAvaliblity(false);
+            tower->setAvailblity(false);
         else
-            tower->setAvaliblity(true);
+            tower->setAvailblity(true);
         tower->draw(window);
     }
 }
