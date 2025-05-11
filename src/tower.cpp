@@ -3,6 +3,9 @@
 Tower::Tower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_)
     : position(position_), price(price_), cool_down(cool_down_), texture(texture_), radius(radius_)
 {   
+    FloatRect bounds = sprite.getLocalBounds();
+    sprite.setOrigin(bounds.left + bounds.width / 2.f,
+        bounds.top + bounds.height / 2.f);
     sprite.setTexture(texture_);
     Vector2u tex_size = texture_.getSize();
     sprite.setScale(TOWER_SIZE / tex_size.x, TOWER_SIZE / tex_size.y);
@@ -15,14 +18,18 @@ void Tower::draw(RenderWindow &window)
 }
 
 ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cool_down_, Texture &texture_, float radius_)
-    : Tower(position_, price_,cool_down_, texture_, radius_), name(name_), size(size_) {}
+    : Tower(position_, price_,cool_down_, texture_, radius_), name(name_), size(size_) 
+    {
+        FloatRect bounds = sprite.getLocalBounds();
+        sprite.setOrigin(bounds.left, bounds.top);
+    }
 
 void ShopTower::draw(RenderWindow &window)
 {
     Vector2u tex_size = texture.getSize();
     sprite.setScale(size / tex_size.x, size / tex_size.y);
 
-    if (avalible == true)
+    if (availble == true)
         sprite.setColor(Color::White);
     else
         sprite.setColor(Color(80, 80, 80));
@@ -90,9 +97,9 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
     window.draw(text);
 }
 
-void ShopTower::setAvaliblity(bool status)
+void ShopTower::setAvailblity(bool status)
 {
-    avalible = status;
+    availble = status;
 }
 
 void ShopTower::highlight(RenderWindow& window)

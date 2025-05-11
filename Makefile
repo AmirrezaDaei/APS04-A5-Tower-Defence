@@ -1,4 +1,4 @@
-OBJDIR = obj
+OBJDIR = build
 SRCDIR = src
 INCDIR = include
 ASSESTSDIR = asssets
@@ -18,7 +18,7 @@ $(EXE): $(OBJECTS)
 	$(CXX) -o $@ $^ $(FLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(wildcard $(SRCDIR)/*.hpp)
-	mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 	$(CXX) -c $< -o $@ -I./$(ASSESTSDIR)/
 
 

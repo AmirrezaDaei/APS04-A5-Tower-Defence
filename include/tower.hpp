@@ -31,13 +31,18 @@ public:
     float getCoolDownTime();
     Texture& getTexture();
     void highlight(RenderWindow& window);
-    void setAvaliblity(bool status);
+    void setAvailblity(bool status);
     bool containsMouse(Vector2i mouse_pos);
     void handleBeingHovered(RenderWindow& window);
 private:
     string name;
     float size;
-    bool avalible;
+    bool availble;
+};
+
+class FireTower : public Tower
+{
+    
 };
 
 #endif // define TOWER_HPP
