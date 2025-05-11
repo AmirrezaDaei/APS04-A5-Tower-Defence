@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "constants.hpp"
-
 using namespace sf;
 
 class Balloon {
@@ -13,12 +12,10 @@ class Balloon {
         Vector2i getVDir() {return v_dir;}
         float getSpeed() {return speed;}
         void draw(RenderWindow& window);
+        void move(float dt);
         void turnLeft();
         void turnRight();
-        void move(float dt) {
-            sprite.move(v_dir.x * dt * speed, v_dir.y * dt * speed);
-            position = sprite.getPosition();
-        }
+        void move(float dt);
     private:
         Vector2i v_dir;
         float speed;

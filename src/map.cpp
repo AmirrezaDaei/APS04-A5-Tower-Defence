@@ -45,19 +45,25 @@ void Map::drawTiles(RenderWindow &window)
 }
 
 void Map::drawBalloons(RenderWindow &window, float dt) {
-    for (auto& balloon : balloons) {
+    for(auto it = balloons.begin(); it != balloons.end();) {
+        auto& balloon = *it;
         balloon->move(dt);
         Vector2f pos = balloon->getPosition();
         Vector2i current_dir = balloon->getVDir();
-            if (!this->isPath(pos, current_dir)) {
-                Vector2i right_dir = Vector2i(-current_dir.y, current_dir.x);
-                Vector2i left_dir  = Vector2i(current_dir.y, -current_dir.x);
-                if (this->isPath(pos, right_dir))
-                    balloon->turnRight();
-                else if (this->isPath(pos, left_dir))
-                    balloon->turnLeft();
+        if(!this->isPath(pos, current_dir)) {
+            Vector2i right_dir = Vector2i(-current_dir.y, current_dir.x);
+            Vector2i left_dir  = Vector2i(current_dir.y, -current_dir.x);
+            if (this->isPath(pos, right_dir))
+                balloon->turnRight();
+            else if (this->isPath(pos, left_dir))
+                balloon->turnLeft();
+            else {
+                it = balloons.erase(it);
+                continue;
             }
+        }
         balloon->draw(window);
+        ++it;
     }
 }
 
