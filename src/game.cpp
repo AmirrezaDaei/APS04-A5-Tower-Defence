@@ -29,9 +29,9 @@ Game::Game()
 void Game::updateWindow(float dt)
 {
     game_map->drawTiles(window);
+    game_map->drawBalloons(window, dt);
     score_board->draw(window, player_stats);
     game_shop->drawShop(window);
-    game_map->drawBalloons(window, dt);
 }
 
 void Game::run()
@@ -50,6 +50,10 @@ void Game::run()
                 {
                     Vector2i mousePos = Mouse::getPosition(window);
                     chosen_tower = game_shop->handleBuyingTower(mousePos);
+                    /*if (chosen_tower != NULL)
+                    {
+                        game_map->plantTower()
+                    }*/
                 }
                 if (event.mouseButton.button == Mouse::Right)
                 {
