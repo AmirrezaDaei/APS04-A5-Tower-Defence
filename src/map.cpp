@@ -95,14 +95,17 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
             if (tile->canPlantTower() == true)
             {
                 Vector2f position = tile->getPosition();
-                position.x = position.x;
-                position.y = position.y;
-                shared_ptr<Tower> new_tower = make_shared<Tower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                position.x = position.x + TILE_SIZE / 2;
+                position.y = position.y + TILE_SIZE / 2;
+                shared_ptr<GameTower> new_tower = make_shared<GameTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
                     tower->getRadius());
                 towers.push_back(new_tower);
                 tile->plantTower(new_tower);
+                
                 return true;
             }
     }
+    
     return false;
+
 }

@@ -34,9 +34,12 @@ const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";
 const string ICE_SHOOTER = "ice_shooter";
 const string CANNON = "cannon";
+const string NORMAL_SHOOTER_TITLE = "Fire Shooter";
+const string ICE_SHOOTER_TITLE = "Ice Shooter";
+const string CANNON_TITLE = "Cannon";
 
 const float MAX_HEALTH = 40.f;
-const int INITIAL_MONEY = 200;;
+const int INITIAL_MONEY = 420;
 
 
 namespace t_info

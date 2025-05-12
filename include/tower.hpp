@@ -11,7 +11,7 @@ class Tower
 {
 public:
     Tower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
-    void virtual draw(RenderWindow &window);
+    void virtual draw(RenderWindow &window) = 0;
 protected:
     Vector2f position;
     int price;
@@ -40,9 +40,32 @@ private:
     bool availble;
 };
 
-class FireTower : public Tower
+class GameTower : public Tower
 {
-    
+public:
+    GameTower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
+    void draw(RenderWindow& window);
+protected:
+    CircleShape radius_circle;
+};
+
+class FireTower : public GameTower
+{
+public:
+    FireTower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
+
+};
+
+class IceTower : public GameTower
+{
+public:
+    IceTower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
+};
+
+class Cannon : public GameTower
+{
+public:
+    Cannon(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
 };
 
 #endif // define TOWER_HPP

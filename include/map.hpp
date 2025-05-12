@@ -33,7 +33,7 @@ private:
     Vector2f finish_point;
     vector<shared_ptr<Tile>> path_tiles;
     vector<shared_ptr<Tile>> tiles;
-    vector<shared_ptr<Tower>> towers;
+    vector<shared_ptr<GameTower>> towers;
     vector<shared_ptr<Balloon>> balloons;
     int map_height;
     int map_width;
