@@ -59,6 +59,8 @@ void GameTower::draw(RenderWindow &window)
     window.draw(sprite);
 }
 
+string ShopTower::getName() { return name; } 
+
 int ShopTower::getPrice() { return price; }
 
 float ShopTower::getRadius() { return radius; }
@@ -67,15 +69,15 @@ float ShopTower::getCoolDownTime() { return cool_down; }
 
 Texture &ShopTower::getTexture() { return texture; }
 
-bool ShopTower::containsMouse(Vector2i mouse_pos)
+bool Tower::containsMouse(Vector2i mouse_pos)
 {
-    sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+    FloatRect spriteBounds = sprite.getGlobalBounds();
     float centerWidth = spriteBounds.width * 0.5f;
     float centerHeight = spriteBounds.height * 0.5f;
     float centerX = spriteBounds.left + (spriteBounds.width - centerWidth) / 2;
     float centerY = spriteBounds.top + (spriteBounds.height - centerHeight) / 2;
 
-    sf::FloatRect centerRect(centerX, centerY, centerWidth, centerHeight);
+    FloatRect centerRect(centerX, centerY, centerWidth, centerHeight);
 
     return centerRect.contains(mouse_pos.x, mouse_pos.y);
 }
@@ -106,17 +108,14 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
     title.setFillColor(Color::White);
 
     std::ostringstream stream_for_radius;
-    stream_for_radius << std::fixed << std::setprecision(0) << radius;
     std::ostringstream stream_for_cooldown;
+    stream_for_radius << std::fixed << std::setprecision(0) << radius;
     stream_for_cooldown << std::fixed << std::setprecision(1) << cool_down;
 
     string shooter_name;
-    if (name == NORMAL_SHOOTER)
-        shooter_name = NORMAL_SHOOTER_TITLE;
-    else if (name == ICE_SHOOTER)
-        shooter_name = ICE_SHOOTER_TITLE;
-    else if (name == CANNON)
-        shooter_name = CANNON_TITLE;
+    if (name == NORMAL_SHOOTER) shooter_name = NORMAL_SHOOTER_TITLE;
+    else if (name == ICE_SHOOTER) shooter_name = ICE_SHOOTER_TITLE;
+    else if (name == CANNON) shooter_name = CANNON_TITLE;
 
     title.setString("\n\n\n\n" + shooter_name);
     FloatRect textBounds = title.getLocalBounds();

@@ -12,6 +12,7 @@ class Tower
 public:
     Tower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
     void virtual draw(RenderWindow &window) = 0;
+    bool containsMouse(Vector2i mousepos);
 protected:
     Vector2f position;
     int price;
@@ -26,14 +27,14 @@ class ShopTower : public Tower
 public:
     ShopTower(Vector2f position_,string name_ ,int price_, float size_, float cool_down_, Texture& texture_, float radius_);
     void draw(RenderWindow &window);
+    string getName();
     int getPrice();
     float getRadius();
     float getCoolDownTime();
     Texture& getTexture();
+    void handleBeingHovered(RenderWindow& window);
     void highlight(RenderWindow& window);
     void setAvailblity(bool status);
-    bool containsMouse(Vector2i mouse_pos);
-    void handleBeingHovered(RenderWindow& window);
 private:
     string name;
     float size;

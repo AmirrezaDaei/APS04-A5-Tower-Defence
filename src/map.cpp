@@ -10,18 +10,18 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
             Vector2f position(j * TILE_SIZE, i * TILE_SIZE);
             shared_ptr<Tile> new_tile;
 
-            if (map[i][j] == 'O' || map[i][j] == 'S' || map[i][j] == 'F')
+            if (map[i][j] == PATH || map[i][j] == START || map[i][j] == FINNISH)
             {
                 Texture &texture = texture_manager->getTexture(PATH_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
                 path_tiles.push_back(new_tile);
-                if(map[i][j] == 'S')
+                if(map[i][j] == START)
                     start_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
-                if(map[i][j] == 'F')
+                if(map[i][j] == FINNISH)
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
             }
 
-            else if (map[i][j] == '-')
+            else if (map[i][j] == GRASS)
             {
                 Texture &texture = texture_manager->getTexture(BUILDABLE_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
@@ -97,8 +97,20 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
                 Vector2f position = tile->getPosition();
                 position.x = position.x + TILE_SIZE / 2;
                 position.y = position.y + TILE_SIZE / 2;
-                shared_ptr<GameTower> new_tower = make_shared<GameTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
-                    tower->getRadius());
+
+                shared_ptr<GameTower> new_tower;
+                if (tower->getName() == NORMAL_SHOOTER)
+                    new_tower = make_shared<FireTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());  
+
+                if (tower->getName() == ICE_SHOOTER)
+                    new_tower = make_shared<IceTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());  
+
+                if (tower->getName() == CANNON)
+                    new_tower = make_shared<Cannon>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());                  
+                              
                 towers.push_back(new_tower);
                 tile->plantTower(new_tower);
                 
