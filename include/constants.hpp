@@ -17,7 +17,7 @@ const unsigned int SCORE_BOARD_HEIGHT = 180;
 const char GRASS = '-';
 const char PATH = 'O';
 const char START = 'S';
-const char FINNISH = 'F';
+const char FINISH = 'F';
 const char COMMA_SEPERATOR = ',';
 
 const string IMAGE_FORMAT = ".png";
