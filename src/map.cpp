@@ -10,20 +10,20 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
             Vector2f position(j * TILE_SIZE, i * TILE_SIZE);
             shared_ptr<Tile> new_tile;
 
-            if (map[i][j] == 'O' || map[i][j] == 'S' || map[i][j] == 'F')
+            if (map[i][j] == PATH || map[i][j] == START || map[i][j] == FINISH)
             {
                 Texture &texture = texture_manager->getTexture(PATH_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
                 path_tiles.push_back(new_tile);
-                if(map[i][j] == 'S') 
+                if(map[i][j] == START) 
                 {
                     start_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
                     this->setStartDir(map, i, j);
                 }
-                if(map[i][j] == 'F')
+                if(map[i][j] == FINISH)
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
             }
-            else if (map[i][j] == '-')
+            else if (map[i][j] == GRASS)
             {
                 Texture &texture = texture_manager->getTexture(BUILDABLE_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
@@ -47,24 +47,27 @@ void Map::drawTiles(RenderWindow &window) {
 
 void Map::drawTowers(RenderWindow& window) {
     for (auto tower : towers)
+    {
+        tower->rotateTower();
         tower->draw(window);
+    }
 }
 
 void Map::setStartDir(vector<string> map, int i, int j) {
     if(i + 1 < map.size())
-        if(map[i + 1][j] == 'O')
+        if(map[i + 1][j] == GRASS)
             start_dir = Vector2i(1, 0);
 
     if(j + 1 < map[0].size())
-        if(map[i][j + 1] == 'O')
+        if(map[i][j + 1] == GRASS)
             start_dir = Vector2i(0, -1);
 
     if(i - 1 >= 0)
-        if(map[i - 1][j] == 'O')
+        if(map[i - 1][j] == GRASS)
             start_dir = Vector2i(-1, 0);
 
     if(j - 1 >= 0)
-        if(map[i][j - 1] == 'O')
+        if(map[i][j - 1] == GRASS)
             start_dir = Vector2i(0, 1); 
 }
 
@@ -110,15 +113,48 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
             if (tile->canPlantTower() == true)
             {
                 Vector2f position = tile->getPosition();
-                position.x = position.x;
-                position.y = position.y;
-                shared_ptr<Tower> new_tower = make_shared<Tower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
-                    tower->getRadius());
+                position.x = position.x + TILE_SIZE / 2;
+                position.y = position.y + TILE_SIZE / 2;
+
+                shared_ptr<GameTower> new_tower;
+                if (tower->getName() == NORMAL_SHOOTER)
+                    new_tower = make_shared<FireTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());  
+
+                if (tower->getName() == ICE_SHOOTER)
+                    new_tower = make_shared<IceTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());  
+
+                if (tower->getName() == CANNON)
+                    new_tower = make_shared<Cannon>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());                  
+                
                 towers.push_back(new_tower);
                 tile->plantTower(new_tower);
                 return true;
             }
         }
     }
+    
     return false;
+}
+
+void Map::handleTowersAiming()
+{
+        for (auto tower : towers)
+        {
+            if (tower->isReady())
+            {
+                vector<shared_ptr<Balloon>> enemiesInRange;
+                    for (auto balloon : balloons)
+                        {
+                            if (tower->isInRange(balloon->getPosition()))
+                                enemiesInRange.push_back(balloon);  
+                        }
+                    if (enemiesInRange.size() != 0)
+                    {
+                      tower->selectEnemy(enemiesInRange);
+                    }
+            }
+        }
 }

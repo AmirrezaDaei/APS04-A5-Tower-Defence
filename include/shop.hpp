@@ -16,6 +16,7 @@ public:
     shared_ptr<ShopTower>  handleBuyingTower(Vector2i mouse_pos);
     void abortBuying();
 private:
+    RectangleShape shop_rectangle;
     vector<shared_ptr<ShopTower>> towers_in_shop;
     int& money;
     shared_ptr<TextureManager> texture_manager;

@@ -29,6 +29,7 @@ public:
     void drawTowers(RenderWindow& window);
     bool isPath(Vector2f position, Vector2i v_dir);
     bool plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower);
+    void handleTowersAiming();
     void setStartDir(vector<string> map, int i, int j);
 private:
     shared_ptr<TextureManager> texture_manager;
@@ -37,7 +38,7 @@ private:
     Vector2i start_dir;
     vector<shared_ptr<Tile>> path_tiles;
     vector<shared_ptr<Tile>> tiles;
-    vector<shared_ptr<Tower>> towers;
+    vector<shared_ptr<GameTower>> towers;
     vector<shared_ptr<Balloon>> balloons;
     int map_height;
     int map_width;

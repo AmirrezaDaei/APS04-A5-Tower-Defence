@@ -29,9 +29,9 @@ void Game::updateWindow(float dt)
 {
     game_map->drawTiles(window);
     game_map->drawBalloons(window, dt);
+    game_map->drawTowers(window);
     score_board->drawScoreBoard(window, player_stats);
     game_shop->drawShop(window);
-    game_map->drawTowers(window);
 }
 
 void Game::run()
@@ -56,7 +56,10 @@ void Game::run()
                     {
                         bool bought = game_map->plantTower(mousePos, chosen_tower);
                         if (bought == true)
+                        {
+                            player_stats.money -= chosen_tower->getPrice();
                             game_shop->abortBuying();
+                        }
                         chosen_tower = nullptr;
                     }
                 }
@@ -68,9 +71,13 @@ void Game::run()
             }
         }
         float dt = clock.restart().asSeconds();
+
+
         Vector2i mouse_pos = Mouse::getPosition(window);
         game_shop->handleTowerBeingHovered(mouse_pos);
-        window.clear(Color(200, 200, 200));
+
+        game_map->handleTowersAiming();
+        window.clear();
         updateWindow(dt);
         window.display();
     }

@@ -5,7 +5,7 @@
 using namespace std;
 
 const float TILE_SIZE = 75.f;
-const float TOWER_SIZE = 75.f;
+const float TOWER_SIZE = 65.f;
 const float HEART_SIZE = 40.f;
 const float HEALTHBAR_LENGTH = 160.f;
 const float HEALTHBAR_WIDTH =  20.f;
@@ -17,7 +17,10 @@ const unsigned int SCORE_BOARD_HEIGHT = 180;
 const char GRASS = '-';
 const char PATH = 'O';
 const char START = 'S';
-const char FINNISH = 'F';
+const char FINISH = 'F';
+const char COMMA_SEPERATOR = ',';
+
+const string IMAGE_FORMAT = ".png";
 
 const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/buildable_tile.png";
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";
@@ -34,9 +37,12 @@ const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";
 const string ICE_SHOOTER = "ice_shooter";
 const string CANNON = "cannon";
+const string NORMAL_SHOOTER_TITLE = "Fire Shooter";
+const string ICE_SHOOTER_TITLE = "Ice Shooter";
+const string CANNON_TITLE = "Cannon";
 
 const float MAX_HEALTH = 40.f;
-const int INITIAL_MONEY = 200;;
+const int INITIAL_MONEY = 420;
 
 
 namespace t_info

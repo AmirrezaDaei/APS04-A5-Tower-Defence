@@ -11,16 +11,16 @@ SOURCES := $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
 
 
-all: $(EXE)
+all: $(OBJDIR) $(EXE)
+
+$(OBJDIR):
+	@mkdir -p $@
 
 $(EXE): $(OBJECTS)
 	$(CXX) -o $@ $^ $(FLAGS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp 
 	$(CXX) -c $< -o $@
-
-
 
 clean:
 	rm -f $(OBJDIR)/*.o $(EXE)
