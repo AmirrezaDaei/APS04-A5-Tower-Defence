@@ -34,7 +34,7 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
 
 void Map::constructBalloons(Vector2f position) {
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, Vector2i(1, 0), 225, 2);
+    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, Vector2i(1, 0), 50, 2);
     balloons.push_back(new_balloon);
 }
 
@@ -48,6 +48,7 @@ void Map::drawTowers(RenderWindow& window)
 {
     for (auto tower : towers)
     {
+        tower->rotateTower();
         tower->draw(window);
     }
 }
@@ -110,14 +111,32 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
                 if (tower->getName() == CANNON)
                     new_tower = make_shared<Cannon>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
                     tower->getRadius());                  
-                              
+                
                 towers.push_back(new_tower);
                 tile->plantTower(new_tower);
-                
                 return true;
             }
     }
     
     return false;
+}
 
+void Map::handleTowersAiming()
+{
+        for (auto tower : towers)
+        {
+            if (tower->isReady())
+            {
+                vector<shared_ptr<Balloon>> enemiesInRange;
+                    for (auto balloon : balloons)
+                        {
+                            if (tower->isInRange(balloon->getPosition()))
+                                enemiesInRange.push_back(balloon);  
+                        }
+                    if (enemiesInRange.size() != 0)
+                    {
+                      tower->selectEnemy(enemiesInRange);
+                    }
+            }
+        }
 }

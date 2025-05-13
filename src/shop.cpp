@@ -1,34 +1,41 @@
 #include "../include/shop.hpp"
 
-Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow &window, int &money_) : texture_manager(texture_manager_), hovered_tower(nullptr),
-                                                                                             money(money_)
+Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow &window, int &money_)
+: texture_manager(texture_manager_), hovered_tower(nullptr), money(money_)
 {
     ifstream input(TOWERS_FILENAME);
-    string line;
+    string line, to_be_ignored;
     vector<string> words;
 
-    getline(input, line); // reading the first line
+    getline(input, to_be_ignored); 
     int count = 0;
     while (getline(input, line))
     {
         words.clear();
         istringstream iss(line);
         string word;
-        while (getline(iss, word, ','))
+        while (getline(iss, word, COMMA_SEPERATOR))
             words.push_back(word);
+            
         float size = static_cast<float>(SHOP_WIDTH / TOWER_COUNT);
-        Texture &texture = texture_manager->getTexture(SHOOTERS_FILEPATH + words[t_info::NAME] + ".png");
+        Texture &texture = texture_manager->getTexture(SHOOTERS_FILEPATH + words[t_info::NAME] + IMAGE_FORMAT);
         Vector2f position(static_cast<float>(window.getSize().x - SHOP_WIDTH) + count * size, static_cast<float>(SCORE_BOARD_HEIGHT));
+        
         shared_ptr<ShopTower> new_tower = make_shared<ShopTower>(position, words[t_info::NAME],
-                                                                 stoi(words[t_info::PRICE]), size, stof(words[t_info::COOLDOWN]), texture, stof(words[t_info::RADIUS]));
+        stoi(words[t_info::PRICE]), size, stof(words[t_info::COOLDOWN]), texture, stof(words[t_info::RADIUS]));
 
         towers_in_shop.push_back(new_tower);
         count++;
     }
+
+    shop_rectangle.setSize(Vector2f(SHOP_WIDTH, window.getSize().y - SCORE_BOARD_HEIGHT));
+    shop_rectangle.setPosition(window.getSize().x - SHOP_WIDTH, SCORE_BOARD_HEIGHT);
+    shop_rectangle.setFillColor(Color(200, 200, 200));
 }
 
 void Shop::drawShop(RenderWindow &window)
 {
+    window.draw(shop_rectangle);
     bool avalible;
     for (auto tower : towers_in_shop)
     {
@@ -42,6 +49,7 @@ void Shop::drawShop(RenderWindow &window)
             tower->setAvailblity(false);
         else
             tower->setAvailblity(true);
+
         tower->draw(window);
     }
 }

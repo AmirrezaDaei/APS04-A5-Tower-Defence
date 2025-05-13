@@ -22,8 +22,6 @@ $(EXE): $(OBJECTS)
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp 
 	$(CXX) -c $< -o $@
 
-
-
 clean:
 	rm -f $(OBJDIR)/*.o $(EXE)
 

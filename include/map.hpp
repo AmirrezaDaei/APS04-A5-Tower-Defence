@@ -27,6 +27,7 @@ public:
     void drawTowers(RenderWindow& window);
     bool isPath(Vector2f position, Vector2i v_dir);
     bool plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower);
+    void handleTowersAiming();
 private:
     shared_ptr<TextureManager> texture_manager;
     Vector2f start_point;
