@@ -1,7 +1,6 @@
 OBJDIR = build
 SRCDIR = src
 INCDIR = include
-ASSESTSDIR = asssets
 
 CXX = g++ -std=c++20 -I./$(INCDIR)
 FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
@@ -17,9 +16,9 @@ all: $(EXE)
 $(EXE): $(OBJECTS)
 	$(CXX) -o $@ $^ $(FLAGS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(wildcard $(SRCDIR)/*.hpp)
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(OBJDIR)
-	$(CXX) -c $< -o $@ -I./$(ASSESTSDIR)/
+	$(CXX) -c $< -o $@
 
 
 

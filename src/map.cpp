@@ -15,13 +15,15 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
                 Texture &texture = texture_manager->getTexture(PATH_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
                 path_tiles.push_back(new_tile);
-                if(map[i][j] == 'S')
-                    start_point = Vector2f(j * TILE_SIZE, i * TILE_SIZE);
-                    // start_dir = findStartingDir(map, i, j);
+                if(map[i][j] == 'S') 
+                {
+                    start_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
+                    this->setStartDir(map, i, j);
+                    cout << start_dir.x << ' ' << start_dir.y << endl;
+                }
                 if(map[i][j] == 'F')
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
             }
-
             else if (map[i][j] == '-')
             {
                 Texture &texture = texture_manager->getTexture(BUILDABLE_TILE_FILENAME);
@@ -34,11 +36,8 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
 }
 
 void Map::constructBalloons(Vector2f position, vector<AttackWave> waves) {
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> posRand(0, TILE_SIZE);
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position + Vector2f(posRand(gen), posRand(gen)), Vector2i(1,0), 75, 2);
+    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, start_dir, 75, 2);
     balloons.push_back(new_balloon);
 }
 
@@ -52,23 +51,23 @@ void Map::drawTowers(RenderWindow& window) {
         tower->draw(window);
 }
 
-// Vector2i Map::findStartingDir(vector<string> map, int i, int j) {
-//     cout << "hello1";
-//     if(i + 1 < map[0].size())
-//         // cout << "hello";
-//         if(map[i + 1][j] == 'O')
-//             return Vector2i(1, 0);
+void Map::setStartDir(vector<string> map, int i, int j) {
+    if(i + 1 < map.size())
+        if(map[i + 1][j] == 'O')
+            start_dir = Vector2i(1, 0);
 
-//     if(i + 1 < map.size())
-//         if(map[i][j + 1] == 'O')
-//             return Vector2i(0, -1);
+    if(j + 1 < map[0].size())
+        if(map[i][j + 1] == 'O')
+            start_dir = Vector2i(0, -1);
 
-//     if(i - 1 >= 0)
-//         if(map[i - 1][j] == 'O')
-//             return Vector2i(-1, 0);
+    if(i - 1 >= 0)
+        if(map[i - 1][j] == 'O')
+            start_dir = Vector2i(-1, 0);
 
-//     return Vector2i(0, 1);
-// }
+    if(j - 1 >= 0)
+        if(map[i][j - 1] == 'O')
+            start_dir = Vector2i(0, 1); 
+}
 
 void Map::drawBalloons(RenderWindow &window, float dt) {
     for(auto it = balloons.begin(); it != balloons.end();) {
@@ -84,7 +83,7 @@ void Map::drawBalloons(RenderWindow &window, float dt) {
             else if(this->isPath(pos, left_dir))
                 balloon->turnLeft();
             else {
-                it = balloons.erase(it);
+                balloons.erase(it);
                 continue;
             }
         }
@@ -97,9 +96,10 @@ bool Map::isPath(Vector2f position, Vector2i v_dir) {
     Vector2f check_pos;
     check_pos.x = position.x + v_dir.x * TILE_SIZE / 2 + v_dir.x;
     check_pos.y = position.y + v_dir.y * TILE_SIZE / 2 + v_dir.y;
-    for(auto& tile : path_tiles)
+    for(auto& tile : path_tiles) {
         if(tile->getSprite().getGlobalBounds().contains(check_pos))
             return true;
+    }
     return false;
 }
 
@@ -107,7 +107,8 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
 {
     for (auto tile : tiles)
     {
-        if (tile->contains(mouspos))
+        if (tile->contains(mouspos)) 
+        {
             if (tile->canPlantTower() == true)
             {
                 Vector2f position = tile->getPosition();
@@ -119,6 +120,7 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
                 tile->plantTower(new_tower);
                 return true;
             }
+        }
     }
     return false;
 }

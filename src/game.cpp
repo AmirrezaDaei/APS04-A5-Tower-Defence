@@ -19,8 +19,8 @@ Game::Game()
 
     shared_ptr<TextureManager> texture_manager = make_shared<TextureManager>();
     game_map = make_shared<Map>(map_width, map_height, map, texture_manager);
-    game_shop = make_shared<Shop>(texture_manager, window, player_stats.money);
     game_map->constructBalloons(game_map->getStartPoint(), ATTACKING_PLAN);
+    game_shop = make_shared<Shop>(texture_manager, window, player_stats.money);
     score_board = make_shared<ScoreBoard>(window);
     input.close();        
 }
