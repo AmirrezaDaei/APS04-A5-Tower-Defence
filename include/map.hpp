@@ -29,10 +29,12 @@ public:
     void drawTowers(RenderWindow& window);
     bool isPath(Vector2f position, Vector2i v_dir);
     bool plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower);
+    // Vector2i findStartingDir(vector<string> map, int i, int j);
 private:
     shared_ptr<TextureManager> texture_manager;
     Vector2f start_point;
     Vector2f finish_point;
+    // Vector2i start_dir;
     vector<shared_ptr<Tile>> path_tiles;
     vector<shared_ptr<Tile>> tiles;
     vector<shared_ptr<Tower>> towers;

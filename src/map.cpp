@@ -17,6 +17,7 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
                 path_tiles.push_back(new_tile);
                 if(map[i][j] == 'S')
                     start_point = Vector2f(j * TILE_SIZE, i * TILE_SIZE);
+                    // start_dir = findStartingDir(map, i, j);
                 if(map[i][j] == 'F')
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
             }
@@ -35,26 +36,39 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
 void Map::constructBalloons(Vector2f position, vector<AttackWave> waves) {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<> posRand(0, 75);
-    uniform_int_distribution<> timeRand(0, 200);
+    uniform_int_distribution<> posRand(0, TILE_SIZE);
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position + Vector2f(posRand(gen), posRand(gen)), Vector2i(1, 0), 75, 2);
+    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position + Vector2f(posRand(gen), posRand(gen)), Vector2i(1,0), 75, 2);
     balloons.push_back(new_balloon);
 }
 
-void Map::drawTiles(RenderWindow &window)
-{
+void Map::drawTiles(RenderWindow &window) {
     for (auto tile : tiles)
         tile->draw(window);
 }
 
-void Map::drawTowers(RenderWindow& window)
-{
+void Map::drawTowers(RenderWindow& window) {
     for (auto tower : towers)
-    {
         tower->draw(window);
-    }
 }
+
+// Vector2i Map::findStartingDir(vector<string> map, int i, int j) {
+//     cout << "hello1";
+//     if(i + 1 < map[0].size())
+//         // cout << "hello";
+//         if(map[i + 1][j] == 'O')
+//             return Vector2i(1, 0);
+
+//     if(i + 1 < map.size())
+//         if(map[i][j + 1] == 'O')
+//             return Vector2i(0, -1);
+
+//     if(i - 1 >= 0)
+//         if(map[i - 1][j] == 'O')
+//             return Vector2i(-1, 0);
+
+//     return Vector2i(0, 1);
+// }
 
 void Map::drawBalloons(RenderWindow &window, float dt) {
     for(auto it = balloons.begin(); it != balloons.end();) {
@@ -65,9 +79,9 @@ void Map::drawBalloons(RenderWindow &window, float dt) {
         if(!this->isPath(pos, current_dir)) {
             Vector2i right_dir = Vector2i(-current_dir.y, current_dir.x);
             Vector2i left_dir  = Vector2i(current_dir.y, -current_dir.x);
-            if (this->isPath(pos, right_dir))
+            if(this->isPath(pos, right_dir))
                 balloon->turnRight();
-            else if (this->isPath(pos, left_dir))
+            else if(this->isPath(pos, left_dir))
                 balloon->turnLeft();
             else {
                 it = balloons.erase(it);
@@ -83,11 +97,9 @@ bool Map::isPath(Vector2f position, Vector2i v_dir) {
     Vector2f check_pos;
     check_pos.x = position.x + v_dir.x * TILE_SIZE / 2 + v_dir.x;
     check_pos.y = position.y + v_dir.y * TILE_SIZE / 2 + v_dir.y;
-    for(auto& tile : path_tiles) {
-        if(tile->getSprite().getGlobalBounds().contains(check_pos)) {
+    for(auto& tile : path_tiles)
+        if(tile->getSprite().getGlobalBounds().contains(check_pos))
             return true;
-        }
-    }
     return false;
 }
 
