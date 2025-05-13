@@ -20,7 +20,6 @@ void Balloon::move(float dt) {
 
 void Balloon::turnLeft() {
     Vector2i new_dir;
-    
     new_dir.x = v_dir.y;
     new_dir.y = -v_dir.x;
     v_dir = new_dir;

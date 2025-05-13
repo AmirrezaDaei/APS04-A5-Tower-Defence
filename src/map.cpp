@@ -19,7 +19,6 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
                 {
                     start_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
                     this->setStartDir(map, i, j);
-                    cout << start_dir.x << ' ' << start_dir.y << endl;
                 }
                 if(map[i][j] == 'F')
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
@@ -96,10 +95,9 @@ bool Map::isPath(Vector2f position, Vector2i v_dir) {
     Vector2f check_pos;
     check_pos.x = position.x + v_dir.x * TILE_SIZE / 2 + v_dir.x;
     check_pos.y = position.y + v_dir.y * TILE_SIZE / 2 + v_dir.y;
-    for(auto& tile : path_tiles) {
+    for(auto& tile : path_tiles)
         if(tile->getSprite().getGlobalBounds().contains(check_pos))
             return true;
-    }
     return false;
 }
 
