@@ -32,22 +32,28 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
     }
 }
 
-void Map::constructBalloons(Vector2f position, vector<AttackWave> wave) {
+void Map::constructBalloons(Vector2f position, vector<AttackWave> waves) {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<> rnd(0, 75);
+    uniform_int_distribution<> posRand(0, 75);
+    uniform_int_distribution<> timeRand(0, 200);
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    // if(balloonClock.getElapsedTime().asSeconds() >= 1) {
-        shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position + Vector2f(rnd(gen) % 75, rnd(gen) % 75), Vector2i(1, 0), 150, 2);
-        balloons.push_back(new_balloon);
-        balloonClock.restart();
-    // }
+    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position + Vector2f(posRand(gen), posRand(gen)), Vector2i(1, 0), 75, 2);
+    balloons.push_back(new_balloon);
 }
 
 void Map::drawTiles(RenderWindow &window)
 {
     for (auto tile : tiles)
         tile->draw(window);
+}
+
+void Map::drawTowers(RenderWindow& window)
+{
+    for (auto tower : towers)
+    {
+        tower->draw(window);
+    }
 }
 
 void Map::drawBalloons(RenderWindow &window, float dt) {
@@ -81,6 +87,26 @@ bool Map::isPath(Vector2f position, Vector2i v_dir) {
         if(tile->getSprite().getGlobalBounds().contains(check_pos)) {
             return true;
         }
+    }
+    return false;
+}
+
+bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
+{
+    for (auto tile : tiles)
+    {
+        if (tile->contains(mouspos))
+            if (tile->canPlantTower() == true)
+            {
+                Vector2f position = tile->getPosition();
+                position.x = position.x;
+                position.y = position.y;
+                shared_ptr<Tower> new_tower = make_shared<Tower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
+                    tower->getRadius());
+                towers.push_back(new_tower);
+                tile->plantTower(new_tower);
+                return true;
+            }
     }
     return false;
 }

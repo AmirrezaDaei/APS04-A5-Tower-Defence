@@ -20,18 +20,20 @@ Game::Game()
     shared_ptr<TextureManager> texture_manager = make_shared<TextureManager>();
 
     game_map = make_shared<Map>(map_width, map_height, map, texture_manager);
+    game_map->constructBalloons(game_map->getStartPoint(), ATTACKING_PLAN);
     game_shop = make_shared<Shop>(texture_manager, window, player_stats.money);
     score_board = make_shared<ScoreBoard>(window);
-    game_map->constructBalloons(game_map->getStartPoint(), ATTACKING_PLAN);
-    input.close();
+    input.close();        game_map->constructBalloons(game_map->getStartPoint(), ATTACKING_PLAN);
+
 }
 
 void Game::updateWindow(float dt)
 {
     game_map->drawTiles(window);
     game_map->drawBalloons(window, dt);
-    score_board->draw(window, player_stats);
+    score_board->drawScoreBoard(window, player_stats);
     game_shop->drawShop(window);
+    game_map->drawTowers(window);
 }
 
 void Game::run()
@@ -43,17 +45,22 @@ void Game::run()
         while (window.pollEvent(event))
         {
             if (event.type == Event::Closed)
+            {
                 window.close();
+            }    
             if (event.type == Event::MouseButtonPressed)
             {
                 if (event.mouseButton.button == Mouse::Left)
                 {
                     Vector2i mousePos = Mouse::getPosition(window);
                     chosen_tower = game_shop->handleBuyingTower(mousePos);
-                    /*if (chosen_tower != NULL)
+                    if (chosen_tower != NULL)
                     {
-                        game_map->plantTower()
-                    }*/
+                        bool bought = game_map->plantTower(mousePos, chosen_tower);
+                        if (bought == true)
+                            game_shop->abortBuying();
+                        chosen_tower = nullptr;
+                    }
                 }
                 if (event.mouseButton.button == Mouse::Right)
                 {
@@ -66,7 +73,6 @@ void Game::run()
 
         Vector2i mouse_pos = Mouse::getPosition(window);
         game_shop->handleTowerBeingHovered(mouse_pos);
-
         window.clear(Color(200, 200, 200));
         updateWindow(dt);
         window.display();

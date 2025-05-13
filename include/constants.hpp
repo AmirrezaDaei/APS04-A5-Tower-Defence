@@ -5,7 +5,7 @@
 using namespace std;
 
 const float TILE_SIZE = 75.f;
-const float TOWER_SIZE = 45.f;
+const float TOWER_SIZE = 75.f;
 const float HEART_SIZE = 40.f;
 const float HEALTHBAR_LENGTH = 160.f;
 const float HEALTHBAR_WIDTH =  20.f;
@@ -13,6 +13,11 @@ const float DESCRIPTION_HEIGHT = 150.f;
 const float BALLOON_SIZE = 50.f;
 const unsigned int SHOP_WIDTH = 250;
 const unsigned int SCORE_BOARD_HEIGHT = 180;
+
+const char GRASS = '-';
+const char PATH = 'O';
+const char START = 'S';
+const char FINNISH = 'F';
 
 const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/buildable_tile.png";
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";

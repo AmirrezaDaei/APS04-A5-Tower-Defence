@@ -9,7 +9,7 @@ class ScoreBoard
 {
 public:
     ScoreBoard(RenderWindow& window);
-    void draw(RenderWindow& window, PlayerStats player_stats);
+    void drawScoreBoard(RenderWindow& window, PlayerStats player_stats);
 
 private:
     Font font;

@@ -9,6 +9,7 @@
 #include <cmath>
 #include <random>
 #include "texturemanager.hpp"
+#include "tower.hpp"
 #include "tile.hpp"
 #include "constants.hpp"
 #include "balloon.hpp"
@@ -25,14 +26,16 @@ public:
     void constructBalloons(Vector2f position, vector<AttackWave> waves);
     void drawTiles(RenderWindow& window);
     void drawBalloons(RenderWindow& window, float dt);
+    void drawTowers(RenderWindow& window);
     bool isPath(Vector2f position, Vector2i v_dir);
+    bool plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower);
 private:
-    Clock balloonClock;
     shared_ptr<TextureManager> texture_manager;
     Vector2f start_point;
     Vector2f finish_point;
     vector<shared_ptr<Tile>> path_tiles;
     vector<shared_ptr<Tile>> tiles;
+    vector<shared_ptr<Tower>> towers;
     vector<shared_ptr<Balloon>> balloons;
     int map_height;
     int map_width;
