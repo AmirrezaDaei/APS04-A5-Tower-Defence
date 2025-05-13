@@ -22,7 +22,7 @@ GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &t
 
     radius_circle.setRadius(radius);
     radius_circle.setOrigin(radius_circle.getRadius(), radius_circle.getRadius());
-    radius_circle.setFillColor(Color(173, 216, 230, 65));
+    radius_circle.setFillColor(Color(173, 216, 230, 50));
     radius_circle.setPosition(position);
 }
 
@@ -33,7 +33,11 @@ IceTower::IceTower(Vector2f position_, int price_, float cooldown_, Texture &tex
     : GameTower(position_, price_, cooldown_, texture_, radius_) {}
 
 Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_)
-    : GameTower(position_, price_, cooldown_, texture_, radius_) {}
+    : GameTower(position_, price_, cooldown_, texture_, radius_) 
+    {
+        radius_circle.setRadius(radius - BOMB_RADIUS);
+        radius_circle.setOrigin(radius_circle.getRadius(), radius_circle.getRadius());
+    }
 
 ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_)
     : Tower(position_, price_, cooldown_, texture_, radius_), name(name_), size(size_)
@@ -63,8 +67,8 @@ void GameTower::draw(RenderWindow &window)
 bool Tower::containsMouse(Vector2i mouse_pos)
 {
     FloatRect spriteBounds = sprite.getGlobalBounds();
-    float centerWidth = spriteBounds.width * 0.5f;
-    float centerHeight = spriteBounds.height * 0.5f;
+    float centerWidth = spriteBounds.width * 0.75f;
+    float centerHeight = spriteBounds.height * 0.75f;
     float centerX = spriteBounds.left + (spriteBounds.width - centerWidth) / 2;
     float centerY = spriteBounds.top + (spriteBounds.height - centerHeight) / 2;
 
@@ -78,7 +82,7 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
     FloatRect bounds = sprite.getGlobalBounds();
     RectangleShape description(Vector2f(SHOP_WIDTH, DESCRIPTION_HEIGHT));
     description.setPosition(window.getSize().x - SHOP_WIDTH,
-    SCORE_BOARD_HEIGHT + bounds.height);
+                            SCORE_BOARD_HEIGHT + bounds.height);
     description.setFillColor(Color(63, 73, 142));
     description.setOutlineThickness(-8);
     description.setOutlineColor(Color(200, 200, 200));
@@ -104,9 +108,12 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
     stream_for_cooldown << std::fixed << std::setprecision(1) << cooldown;
 
     string shooter_name;
-    if (name == NORMAL_SHOOTER) shooter_name = NORMAL_SHOOTER_TITLE;
-    else if (name == ICE_SHOOTER) shooter_name = ICE_SHOOTER_TITLE;
-    else if (name == CANNON) shooter_name = CANNON_TITLE;
+    if (name == NORMAL_SHOOTER)
+        shooter_name = NORMAL_SHOOTER_TITLE;
+    else if (name == ICE_SHOOTER)
+        shooter_name = ICE_SHOOTER_TITLE;
+    else if (name == CANNON)
+        shooter_name = CANNON_TITLE;
 
     title.setString("\n\n\n\n" + shooter_name);
     FloatRect textBounds = title.getLocalBounds();
@@ -137,9 +144,9 @@ void ShopTower::highlight(RenderWindow &window)
     window.draw(highlightRect);
 }
 
-bool GameTower::isReady()
+bool GameTower::readyToShoot()
 {
-    if (lockedInEnemy == nullptr && clock.getElapsedTime().asSeconds() >= cooldown)
+    if (locked_in_enemy == nullptr && clock.getElapsedTime().asSeconds() >= cooldown)
     {
         return true;
         clock.restart();
@@ -148,17 +155,35 @@ bool GameTower::isReady()
         return false;
 }
 
-void GameTower::rotateTower()
+r_dir normalizeRotation(float angle)
 {
-    if (lockedInEnemy != nullptr)
+    if (angle == 0)
+        return ND;
+    angle = fmod(angle, 360.0f);
+    if (angle < 0)
+        angle += 360.0f;
+
+    float cw = 360.0f - angle;
+    float ccw = angle;
+
+    return (cw < ccw) ? CW : CCW;
+}
+
+void GameTower::rotateTower(float dt)
+{
+    if (locked_in_enemy != nullptr)
     {
-        float alpha1 = sprite.getRotation();    
-        double x = lockedInEnemy->getPosition().x - position.x;
-        double y = position.y - lockedInEnemy->getPosition().y;
-        double radians = atan2(x , y);
+        float alpha1 = sprite.getRotation();
+        double x = locked_in_enemy->getPosition().x - position.x;
+        double y = position.y - locked_in_enemy->getPosition().y;
+        double radians = atan2(x, y);
         float alpha2 = radians * (180.0 / M_PI);
-        float rotation = alpha2 - alpha1;
-        sprite.rotate(rotation);
+        float rotation = alpha1 - alpha2;
+        r_dir direction = normalizeRotation(rotation);
+        if (direction == CW)
+            sprite.rotate(dt * ROTATION_SPEED);
+        else if (direction == CCW)
+            sprite.rotate(dt * -ROTATION_SPEED);
     }
 }
 
@@ -170,32 +195,57 @@ bool GameTower::isInRange(Vector2f pos)
 
 float getDistance(Vector2f pos1, Vector2f pos2)
 {
-    float distance =sqrt(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2));
+    float distance = sqrt(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2));
     return distance;
 }
 
-void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange)
+void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
 {
     float distance;
-    Vector2f pos;
-    lockedInEnemy = enemiesInRange.at(0);
-    for (auto enemy : enemiesInRange)
+    locked_in_enemy = enemies_in_range.front();
+    float min_distance = getDistance(position, locked_in_enemy->getPosition());
+    for (auto enemy : enemies_in_range)
     {
-        pos = enemy->getPosition();
-        if (getDistance(position, pos) < getDistance(position, lockedInEnemy->getPosition()))
+        float distance = getDistance(position, enemy->getPosition());
+        if (distance < min_distance)
         {
-            lockedInEnemy = enemy;
-            cout << lockedInEnemy->getPosition().x << endl;
+            min_distance = distance;
+            locked_in_enemy = enemy;
         }
     }
 }
 
-void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange)
+void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
 {
-
+    map<float ,shared_ptr<Balloon>> enemy_distance_map;
+    for (auto enemy : enemies_in_range)
+    {
+        if (enemy->isFrozen() == false)
+            enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
+    }
+    if (enemy_distance_map.empty() == false)
+        locked_in_enemy = enemy_distance_map.begin()->second;
 }
 
-void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange)
+void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
 {
+    map<int, shared_ptr<Balloon>, greater<int>> enemy_casualties_map;
+    for (auto enemy : enemies_in_range)
+    {
+        if (getDistance(position, enemy->getPosition()) < radius)
+            enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies_in_range)] = enemy;
+    }
+    if (enemy_casualties_map.empty() == false)
+        locked_in_enemy = enemy_casualties_map.begin()->second;
+}
 
+int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies_in_range)
+{
+    CircleShape bomb_radius(BOMB_RADIUS);
+    bomb_radius.setPosition(bomb_pos);
+    int count = 0;
+    for (auto enemy : enemies_in_range)
+        if (getDistance(bomb_pos, enemy->getPosition()) < BOMB_RADIUS)
+            count++;
+    return count;
 }

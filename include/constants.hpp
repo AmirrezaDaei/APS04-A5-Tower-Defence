@@ -33,16 +33,20 @@ const string MAP_FILENAME = "map.txt";
 const string SCORE_BOARD_FONT_FILENAME = "assets/sprites/fonts/anton.ttf";
 const string DESCRIBTION_FONT_FILENAME = "assets/sprites/fonts/PressStart2P.ttf";
 
+const float BOMB_RADIUS = 30.f;
+
 const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";
 const string ICE_SHOOTER = "ice_shooter";
 const string CANNON = "cannon";
-const string NORMAL_SHOOTER_TITLE = "Fire Shooter";
-const string ICE_SHOOTER_TITLE = "Ice Shooter";
+const string NORMAL_SHOOTER_TITLE = "Fire Tower";
+const string ICE_SHOOTER_TITLE = "Ice Tower";
 const string CANNON_TITLE = "Cannon";
 
 const float MAX_HEALTH = 40.f;
 const int INITIAL_MONEY = 420;
+
+const float ROTATION_SPEED = 135;
 
 
 namespace t_info
@@ -60,6 +64,12 @@ struct PlayerStats
     int money = INITIAL_MONEY;
 };
 
+enum r_dir
+{
+    CW,
+    CCW,
+    ND
+};
 
 enum GameState
 {

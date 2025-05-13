@@ -26,7 +26,7 @@ public:
     void constructBalloons(Vector2f position, vector<AttackWave> waves);
     void drawTiles(RenderWindow& window);
     void drawBalloons(RenderWindow& window, float dt);
-    void drawTowers(RenderWindow& window);
+    void drawTowers(RenderWindow& window, float dt);
     bool isPath(Vector2f position, Vector2i v_dir);
     bool plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower);
     void handleTowersAiming();
