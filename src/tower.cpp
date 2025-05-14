@@ -201,17 +201,16 @@ float getDistance(Vector2f pos1, Vector2f pos2)
 
 void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
 {
-    float distance;
-    locked_in_enemy = enemies_in_range.front();
-    float min_distance = getDistance(position, locked_in_enemy->getPosition());
+    map<float ,shared_ptr<Balloon>> enemy_distance_map;
     for (auto enemy : enemies_in_range)
     {
-        float distance = getDistance(position, enemy->getPosition());
-        if (distance < min_distance)
-        {
-            min_distance = distance;
-            locked_in_enemy = enemy;
-        }
+        if (enemy->isLockedOn() == false)
+            enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
+    }
+    if (enemy_distance_map.empty() == false)
+    {
+        locked_in_enemy = enemy_distance_map.begin()->second;
+        locked_in_enemy->setLockedOn();
     }
 }
 
@@ -220,11 +219,13 @@ void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
     map<float ,shared_ptr<Balloon>> enemy_distance_map;
     for (auto enemy : enemies_in_range)
     {
-        if (enemy->isFrozen() == false)
+        if (enemy->isFrozen() == false && enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false)
+    {
         locked_in_enemy = enemy_distance_map.begin()->second;
+    }
 }
 
 void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
@@ -232,11 +233,14 @@ void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
     map<int, shared_ptr<Balloon>, greater<int>> enemy_casualties_map;
     for (auto enemy : enemies_in_range)
     {
-        if (getDistance(position, enemy->getPosition()) < radius)
+        if (getDistance(position, enemy->getPosition()) < radius && enemy->isLockedOn() == false)
             enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies_in_range)] = enemy;
     }
     if (enemy_casualties_map.empty() == false)
+    {
         locked_in_enemy = enemy_casualties_map.begin()->second;
+        locked_in_enemy->setLockedOn();
+    }
 }
 
 int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies_in_range)
