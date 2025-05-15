@@ -16,7 +16,7 @@ Game::Game()
                   Style::Titlebar | Style::Close);
     VideoMode desktop = VideoMode::getDesktopMode();
     window.setPosition(Vector2i((desktop.width - window.getSize().x) / 2, (desktop.height - window.getSize().y) / 2));
-
+    
     shared_ptr<TextureManager> texture_manager = make_shared<TextureManager>();
     game_map = make_shared<Map>(map_width, map_height, map, texture_manager);
     game_map->constructBalloons(game_map->getStartPoint(), ATTACKING_PLAN);
@@ -36,7 +36,6 @@ void Game::updateWindow(float dt)
 
 void Game::run()
 {
-    Clock clock;
     while (window.isOpen())
     {
         Event event;
@@ -71,11 +70,8 @@ void Game::run()
             }
         }
         float dt = clock.restart().asSeconds();
-
-
         Vector2i mouse_pos = Mouse::getPosition(window);
         game_shop->handleTowerBeingHovered(mouse_pos);
-
         game_map->handleTowersAiming();
         window.clear();
         updateWindow(dt);

@@ -21,6 +21,7 @@ public:
     void run();
 
 private:
+    Clock clock;
     void updateWindow(float dt);
     shared_ptr<Map> game_map;
     shared_ptr<Shop> game_shop;

@@ -11,6 +11,7 @@ const float HEALTHBAR_LENGTH = 160.f;
 const float HEALTHBAR_WIDTH =  20.f;
 const float DESCRIPTION_HEIGHT = 150.f;
 const float BALLOON_SIZE = 50.f;
+const float PREGNANT_SIZE = 50.f;
 const unsigned int SHOP_WIDTH = 250;
 const unsigned int SCORE_BOARD_HEIGHT = 180;
 
@@ -26,7 +27,8 @@ const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/builda
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";
 const string SHOOTERS_FILEPATH = "assets/sprites/";
 const string HEART_FILENAME = "assets/sprites/heart2.png";
-const string BALLOON_FILENAME = "assets/sprites/normal.png";
+const string BALLOON_FILENAME = "assets/sprites/mainBalloon.png";
+const string PREGNANT_FILENAME = "assets/sprites/cropped_heart_balloon.png";
 const string TOWERS_FILENAME = "towers.csv";
 const string MAP_FILENAME = "map.txt";
 

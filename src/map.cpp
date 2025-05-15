@@ -3,14 +3,13 @@
 Map::Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager_) : 
 map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_)
 {
-    for (int i = 0; i < map_height; i++)
+    for(int i = 0; i < map_height; i++)
     {
-        for (int j = 0; j < map_width; j++)
+        for(int j = 0; j < map_width; j++)
         {
             Vector2f position(j * TILE_SIZE, i * TILE_SIZE);
             shared_ptr<Tile> new_tile;
-
-            if (map[i][j] == PATH || map[i][j] == START || map[i][j] == FINISH)
+            if(map[i][j] == PATH || map[i][j] == START || map[i][j] == FINISH)
             {
                 Texture &texture = texture_manager->getTexture(PATH_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
@@ -23,12 +22,11 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
                 if(map[i][j] == FINISH)
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
             }
-            else if (map[i][j] == GRASS)
+            else if(map[i][j] == GRASS)
             {
                 Texture &texture = texture_manager->getTexture(BUILDABLE_TILE_FILENAME);
                 new_tile = make_shared<Tile>(map[i][j], position, texture);
             }
-
             tiles.push_back(new_tile);
         }
     }
@@ -153,7 +151,7 @@ void Map::handleTowersAiming()
                         }
                     if (enemiesInRange.size() != 0)
                     {
-                      tower->selectEnemy(enemiesInRange);
+                        tower->selectEnemy(enemiesInRange);
                     }
             }
         }

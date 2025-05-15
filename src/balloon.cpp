@@ -6,7 +6,7 @@ Balloon::Balloon(Texture& texture_, Vector2f position_, Vector2i v_dir_, float s
         sprite.setTexture(texture);
         sprite.setPosition(position);
         sprite.setScale(BALLOON_SIZE / tex_size.x, BALLOON_SIZE / tex_size.x);
-        sprite.setOrigin(tex_size.x / 2, tex_size.y / 2);
+        sprite.setOrigin(tex_size.x / 2, tex_size.y * 2 / 3);
     }
 
 void Balloon::draw(RenderWindow& window) {
