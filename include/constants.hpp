@@ -64,7 +64,7 @@ namespace t_info
 
 struct PlayerStats
 {
-    int round = 1;
+    int round = 0;
     float health = MAX_HEALTH;
     int money = INITIAL_MONEY;
 };

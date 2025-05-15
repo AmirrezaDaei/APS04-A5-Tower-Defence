@@ -92,7 +92,7 @@ void Game::handleWave(float dt) {
     else {
         waves_time_gap += dt;
         if(waves_time_gap >= WAVE_LAUNCH_GAP_SECS) 
-            if(wave < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
+            if(player_stats.round < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
                 startNewWave();
     }
 }
@@ -110,7 +110,7 @@ void Game::spawnPregnant() {
 }
 
 void Game::startNewWave() {
-    wave++;
+    player_stats.round++;
     waves_time_gap = 0.f;
     is_wave_active = true;
     pregnants_spawned = 0;

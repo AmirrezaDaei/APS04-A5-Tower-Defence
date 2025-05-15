@@ -32,7 +32,6 @@ private:
     Clock clock;
     float waves_time_gap = 0.f;
     float balloons_time_gap = 0.f;
-    int wave = 0;
     int normals_spawned = 0;
     int pregnants_spawned = 0;
     bool is_wave_active = false;
