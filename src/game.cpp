@@ -29,7 +29,7 @@ void Game::updateWindow(float dt)
 {
     game_map->drawTiles(window);
     game_map->drawBalloons(window, dt);
-    game_map->drawTowers(window);
+    game_map->drawTowers(window, dt);
     score_board->drawScoreBoard(window, player_stats);
     game_shop->drawShop(window);
 }

@@ -44,28 +44,29 @@ private:
     bool availble;
 };
 
+r_dir normalizeRotation(float angle); 
+
 class GameTower : public Tower
 {
 public:
     GameTower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
     void draw(RenderWindow& window);
-    bool isReady();
+    bool readyToShoot();
     bool isInRange(Vector2f pos);
     void virtual selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange) = 0;
-    void rotateTower();
+    void rotateTower(float dt);
 protected:
     CircleShape radius_circle;
     Clock clock;
-    shared_ptr<Balloon> lockedInEnemy  = nullptr;
+    shared_ptr<Balloon> locked_in_enemy  = nullptr;
 };
 
-float getDistance(Vector2f pos1, Vector2f pos2);
 
 class FireTower : public GameTower
 {
 public:
     FireTower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
-    void selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange);
+    void selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range);
 
 };
 
@@ -82,5 +83,9 @@ public:
     Cannon(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange);
 };
+
+float getDistance(Vector2f pos1, Vector2f pos2);
+
+int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies_in_range);
 
 #endif // define TOWER_HPP

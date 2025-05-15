@@ -43,10 +43,10 @@ void Map::drawTiles(RenderWindow &window) {
         tile->draw(window);
 }
 
-void Map::drawTowers(RenderWindow& window) {
+void Map::drawTowers(RenderWindow& window, float dt) {
     for (auto tower : towers)
     {
-        tower->rotateTower();
+        tower->rotateTower(dt);
         tower->draw(window);
     }
 }
@@ -125,7 +125,7 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
 
                 if (tower->getName() == CANNON)
                     new_tower = make_shared<Cannon>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
-                    tower->getRadius());                  
+                    tower->getRadius() + BOMB_RADIUS);                  
                 
                 towers.push_back(new_tower);
                 tile->plantTower(new_tower);
@@ -141,7 +141,7 @@ void Map::handleTowersAiming()
 {
         for (auto tower : towers)
         {
-            if (tower->isReady())
+            if (tower->readyToShoot())
             {
                 vector<shared_ptr<Balloon>> enemiesInRange;
                     for (auto balloon : balloons)

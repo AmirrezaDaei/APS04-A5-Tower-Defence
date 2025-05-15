@@ -16,7 +16,9 @@ public:
     void move(float dt);
     void turnLeft();
     void turnRight();
-
+    bool isLockedOn() { return locked_on; }
+    void setLockedOn() { locked_on = true; }
+    bool isFrozen() { return is_frozen; }
 private:
     Vector2i v_dir;
     float speed;
@@ -25,6 +27,8 @@ private:
     Texture texture;
     Sprite sprite;
     bool is_destroyed = false;
+    bool is_frozen = false;
+    bool locked_on = false;
 };
 
 #endif // define BALLOON_HPP
