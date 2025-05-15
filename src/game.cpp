@@ -85,19 +85,16 @@ void Game::handleWave(float dt) {
     cout << "balloon: " << balloons_gap << endl;
     if(is_wave_active) {
         balloons_gap += dt;
-        if(balloons_spawned < 8 && balloons_gap >= 0.7) {
+        if(balloons_spawned < 8 && balloons_gap >= 0.7)
             spawnBalloon();
-        }
-        if(balloons_spawned >= 8) {
+        if(balloons_spawned >= 8)
             endWave();
-        }
     }
     else {
         waves_gap += dt;
         if(waves_gap >= WAVE_LAUNCH_GAP_SECS) 
-            if(wave < ATTACKING_PLAN.size() && game_map->isBalloonsPopped()) {
+            if(wave < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
                 startNewWave();
-            }
     }
 }
 

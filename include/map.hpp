@@ -18,8 +18,7 @@
 using namespace std;
 using namespace sf;
 
-class Map
-{
+class Map {
 public:
     Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager);
     Vector2f getStartPoint() {return start_point;}

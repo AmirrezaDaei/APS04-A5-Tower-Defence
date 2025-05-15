@@ -13,8 +13,6 @@ void Balloon::draw(RenderWindow& window) {
     window.draw(this->sprite);
 }
 
-Vector2f Balloon::getPosition() { return position; }
-
 void Balloon::move(float dt) {
     sprite.move(v_dir.x * dt * speed, v_dir.y * dt * speed);
     position = sprite.getPosition();
