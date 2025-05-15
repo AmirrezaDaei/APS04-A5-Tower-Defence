@@ -6,14 +6,12 @@ Balloon::Balloon(Texture& texture_, Vector2f position_, Vector2i v_dir_, float s
         sprite.setTexture(texture);
         sprite.setPosition(position);
         sprite.setScale(BALLOON_SIZE / tex_size.x, BALLOON_SIZE / tex_size.x);
-        sprite.setOrigin(tex_size.x / 2, tex_size.y / 2);
+        sprite.setOrigin(tex_size.x / 2, tex_size.y * 2 / 3);
     }
 
 void Balloon::draw(RenderWindow& window) {
     window.draw(this->sprite);
 }
-
-Vector2f Balloon::getPosition() { return position; }
 
 void Balloon::move(float dt) {
     if (clock.getElapsedTime().asSeconds() >= FREEZE_TIME)
@@ -27,7 +25,6 @@ void Balloon::move(float dt) {
 
 void Balloon::turnLeft() {
     Vector2i new_dir;
-    
     new_dir.x = v_dir.y;
     new_dir.y = -v_dir.x;
     v_dir = new_dir;

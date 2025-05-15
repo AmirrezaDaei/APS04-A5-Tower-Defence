@@ -18,12 +18,11 @@
 using namespace std;
 using namespace sf;
 
-class Map
-{
+class Map {
 public:
     Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager);
     Vector2f getStartPoint() {return start_point;}
-    void constructBalloons(Vector2f position, vector<AttackWave> waves);
+    void constructBalloons(Vector2f position);
     void drawTiles(RenderWindow& window);
     void drawBalloons(RenderWindow& window, float dt);
     void drawTowers(RenderWindow& window, float dt);
@@ -31,6 +30,7 @@ public:
     bool plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower);
     void handleTowersAiming();
     void setStartDir(vector<string> map, int i, int j);
+    bool isBalloonsPopped();
 private:
     shared_ptr<TextureManager> texture_manager;
     Vector2f start_point;

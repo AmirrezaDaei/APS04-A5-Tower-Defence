@@ -16,10 +16,9 @@ Game::Game()
                   Style::Titlebar | Style::Close);
     VideoMode desktop = VideoMode::getDesktopMode();
     window.setPosition(Vector2i((desktop.width - window.getSize().x) / 2, (desktop.height - window.getSize().y) / 2));
-
+    
     shared_ptr<TextureManager> texture_manager = make_shared<TextureManager>();
     game_map = make_shared<Map>(map_width, map_height, map, texture_manager);
-    game_map->constructBalloons(game_map->getStartPoint(), ATTACKING_PLAN);
     game_shop = make_shared<Shop>(texture_manager, window, player_stats.money);
     score_board = make_shared<ScoreBoard>(window);
     input.close();        
@@ -36,7 +35,6 @@ void Game::updateWindow(float dt)
 
 void Game::run()
 {
-    Clock clock;
     while (window.isOpen())
     {
         Event event;
@@ -71,14 +69,49 @@ void Game::run()
             }
         }
         float dt = clock.restart().asSeconds();
-
-
         Vector2i mouse_pos = Mouse::getPosition(window);
+        handleWave(dt);
         game_shop->handleTowerBeingHovered(mouse_pos);
-
         game_map->handleTowersAiming();
         window.clear();
         updateWindow(dt);
         window.display();
     }
+}
+
+void Game::handleWave(float dt) {
+    waves_gap += dt;
+    cout << "wave: " << waves_gap << endl;
+    cout << "balloon: " << balloons_gap << endl;
+    if(is_wave_active) {
+        balloons_gap += dt;
+        if(balloons_spawned < 8 && balloons_gap >= 0.7)
+            spawnBalloon();
+        if(balloons_spawned >= 8)
+            endWave();
+    }
+    else {
+        waves_gap += dt;
+        if(waves_gap >= WAVE_LAUNCH_GAP_SECS) 
+            if(wave < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
+                startNewWave();
+    }
+}
+
+void Game::spawnBalloon() {
+    balloons_spawned++;
+    game_map->constructBalloons(game_map->getStartPoint());
+    balloons_gap = 0.f;
+}
+
+void Game::startNewWave() {
+    wave++;
+    waves_gap = 0.f;
+    is_wave_active = true;
+    balloons_spawned = 0;
+}
+
+void Game::endWave() {
+    is_wave_active = false;
+    waves_gap = 0.f;
 }
