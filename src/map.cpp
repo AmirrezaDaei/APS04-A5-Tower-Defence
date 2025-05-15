@@ -32,9 +32,15 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
     }
 }
 
-void Map::constructBalloons(Vector2f position) {
+void Map::constructNormal(Vector2f position) {
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, start_dir, TILE_SIZE, 2);
+    shared_ptr<Balloon> new_balloon = make_shared<Normal>(texture, position, start_dir, TILE_SIZE, 2);
+    balloons.push_back(new_balloon);
+}
+
+void Map::constructPregnant(Vector2f position) {
+    Texture &texture = texture_manager->getTexture(PREGNANT_FILENAME);
+    shared_ptr<Balloon> new_balloon = make_shared<Pregnant>(texture, position, start_dir, TILE_SIZE, 2);
     balloons.push_back(new_balloon);
 }
 
@@ -145,9 +151,9 @@ void Map::handleTowersAiming()
             {
                 vector<shared_ptr<Balloon>> enemies;
                     for (auto balloon : balloons)
-                                enemies.push_back(balloon);  
+                        enemies.push_back(balloon);  
                     if (enemies.size() != 0)
-                      tower->selectEnemy(enemies);
+                        tower->selectEnemy(enemies);
             }
         }
         for (auto tower : towers)

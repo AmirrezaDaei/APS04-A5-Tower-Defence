@@ -2,6 +2,7 @@
 #define CONSTS_HPP
 
 #include <iostream>
+#include <random>
 using namespace std;
 
 const float TILE_SIZE = 75.f;
@@ -85,5 +86,7 @@ enum GameState
     GAME_WON,
     GAME_OVER
 }; 
+
+int generateRandom(int from, int to);
 
 #endif // define CONSTS_HPP
