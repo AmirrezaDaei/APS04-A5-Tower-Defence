@@ -32,9 +32,9 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
     }
 }
 
-void Map::constructBalloons(Vector2f position, vector<AttackWave> waves) {
+void Map::constructBalloons(Vector2f position) {
     Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, start_dir, 75, 2);
+    shared_ptr<Balloon> new_balloon = make_shared<Balloon>(texture, position, start_dir, TILE_SIZE, 2);
     balloons.push_back(new_balloon);
 }
 
@@ -155,4 +155,10 @@ void Map::handleTowersAiming()
                     }
             }
         }
+}
+
+bool Map::isBalloonsPopped() {
+    if(balloons.empty()) 
+        return true;
+    return false;
 }
