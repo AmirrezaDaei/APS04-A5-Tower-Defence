@@ -19,6 +19,7 @@ public:
     bool isLockedOn() { return locked_on; }
     void setLockedOn() { locked_on = true; }
     bool isFrozen() { return is_frozen; }
+    void freeze() { is_frozen = true; clock.restart();}
 private:
     Vector2i v_dir;
     float speed;
@@ -29,6 +30,7 @@ private:
     bool is_destroyed = false;
     bool is_frozen = false;
     bool locked_on = false;
+    Clock clock;
 };
 
 #endif // define BALLOON_HPP

@@ -16,8 +16,13 @@ void Balloon::draw(RenderWindow& window) {
 Vector2f Balloon::getPosition() { return position; }
 
 void Balloon::move(float dt) {
+    if (clock.getElapsedTime().asSeconds() >= FREEZE_TIME)
+        is_frozen = false;
+    if (is_frozen == false)
+    {
     sprite.move(v_dir.x * dt * speed, v_dir.y * dt * speed);
     position = sprite.getPosition();
+    }
 }
 
 void Balloon::turnLeft() {

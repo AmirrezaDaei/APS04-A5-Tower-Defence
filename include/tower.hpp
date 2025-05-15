@@ -54,6 +54,8 @@ public:
     bool readyToShoot();
     bool isInRange(Vector2f pos);
     void virtual selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange) = 0;
+    float getRotation();
+    void virtual shootEnemy() = 0;
     void rotateTower(float dt);
 protected:
     CircleShape radius_circle;
@@ -66,7 +68,8 @@ class FireTower : public GameTower
 {
 public:
     FireTower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
-    void selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range);
+    void selectEnemy(vector<shared_ptr<Balloon>> enemies);
+    void shootEnemy();
 
 };
 
@@ -74,14 +77,16 @@ class IceTower : public GameTower
 {
 public:
     IceTower(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
-    void selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange);
+    void selectEnemy(vector<shared_ptr<Balloon>> enemies);
+    void shootEnemy();
 };
 
 class Cannon : public GameTower
 {
 public:
     Cannon(Vector2f position_, int price_,float cool_down_, Texture& texture_, float radius_);
-    void selectEnemy(vector<shared_ptr<Balloon>> enemiesInRange);
+    void selectEnemy(vector<shared_ptr<Balloon>> enemies);
+    void shootEnemy();
 };
 
 float getDistance(Vector2f pos1, Vector2f pos2);

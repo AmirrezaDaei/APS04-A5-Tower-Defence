@@ -19,7 +19,6 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
                 {
                     start_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
                     this->setStartDir(map, i, j);
-                    cout << start_dir.x << ' ' << start_dir.y << endl;
                 }
                 if(map[i][j] == FINISH)
                     finish_point = Vector2f(j * TILE_SIZE + TILE_SIZE / 2, i * TILE_SIZE + TILE_SIZE / 2);
@@ -129,7 +128,7 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
 
                 if (tower->getName() == CANNON)
                     new_tower = make_shared<Cannon>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
-                    tower->getRadius() + BOMB_RADIUS);                  
+                    tower->getRadius());                  
                 
                 towers.push_back(new_tower);
                 tile->plantTower(new_tower);
@@ -147,16 +146,15 @@ void Map::handleTowersAiming()
         {
             if (tower->readyToShoot())
             {
-                vector<shared_ptr<Balloon>> enemiesInRange;
+                vector<shared_ptr<Balloon>> enemies;
                     for (auto balloon : balloons)
-                        {
-                            if (tower->isInRange(balloon->getPosition()))
-                                enemiesInRange.push_back(balloon);  
-                        }
-                    if (enemiesInRange.size() != 0)
-                    {
-                      tower->selectEnemy(enemiesInRange);
-                    }
+                                enemies.push_back(balloon);  
+                    if (enemies.size() != 0)
+                      tower->selectEnemy(enemies);
             }
+        }
+        for (auto tower : towers)
+        {
+            tower->shootEnemy();
         }
 }

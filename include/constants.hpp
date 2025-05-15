@@ -48,6 +48,8 @@ const int INITIAL_MONEY = 420;
 
 const float ROTATION_SPEED = 135;
 
+const float FREEZE_TIME = 1;
+
 
 namespace t_info
 {

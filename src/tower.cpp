@@ -33,11 +33,7 @@ IceTower::IceTower(Vector2f position_, int price_, float cooldown_, Texture &tex
     : GameTower(position_, price_, cooldown_, texture_, radius_) {}
 
 Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_)
-    : GameTower(position_, price_, cooldown_, texture_, radius_) 
-    {
-        radius_circle.setRadius(radius - BOMB_RADIUS);
-        radius_circle.setOrigin(radius_circle.getRadius(), radius_circle.getRadius());
-    }
+    : GameTower(position_, price_, cooldown_, texture_, radius_) {}
 
 ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_)
     : Tower(position_, price_, cooldown_, texture_, radius_), name(name_), size(size_)
@@ -157,28 +153,33 @@ bool GameTower::readyToShoot()
 
 r_dir normalizeRotation(float angle)
 {
-    if (angle == 0)
-        return ND;
     angle = fmod(angle, 360.0f);
     if (angle < 0)
         angle += 360.0f;
-
+    if (angle < 1)
+        return ND;
     float cw = 360.0f - angle;
     float ccw = angle;
 
     return (cw < ccw) ? CW : CCW;
 }
 
+float GameTower::getRotation()
+{
+    float alpha1 = sprite.getRotation();
+    double x = locked_in_enemy->getPosition().x - position.x;
+    double y = position.y - locked_in_enemy->getPosition().y;
+    double radians = atan2(x, y);
+    float alpha2 = radians * (180.0 / M_PI);
+    float rotation = alpha1 - alpha2;
+    return rotation;
+}
+
 void GameTower::rotateTower(float dt)
 {
     if (locked_in_enemy != nullptr)
     {
-        float alpha1 = sprite.getRotation();
-        double x = locked_in_enemy->getPosition().x - position.x;
-        double y = position.y - locked_in_enemy->getPosition().y;
-        double radians = atan2(x, y);
-        float alpha2 = radians * (180.0 / M_PI);
-        float rotation = alpha1 - alpha2;
+        float rotation = this->getRotation();
         r_dir direction = normalizeRotation(rotation);
         if (direction == CW)
             sprite.rotate(dt * ROTATION_SPEED);
@@ -201,10 +202,10 @@ float getDistance(Vector2f pos1, Vector2f pos2)
 
 void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
 {
-    map<float ,shared_ptr<Balloon>> enemy_distance_map;
+    map<float, shared_ptr<Balloon>> enemy_distance_map;
     for (auto enemy : enemies_in_range)
     {
-        if (enemy->isLockedOn() == false)
+        if (this->isInRange(enemy->getPosition()) && enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false)
@@ -216,10 +217,10 @@ void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
 
 void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
 {
-    map<float ,shared_ptr<Balloon>> enemy_distance_map;
+    map<float, shared_ptr<Balloon>> enemy_distance_map;
     for (auto enemy : enemies_in_range)
     {
-        if (enemy->isFrozen() == false && enemy->isLockedOn() == false)
+        if (this->isInRange(enemy->getPosition()) && enemy->isFrozen() == false && enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false)
@@ -228,13 +229,13 @@ void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
     }
 }
 
-void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
+void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies)
 {
     map<int, shared_ptr<Balloon>, greater<int>> enemy_casualties_map;
-    for (auto enemy : enemies_in_range)
+    for (auto enemy : enemies)
     {
-        if (getDistance(position, enemy->getPosition()) < radius && enemy->isLockedOn() == false)
-            enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies_in_range)] = enemy;
+        if (this->isInRange(enemy->getPosition()) && enemy->isLockedOn() == false)
+            enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies)] = enemy;
     }
     if (enemy_casualties_map.empty() == false)
     {
@@ -243,13 +244,35 @@ void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
     }
 }
 
-int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies_in_range)
+int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies)
 {
     CircleShape bomb_radius(BOMB_RADIUS);
     bomb_radius.setPosition(bomb_pos);
     int count = 0;
-    for (auto enemy : enemies_in_range)
+    for (auto enemy : enemies)
         if (getDistance(bomb_pos, enemy->getPosition()) < BOMB_RADIUS)
             count++;
     return count;
+}
+
+void FireTower::shootEnemy()
+{
+}
+void IceTower::shootEnemy()
+{
+    if (locked_in_enemy != nullptr)
+    {
+        float rotation = this->getRotation();
+        r_dir dir = normalizeRotation(rotation);
+        if (dir == ND)
+        {
+            locked_in_enemy->freeze();
+            clock.restart();
+            locked_in_enemy = nullptr;
+        }
+    }
+}
+
+void Cannon::shootEnemy()
+{
 }
