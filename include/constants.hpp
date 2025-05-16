@@ -28,8 +28,11 @@ const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/builda
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";
 const string SHOOTERS_FILEPATH = "assets/sprites/";
 const string HEART_FILENAME = "assets/sprites/heart2.png";
-const string BALLOON_FILENAME = "assets/sprites/mainBalloon.png";
-const string PREGNANT_FILENAME = "assets/sprites/cropped_heart_balloon.png";
+const string RED_NORMAL_BALLOON_FILENAME = "assets/sprites/RedNormalBalloon.png";
+const string FROZEN_NORMAL_BALLOON_FILENAME = "assets/sprites/FrozenNormalBalloon.png";
+const string PURPLE_NORMAL_BALLOON_FILENAME = "assets/sprites/PurpleNormalBalloon.png";
+const string PREGNANT_BALLOON_FILENAME = "assets/sprites/PregnantBalloon.png";
+const string FROZEN_PREGNANT_BALLOON_FILENAME = "assets/sprites/FrozenPregnantBalloon.png";
 const string TOWERS_FILENAME = "towers.csv";
 const string MAP_FILENAME = "map.txt";
 

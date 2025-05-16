@@ -19,7 +19,7 @@ public:
     void setLockedOn() { locked_on = true; }
     bool isFrozen() { return is_frozen; }
     void freeze() { is_frozen = true; clock.restart();}
-    virtual void pop() = 0;
+    // virtual void pop() = 0;
 protected:
     Vector2i v_dir;
     Vector2f position;
@@ -45,7 +45,7 @@ public:
     Pregnant(Texture& texture_, Vector2f position_, Vector2i v_dir, float speed, int point_)
     : Balloon(texture_, position_, v_dir, speed, point_) {}
     void pop();
-    void replicate();
+    // void replicate();
 };
 
 #endif // define BALLOON_HPP

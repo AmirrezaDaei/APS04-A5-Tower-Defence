@@ -33,13 +33,13 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
 }
 
 void Map::constructNormal(Vector2f position) {
-    Texture &texture = texture_manager->getTexture(BALLOON_FILENAME);
+    Texture &texture = texture_manager->getTexture(RED_NORMAL_BALLOON_FILENAME);
     shared_ptr<Balloon> new_balloon = make_shared<Normal>(texture, position, start_dir, TILE_SIZE, 2);
     balloons.push_back(new_balloon);
 }
 
 void Map::constructPregnant(Vector2f position) {
-    Texture &texture = texture_manager->getTexture(PREGNANT_FILENAME);
+    Texture &texture = texture_manager->getTexture(PREGNANT_BALLOON_FILENAME);
     shared_ptr<Balloon> new_balloon = make_shared<Pregnant>(texture, position, start_dir, TILE_SIZE, 2);
     balloons.push_back(new_balloon);
 }
