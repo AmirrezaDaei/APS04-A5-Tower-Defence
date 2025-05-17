@@ -72,6 +72,14 @@ struct PlayerStats
     int money = INITIAL_MONEY;
 };
 
+
+struct WaveConfig {
+    int normal_count = 0;
+    int pregnant_count = 0;
+    int min_gap_ms;
+    int max_gap_ms;
+};
+
 enum r_dir
 {
     CW,

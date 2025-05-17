@@ -16,12 +16,12 @@ Game::Game()
                   Style::Titlebar | Style::Close);
     VideoMode desktop = VideoMode::getDesktopMode();
     window.setPosition(Vector2i((desktop.width - window.getSize().x) / 2, (desktop.height - window.getSize().y) / 2));
-    
+    readWaveConfigs();
     shared_ptr<TextureManager> texture_manager = make_shared<TextureManager>();
     game_map = make_shared<Map>(map_width, map_height, map, texture_manager);
     game_shop = make_shared<Shop>(texture_manager, window, player_stats.money);
     score_board = make_shared<ScoreBoard>(window);
-    input.close();        
+    input.close();
 }
 
 void Game::updateWindow(float dt)
@@ -83,10 +83,11 @@ void Game::handleWave(float dt) {
     waves_time_gap += dt;
     if(is_wave_active) {
         balloons_time_gap += dt;
-        if(balloons_time_gap >= 0.7) {
+        cout << balloons_time_gap << " " << gap << endl;
+        if(balloons_time_gap >= gap) {
             generateRandomBalloon();
         }
-        if(pregnants_spawned >= 4 && normals_spawned >= 3)
+        if(pregnants_spawned >= waves_config[player_stats.round - 1].pregnant_count && normals_spawned >= waves_config[player_stats.round - 1].normal_count)
             endWave();
     }
     else {
@@ -123,12 +124,29 @@ void Game::endWave() {
 }
 
 void Game::generateRandomBalloon() {
+    // cout << pregnants_spawned << " " << waves_config[player_stats.round - 1].pregnant_count << " " << normals_spawned << " " << waves_config[player_stats.round - 1].normal_count << endl;
     if(generateRandom(1, 2) == 1) {
-        if(pregnants_spawned < 4)
+        if(pregnants_spawned < waves_config[player_stats.round - 1].pregnant_count)
         spawnPregnant();
     }
     else {
-        if(normals_spawned < 3)
+        if(normals_spawned < waves_config[player_stats.round - 1].normal_count)
         spawnNormal();
+    }
+    gap = float(generateRandom(waves_config[player_stats.round - 1].min_gap_ms, waves_config[player_stats.round - 1].max_gap_ms)) / 1000;
+}
+
+void Game::readWaveConfigs() {
+    for(const AttackWave& wave : ATTACKING_PLAN) {
+        WaveConfig config;
+        for(const auto& enemy : wave.enemies_count) {
+            if(enemy.first == "Normal")
+                config.normal_count = enemy.second;
+            else if(enemy.first == "Pregnant")
+                config.pregnant_count = enemy.second;
+        }
+        config.min_gap_ms = wave.enemy_launch_gap_ms.first;
+        config.max_gap_ms = wave.enemy_launch_gap_ms.second;
+        waves_config.push_back(config);
     }
 }

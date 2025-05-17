@@ -10,7 +10,7 @@
 #include "scoreboard.hpp"
 #include "tile.hpp"
 #include "balloon.hpp"
-#include "wave_configs.hpp"
+#include "waves_config.hpp"
 #include "constants.hpp"
 
 using namespace std;
@@ -29,12 +29,15 @@ private:
     void startNewWave();
     void generateRandomBalloon();
     void endWave();
+    void readWaveConfigs();
     Clock clock;
     float waves_time_gap = 0.f;
     float balloons_time_gap = 0.f;
+    float gap = 0;
     int normals_spawned = 0;
     int pregnants_spawned = 0;
     bool is_wave_active = false;
+    vector<WaveConfig> waves_config;
     shared_ptr<Map> game_map;
     shared_ptr<Shop> game_shop;
     shared_ptr<ScoreBoard> score_board;

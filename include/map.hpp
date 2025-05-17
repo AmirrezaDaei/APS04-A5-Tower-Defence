@@ -13,7 +13,7 @@
 #include "tile.hpp"
 #include "constants.hpp"
 #include "balloon.hpp"
-#include "wave_configs.hpp"
+#include "waves_config.hpp"
 
 using namespace std;
 using namespace sf;

@@ -36,3 +36,11 @@ void Balloon::turnRight() {
     new_dir.y = v_dir.x;
     v_dir = new_dir;
 }
+
+void Normal::pop() {
+    cout << "Normal" << endl;
+}
+
+void Pregnant::pop() {
+    cout << "Pregnant" << endl;
+}
