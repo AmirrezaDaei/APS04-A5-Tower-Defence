@@ -93,7 +93,11 @@ class Cannon : public GameTower
 public:
     Cannon(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
+    void draw(RenderWindow &window) override;
     void shootEnemy();
+private:
+    vector<shared_ptr<Balloon>> bomb_casualties;
+    CircleShape bomb_radius_circle;
 };
 
 float getDistance(Vector2f pos1, Vector2f pos2);

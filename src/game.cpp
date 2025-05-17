@@ -29,6 +29,13 @@ Game::Game()
     Game_over_sprite.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
     Game_over_sprite.scale(window.getSize().x /game_over_texture.getSize().x, window.getSize().y /game_over_texture.getSize().y);
 
+    you_win_texture = texture_manager->getTexture(YOU_WIN_DISPLAY_FILENAME);
+    you_win_sprite.setTexture(you_win_texture);
+    you_win_sprite.setOrigin(you_win_texture.getSize().x / 2.0f, you_win_texture.getSize().y / 2.0f);
+    you_win_sprite.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
+    you_win_sprite.scale(window.getSize().x / you_win_texture.getSize().x, window.getSize().y / you_win_texture.getSize().y);
+
+
     state = PLAYING;
 }
 
@@ -100,6 +107,12 @@ void Game::run()
             }
             updateWindow(dt);
             window.display();
+            if (player_stats.round == ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
+            {   
+                clock.restart();
+                state = GAME_WON;
+                music.pause();
+            }
         }
         
         if (state == GAME_OVER)
@@ -107,6 +120,15 @@ void Game::run()
             window.clear();
             window.draw(Game_over_sprite);
             window.display();
+        }
+        if (state == GAME_WON)
+        {
+            if (clock.getElapsedTime().asSeconds() > 2)
+            {
+                window.clear();
+                window.draw(you_win_sprite);
+                window.display(); 
+            }
         }
     }
 }

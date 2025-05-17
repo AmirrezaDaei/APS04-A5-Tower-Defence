@@ -49,6 +49,8 @@ private:
     shared_ptr<ShopTower> chosen_tower = nullptr;
     Texture game_over_texture;
     Sprite Game_over_sprite;
+    Texture you_win_texture;
+    Sprite you_win_sprite;
 };
 
 #endif // define GAME_HPP

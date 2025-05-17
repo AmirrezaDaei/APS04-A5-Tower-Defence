@@ -25,6 +25,7 @@ const char COMMA_SEPERATOR = ',';
 const string IMAGE_FORMAT = ".png";
 
 const string GAME_OVER_DISPLAY_FILENAME = "assets/sprites/game_over.png";
+const string YOU_WIN_DISPLAY_FILENAME = "assets/sprites/you_win.png";
 const string MUSIC_FILENAME = "assets/music & soundTracks/Zang_Bzn_Ambulaance.ogg";
 const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/buildable_tile.png";
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";
@@ -46,7 +47,7 @@ const string MAP_FILENAME = "map.txt";
 const string SCORE_BOARD_FONT_FILENAME = "assets/sprites/fonts/anton.ttf";
 const string DESCRIBTION_FONT_FILENAME = "assets/sprites/fonts/PressStart2P.ttf";
 
-const float BOMB_RADIUS = 30.f;
+const float BOMB_RADIUS = 80.f;
 
 const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";
@@ -56,7 +57,7 @@ const string NORMAL_SHOOTER_TITLE = "Fire Tower";
 const string ICE_SHOOTER_TITLE = "Ice Tower";
 const string CANNON_TITLE = "Cannon";
 
-const float MAX_HEALTH = 1.f;
+const float MAX_HEALTH = 40.f;
 const int INITIAL_MONEY = 420;
 const float DAMAGE = 2;
 const float ROTATION_SPEED = 135;
@@ -102,11 +103,7 @@ enum r_dir
 
 enum GameState
 {
-    MENU,
-    SETTINGS,
-    PREPARING_FOR_ROUND,
     PLAYING,
-    PAUSED,
     GAME_WON,
     GAME_OVER
 }; 
