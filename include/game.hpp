@@ -11,6 +11,7 @@
 #include "tile.hpp"
 #include "balloon.hpp"
 #include "wave_configs.hpp"
+#include "constants.hpp"
 
 using namespace std;
 
@@ -23,14 +24,16 @@ public:
 private:
     void updateWindow(float dt);
     void handleWave(float dt);
-    void spawnBalloon();
+    void spawnNormal();
+    void spawnPregnant();
     void startNewWave();
+    void generateRandomBalloon();
     void endWave();
     Clock clock;
-    float waves_gap = 0.f;
-    float balloons_gap = 0.f;
-    int wave = 0;
-    int balloons_spawned = 0;
+    float waves_time_gap = 0.f;
+    float balloons_time_gap = 0.f;
+    int normals_spawned = 0;
+    int pregnants_spawned = 0;
     bool is_wave_active = false;
     shared_ptr<Map> game_map;
     shared_ptr<Shop> game_shop;

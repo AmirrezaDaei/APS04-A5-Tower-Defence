@@ -2,6 +2,7 @@
 #define CONSTS_HPP
 
 #include <iostream>
+#include <random>
 using namespace std;
 
 const float TILE_SIZE = 75.f;
@@ -32,6 +33,11 @@ const string PREGNANT_FILENAME = "assets/sprites/cropped_heart_balloon.png";
 const string ICE_RAY_FILENAME = "assets/sprites/extra_sprite/projectiles/ice_ray2.png";
 const string FIRE_RAY_FILENAME = "assets/sprites/extra_sprite/projectiles/fire_ray.png";
 const string CANNON_RAY_FILENAME = "assets/sprites/extra_sprite/projectiles/cannon_ray.png";
+const string RED_NORMAL_BALLOON_FILENAME = "assets/sprites/RedNormalBalloon.png";
+const string FROZEN_NORMAL_BALLOON_FILENAME = "assets/sprites/FrozenNormalBalloon.png";
+const string PURPLE_NORMAL_BALLOON_FILENAME = "assets/sprites/PurpleNormalBalloon.png";
+const string PREGNANT_BALLOON_FILENAME = "assets/sprites/PregnantBalloon.png";
+const string FROZEN_PREGNANT_BALLOON_FILENAME = "assets/sprites/FrozenPregnantBalloon.png";
 const string TOWERS_FILENAME = "towers.csv";
 const string MAP_FILENAME = "map.txt";
 
@@ -66,7 +72,7 @@ namespace t_info
 
 struct PlayerStats
 {
-    int round = 1;
+    int round = 0;
     float health = MAX_HEALTH;
     int money = INITIAL_MONEY;
 };
@@ -88,5 +94,7 @@ enum GameState
     GAME_WON,
     GAME_OVER
 }; 
+
+int generateRandom(int from, int to);
 
 #endif // define CONSTS_HPP

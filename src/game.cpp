@@ -80,36 +80,55 @@ void Game::run()
 }
 
 void Game::handleWave(float dt) {
-    waves_gap += dt;
+    waves_time_gap += dt;
     if(is_wave_active) {
-        balloons_gap += dt;
-        if(balloons_spawned < 8 && balloons_gap >= 0.7)
-            spawnBalloon();
-        if(balloons_spawned >= 8)
+        balloons_time_gap += dt;
+        if(balloons_time_gap >= 0.7) {
+            generateRandomBalloon();
+        }
+        if(pregnants_spawned >= 4 && normals_spawned >= 3)
             endWave();
     }
     else {
-        waves_gap += dt;
-        if(waves_gap >= WAVE_LAUNCH_GAP_SECS) 
-            if(wave < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
+        waves_time_gap += dt;
+        if(waves_time_gap >= WAVE_LAUNCH_GAP_SECS) 
+            if(player_stats.round < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
                 startNewWave();
     }
 }
 
-void Game::spawnBalloon() {
-    balloons_spawned++;
-    game_map->constructBalloons(game_map->getStartPoint());
-    balloons_gap = 0.f;
+void Game::spawnNormal() {
+    normals_spawned++;
+    game_map->constructNormal(game_map->getStartPoint());
+    balloons_time_gap = 0.f;
+}
+
+void Game::spawnPregnant() {
+    pregnants_spawned++;
+    game_map->constructPregnant(game_map->getStartPoint());
+    balloons_time_gap = 0.f;
 }
 
 void Game::startNewWave() {
-    wave++;
-    waves_gap = 0.f;
+    player_stats.round++;
+    waves_time_gap = 0.f;
     is_wave_active = true;
-    balloons_spawned = 0;
+    pregnants_spawned = 0;
+    normals_spawned = 0;
 }
 
 void Game::endWave() {
     is_wave_active = false;
-    waves_gap = 0.f;
+    waves_time_gap = 0.f;
+}
+
+void Game::generateRandomBalloon() {
+    if(generateRandom(1, 2) == 1) {
+        if(pregnants_spawned < 4)
+        spawnPregnant();
+    }
+    else {
+        if(normals_spawned < 3)
+        spawnNormal();
+    }
 }
