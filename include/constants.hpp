@@ -22,8 +22,6 @@ const char START = 'S';
 const char FINISH = 'F';
 const char COMMA_SEPERATOR = ',';
 
-#define wall cerr<<"--------------------------------------"<<endl
-
 const string IMAGE_FORMAT = ".png";
 
 const string GAME_OVER_DISPLAY_FILENAME = "assets/sprites/game_over.png";

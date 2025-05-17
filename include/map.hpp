@@ -8,6 +8,7 @@
 #include <memory>
 #include <cmath>
 #include <random>
+#include <list>
 #include "texturemanager.hpp"
 #include "tower.hpp"
 #include "tile.hpp"
@@ -32,7 +33,7 @@ public:
     void handleTowersAiming();
     void setStartDir(vector<string> map, int i, int j);
     bool isBalloonsPopped();
-
+    void spawnNormalBalloon(Vector2f pos, Vector2i dir);
 private:
     shared_ptr<TextureManager> texture_manager;
     Vector2f start_point;
@@ -41,7 +42,7 @@ private:
     vector<shared_ptr<Tile>> path_tiles;
     vector<shared_ptr<Tile>> tiles;
     vector<shared_ptr<GameTower>> towers;
-    vector<shared_ptr<Balloon>> balloons;
+    list<shared_ptr<Balloon>> balloons;
     int& money;
     float& health;
     int map_height;

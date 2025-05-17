@@ -78,44 +78,49 @@ void Map::setStartDir(vector<string> map, int i, int j) {
 }
 
 void Map::drawBalloons(RenderWindow &window, float dt) {
-    vector<vector<shared_ptr<Balloon>>::iterator> destroyed;
-    vector<vector<shared_ptr<Balloon>>::iterator> finished;
-    for(auto it = balloons.begin(); it != balloons.end();) {
+    for (auto it = balloons.begin(); it != balloons.end();) {
         auto& balloon = *it;
-        if(balloon->isDestroyed()) {
-            destroyed.push_back(it);
+        if (balloon->isDestroyed()) {
             money += balloon->getPoint();
+            if (balloon->getType() == PREGNANT) {
+                if(balloon->getVDir().x == 0) {
+                    spawnNormalBalloon(Vector2f(balloon->getPosition().x, balloon->getPosition().y + generateRandom(-5, 5)), balloon->getVDir());
+                    spawnNormalBalloon(Vector2f(balloon->getPosition().x, balloon->getPosition().y + generateRandom(-5, 5)), balloon->getVDir());
+                }
+                else if(balloon->getVDir().y == 0) {
+                    spawnNormalBalloon(Vector2f(balloon->getPosition().x + generateRandom(-5, 5), balloon->getPosition().y), balloon->getVDir());
+                    spawnNormalBalloon(Vector2f(balloon->getPosition().x + generateRandom(-5, 5), balloon->getPosition().y), balloon->getVDir());    
+                }
+            }
+            it = balloons.erase(it);
             continue;
         }
         balloon->move(dt);
         Vector2f pos = balloon->getPosition();
         Vector2i current_dir = balloon->getVDir();
-        if(!this->isPath(pos, current_dir)) {
+        if (!this->isPath(pos, current_dir)) {
             Vector2i right_dir = Vector2i(-current_dir.y, current_dir.x);
             Vector2i left_dir  = Vector2i(current_dir.y, -current_dir.x);
-            if(this->isPath(pos, right_dir))
+            if (this->isPath(pos, right_dir))
                 balloon->turnRight();
-            else if(this->isPath(pos, left_dir))
+            else if (this->isPath(pos, left_dir))
                 balloon->turnLeft();
             else {
-                finished.push_back(it);
-                balloons.erase(it);
                 health -= DAMAGE;
+                it = balloons.erase(it);
                 continue;
             }
         }
-        balloon->draw(window);
-        ++it;
+            balloon->draw(window);
+            ++it;
     }
-    // for(auto& it : finished) {
-    //     // wall;
-    //     balloons.erase(it);
-    // }
-    // for(auto& it : destroyed) {
-    //     constructNormal((*it)->getPosition());
-    //     constructNormal((*it)->getPosition());
-    //     balloons.erase(it);
-    // }
+}
+
+void Map::spawnNormalBalloon(Vector2f pos, Vector2i dir) {
+    Texture &texture = texture_manager->getTexture(RED_NORMAL_BALLOON_FILENAME);
+    Texture &frozen_texture = texture_manager->getTexture(FROZEN_NORMAL_BALLOON_FILENAME);
+    shared_ptr<Balloon> normalBalloon = make_shared<Normal>(texture, pos, dir, TILE_SIZE, POINT, frozen_texture);
+    balloons.push_back(normalBalloon);
 }
 
 bool Map::isPath(Vector2f position, Vector2i v_dir) {
