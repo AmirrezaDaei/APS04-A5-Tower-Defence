@@ -107,7 +107,7 @@ void Game::run()
             }
             updateWindow(dt);
             window.display();
-            if (player_stats.round == ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
+            if (player_stats.round == ATTACKING_PLAN.size() && game_map->isBalloonsPopped() && is_wave_active == false)
             {   
                 clock.restart();
                 state = GAME_WON;
@@ -159,14 +159,14 @@ void Game::handleWave(float dt)
 void Game::spawnNormal()
 {
     normals_spawned++;
-    game_map->constructNormal(game_map->getStartPoint());
+    game_map->constructNormal(game_map->getStartPoint(), game_map->getStartVDir());
     balloons_time_gap = 0.f;
 }
 
 void Game::spawnPregnant()
 {
     pregnants_spawned++;
-    game_map->constructPregnant(game_map->getStartPoint());
+    game_map->constructPregnant(game_map->getStartPoint(), game_map->getStartVDir());
     balloons_time_gap = 0.f;
 }
 
