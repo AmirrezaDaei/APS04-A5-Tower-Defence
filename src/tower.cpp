@@ -210,12 +210,12 @@ float getDistance(Vector2f pos1, Vector2f pos2)
     return distance;
 }
 
-void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
+void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies)
 {
     map<float, shared_ptr<Balloon>> enemy_distance_map;
-    for (auto enemy : enemies_in_range)
+    for (auto enemy : enemies)
     {
-        if (this->isInRange(enemy->getPosition()) && enemy->isLockedOn() == false)
+        if (this->isInRange(enemy->getPosition()))
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false)
@@ -225,12 +225,12 @@ void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
     }
 }
 
-void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies_in_range)
+void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies)
 {
     map<float, shared_ptr<Balloon>> enemy_distance_map;
-    for (auto enemy : enemies_in_range)
+    for (auto enemy : enemies)
     {
-        if (this->isInRange(enemy->getPosition()) && enemy->isFrozen() == false && enemy->isLockedOn() == false)
+        if (this->isInRange(enemy->getPosition()) && enemy->isFrozen() == false )
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false)
