@@ -1,4 +1,4 @@
 name,price,radius,cooldown
 normal_shooter,50,120,2
 ice_shooter,150,100,2
-cannon,320,75,1.5
+cannon,320,100,1.5
