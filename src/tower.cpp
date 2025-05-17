@@ -273,7 +273,7 @@ void FireTower::shootEnemy()
         r_dir dir = normalizeRotation(rotation);
         if (dir == ND)
         {
-            //enemy->pop();
+            locked_in_enemy->pop();
             clock.restart();
             shooting_ray = true;
             ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,

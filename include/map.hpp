@@ -20,7 +20,7 @@ using namespace sf;
 
 class Map {
 public:
-    Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager);
+    Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager, int& money_, float& health_);
     Vector2f getStartPoint() {return start_point;}
     void constructNormal(Vector2f position);
     void constructPregnant(Vector2f position);
@@ -32,6 +32,7 @@ public:
     void handleTowersAiming();
     void setStartDir(vector<string> map, int i, int j);
     bool isBalloonsPopped();
+
 private:
     shared_ptr<TextureManager> texture_manager;
     Vector2f start_point;
@@ -41,6 +42,8 @@ private:
     vector<shared_ptr<Tile>> tiles;
     vector<shared_ptr<GameTower>> towers;
     vector<shared_ptr<Balloon>> balloons;
+    int& money;
+    float& health;
     int map_height;
     int map_width;
 };

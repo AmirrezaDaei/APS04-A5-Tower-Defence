@@ -18,7 +18,7 @@ Game::Game()
     window.setPosition(Vector2i((desktop.width - window.getSize().x) / 2, (desktop.height - window.getSize().y) / 2));
     readWaveConfigs();
     shared_ptr<TextureManager> texture_manager = make_shared<TextureManager>();
-    game_map = make_shared<Map>(map_width, map_height, map, texture_manager);
+    game_map = make_shared<Map>(map_width, map_height, map, texture_manager, player_stats.money, player_stats.health);
     game_shop = make_shared<Shop>(texture_manager, window, player_stats.money);
     score_board = make_shared<ScoreBoard>(window);
     input.close();
@@ -35,6 +35,11 @@ void Game::updateWindow(float dt)
 
 void Game::run()
 {
+    Music music;
+    if(!music.openFromFile(MUSIC_FILENAME))
+        cerr << "Unable to load music file" << endl;
+    music.setLoop(true);
+    music.play(); 
     while (window.isOpen())
     {
         Event event;

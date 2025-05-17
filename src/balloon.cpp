@@ -55,9 +55,14 @@ void Balloon::freeze() {
 }
 
 void Normal::pop() {
-    cout << "Normal" << endl;
+    is_destroyed = true;
 }
 
 void Pregnant::pop() {
-    cout << "Pregnant" << endl;
+    is_destroyed = true;
+    // replicate();
+}
+
+void Pregnant() {
+
 }

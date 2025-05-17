@@ -24,6 +24,7 @@ const char COMMA_SEPERATOR = ',';
 
 const string IMAGE_FORMAT = ".png";
 
+const string MUSIC_FILENAME = "assets/music & soundTracks/Zang_Bzn_Ambulaance.ogg";
 const string BUILDABLE_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/buildable_tile.png";
 const string PATH_TILE_FILENAME = "assets/sprites/extra_sprite/tiles/path_tile.png";
 const string SHOOTERS_FILEPATH = "assets/sprites/";
@@ -56,10 +57,11 @@ const string CANNON_TITLE = "Cannon";
 
 const float MAX_HEALTH = 40.f;
 const int INITIAL_MONEY = 420;
-
+const float DAMAGE = 2;
 const float ROTATION_SPEED = 135;
 const int TO_SECONDS = 1000;
-const float FREEZE_TIME = 3;
+const float FREEZE_TIME = 1;
+const int POINT = 20;
 
 
 namespace t_info

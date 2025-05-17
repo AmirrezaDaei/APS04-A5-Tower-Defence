@@ -11,6 +11,7 @@ public:
     Vector2f getPosition() { return position; }
     Vector2i getVDir() { return v_dir; }
     float getSpeed() { return speed; }
+    int getPoint() { return point; }
     void draw(RenderWindow &window);
     void move(float dt);
     void turnLeft();
@@ -18,6 +19,7 @@ public:
     bool isLockedOn() { return locked_on; }
     void setLockedOn() { locked_on = true; }
     bool isFrozen() { return is_frozen; }
+    bool isDestroyed() { return is_destroyed; }
     void freeze();
     virtual void pop() = 0;
 protected:

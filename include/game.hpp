@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <memory>
+#include <SFML/Audio.hpp>
 #include "map.hpp"
 #include "shop.hpp"
 #include "scoreboard.hpp"
@@ -22,6 +23,7 @@ public:
     void run();
 
 private:
+    Music music;
     void updateWindow(float dt);
     void handleWave(float dt);
     void spawnNormal();

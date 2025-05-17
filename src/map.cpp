@@ -1,7 +1,7 @@
 #include "map.hpp"
 
-Map::Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager_) : 
-map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_)
+Map::Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager_, int& money_, float& health_) : 
+map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_), money(money_), health(health_)
 {
     for(int i = 0; i < map_height; i++)
     {
@@ -35,14 +35,14 @@ map_width(map_width_), map_height(map_height_), texture_manager(texture_manager_
 void Map::constructNormal(Vector2f position) {
     Texture &texture = texture_manager->getTexture(RED_NORMAL_BALLOON_FILENAME);
     Texture &frozen_texture = texture_manager->getTexture(FROZEN_NORMAL_BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Normal>(texture, position, start_dir, TILE_SIZE, 2, frozen_texture);
+    shared_ptr<Balloon> new_balloon = make_shared<Normal>(texture, position, start_dir, TILE_SIZE, POINT, frozen_texture);
     balloons.push_back(new_balloon);
 }
 
 void Map::constructPregnant(Vector2f position) {
     Texture &texture = texture_manager->getTexture(PREGNANT_BALLOON_FILENAME);
     Texture &frozen_texture = texture_manager->getTexture(FROZEN_PREGNANT_BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Pregnant>(texture, position, start_dir, TILE_SIZE, 2, frozen_texture);
+    shared_ptr<Balloon> new_balloon = make_shared<Pregnant>(texture, position, start_dir, TILE_SIZE, POINT, frozen_texture);
     balloons.push_back(new_balloon);
 }
 
@@ -80,6 +80,11 @@ void Map::setStartDir(vector<string> map, int i, int j) {
 void Map::drawBalloons(RenderWindow &window, float dt) {
     for(auto it = balloons.begin(); it != balloons.end();) {
         auto& balloon = *it;
+        if(balloon->isDestroyed()) {
+            balloons.erase(it);
+            money += balloon->getPoint();
+            continue;
+        }
         balloon->move(dt);
         Vector2f pos = balloon->getPosition();
         Vector2i current_dir = balloon->getVDir();
@@ -92,6 +97,7 @@ void Map::drawBalloons(RenderWindow &window, float dt) {
                 balloon->turnLeft();
             else {
                 balloons.erase(it);
+                health -= DAMAGE;
                 continue;
             }
         }
@@ -142,7 +148,6 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
                     Texture& ray_texture = texture_manager->getTexture(CANNON_RAY_FILENAME);
                     new_tower = make_shared<Cannon>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
                     tower->getRadius(), ray_texture);                  
-                
                 }    
                 
                 towers.push_back(new_tower);
