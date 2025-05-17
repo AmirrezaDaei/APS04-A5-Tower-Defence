@@ -6,3 +6,10 @@ int generateRandom(int from, int to) {
     uniform_int_distribution<> dist(from, to);
     return dist(gen);
 }
+
+void createText(Text& text ,Font& font, int size, Color color)
+{
+    text.setFont(font);
+    text.setCharacterSize(size);
+    text.setFillColor(color);
+}
