@@ -121,7 +121,7 @@ void Map::drawBalloons(RenderWindow &window, float dt) {
 }
 
 void Map::spawnNormalBalloon(Vector2f pos, Vector2i dir) {
-    Texture &texture = texture_manager->getTexture(RED_NORMAL_BALLOON_FILENAME);
+    Texture &texture = texture_manager->getTexture(PURPLE_NORMAL_BALLOON_FILENAME);
     Texture &frozen_texture = texture_manager->getTexture(FROZEN_NORMAL_BALLOON_FILENAME);
     shared_ptr<Balloon> normalBalloon = make_shared<Normal>(texture, pos, dir, TILE_SIZE, POINT, frozen_texture);
     balloons.push_back(normalBalloon);
