@@ -22,6 +22,14 @@ Game::Game()
     game_shop = make_shared<Shop>(texture_manager, window, player_stats.money);
     score_board = make_shared<ScoreBoard>(window);
     input.close();
+
+    game_over_texture = texture_manager->getTexture(GAME_OVER_DISPLAY_FILENAME);
+    Game_over_sprite.setTexture(game_over_texture);
+    Game_over_sprite.setOrigin(game_over_texture.getSize().x / 2.0f, game_over_texture.getSize().y / 2.0f);
+    Game_over_sprite.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
+    Game_over_sprite.scale(window.getSize().x /game_over_texture.getSize().x, window.getSize().y /game_over_texture.getSize().y);
+
+    state = PLAYING;
 }
 
 void Game::updateWindow(float dt)
@@ -36,10 +44,10 @@ void Game::updateWindow(float dt)
 void Game::run()
 {
     Music music;
-    if(!music.openFromFile(MUSIC_FILENAME))
+    if (!music.openFromFile(MUSIC_FILENAME))
         cerr << "Unable to load music file" << endl;
     music.setLoop(true);
-    music.play(); 
+    music.play();
     while (window.isOpen())
     {
         Event event;
@@ -48,74 +56,100 @@ void Game::run()
             if (event.type == Event::Closed)
             {
                 window.close();
-            }    
-            if (event.type == Event::MouseButtonPressed)
+            }
+            if (state == PLAYING)
             {
-                if (event.mouseButton.button == Mouse::Left)
+                if (event.type == Event::MouseButtonPressed)
                 {
-                    Vector2i mousePos = Mouse::getPosition(window);
-                    chosen_tower = game_shop->handleBuyingTower(mousePos);
-                    if (chosen_tower != NULL)
+                    if (event.mouseButton.button == Mouse::Left)
                     {
-                        bool bought = game_map->plantTower(mousePos, chosen_tower);
-                        if (bought == true)
+                        Vector2i mousePos = Mouse::getPosition(window);
+                        chosen_tower = game_shop->handleBuyingTower(mousePos);
+                        if (chosen_tower != NULL)
                         {
-                            player_stats.money -= chosen_tower->getPrice();
-                            game_shop->abortBuying();
+                            bool bought = game_map->plantTower(mousePos, chosen_tower);
+                            if (bought == true)
+                            {
+                                player_stats.money -= chosen_tower->getPrice();
+                                game_shop->abortBuying();
+                            }
+                            chosen_tower = nullptr;
                         }
-                        chosen_tower = nullptr;
                     }
-                }
-                if (event.mouseButton.button == Mouse::Right)
-                {
-                    chosen_tower = nullptr;
-                    game_shop->abortBuying();
+                    if (event.mouseButton.button == Mouse::Right)
+                    {
+                        chosen_tower = nullptr;
+                        game_shop->abortBuying();
+                    }
                 }
             }
         }
-        float dt = clock.restart().asSeconds();
-        Vector2i mouse_pos = Mouse::getPosition(window);
-        handleWave(dt);
-        game_shop->handleTowerBeingHovered(mouse_pos);
-        game_map->handleTowersAiming();
-        window.clear();
-        updateWindow(dt);
-        window.display();
+        if (state == PLAYING)
+        {
+            float dt = clock.restart().asSeconds();
+            Vector2i mouse_pos = Mouse::getPosition(window);
+            handleWave(dt);
+            game_shop->handleTowerBeingHovered(mouse_pos);
+            game_map->handleTowersAiming();
+            window.clear();
+            if (player_stats.health <= 0)
+            {
+                state = GAME_OVER;
+                music.pause();
+                continue;
+            }
+            updateWindow(dt);
+            window.display();
+        }
+        
+        if (state == GAME_OVER)
+        {
+            window.clear();
+            window.draw(Game_over_sprite);
+            window.display();
+        }
     }
 }
 
-void Game::handleWave(float dt) {
+void Game::handleWave(float dt)
+{
     waves_time_gap += dt;
-    if(is_wave_active) {
+    if (is_wave_active)
+    {
         balloons_time_gap += dt;
-        if(balloons_time_gap >= gap) {
+        if (balloons_time_gap >= gap)
+        {
             generateRandomBalloon();
         }
-        if(pregnants_spawned >= waves_config[player_stats.round - 1].pregnant_count &&
+        if (pregnants_spawned >= waves_config[player_stats.round - 1].pregnant_count &&
             normals_spawned >= waves_config[player_stats.round - 1].normal_count)
             endWave();
     }
-    else {
+    else
+    {
         waves_time_gap += dt;
-        if(waves_time_gap >= WAVE_LAUNCH_GAP_SECS) 
-            if(player_stats.round < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
+        if (waves_time_gap >= WAVE_LAUNCH_GAP_SECS)
+            if (player_stats.round < ATTACKING_PLAN.size() && game_map->isBalloonsPopped())
                 startNewWave();
     }
 }
 
-void Game::spawnNormal() {
+void Game::spawnNormal()
+{
     normals_spawned++;
     game_map->constructNormal(game_map->getStartPoint());
     balloons_time_gap = 0.f;
 }
 
-void Game::spawnPregnant() {
+void Game::spawnPregnant()
+{
     pregnants_spawned++;
     game_map->constructPregnant(game_map->getStartPoint());
     balloons_time_gap = 0.f;
 }
 
-void Game::startNewWave() {
+void Game::startNewWave()
+{
     player_stats.round++;
     waves_time_gap = 0.f;
     is_wave_active = true;
@@ -123,30 +157,37 @@ void Game::startNewWave() {
     normals_spawned = 0;
 }
 
-void Game::endWave() {
+void Game::endWave()
+{
     is_wave_active = false;
     waves_time_gap = 0.f;
 }
 
-void Game::generateRandomBalloon() {
-    if(generateRandom(1, 2) == 1) {
-        if(pregnants_spawned < waves_config[player_stats.round - 1].pregnant_count)
-        spawnPregnant();
+void Game::generateRandomBalloon()
+{
+    if (generateRandom(1, 2) == 1)
+    {
+        if (pregnants_spawned < waves_config[player_stats.round - 1].pregnant_count)
+            spawnPregnant();
     }
-    else {
-        if(normals_spawned < waves_config[player_stats.round - 1].normal_count)
-        spawnNormal();
+    else
+    {
+        if (normals_spawned < waves_config[player_stats.round - 1].normal_count)
+            spawnNormal();
     }
     gap = float(generateRandom(waves_config[player_stats.round - 1].min_gap_ms, waves_config[player_stats.round - 1].max_gap_ms)) / TO_SECONDS;
 }
 
-void Game::readWaveConfigs() {
-    for(const AttackWave& wave : ATTACKING_PLAN) {
+void Game::readWaveConfigs()
+{
+    for (const AttackWave &wave : ATTACKING_PLAN)
+    {
         WaveConfig config;
-        for(const auto& enemy : wave.enemies_count) {
-            if(enemy.first == "Normal")
+        for (const auto &enemy : wave.enemies_count)
+        {
+            if (enemy.first == "Normal")
                 config.normal_count = enemy.second;
-            else if(enemy.first == "Pregnant")
+            else if (enemy.first == "Pregnant")
                 config.pregnant_count = enemy.second;
         }
         config.min_gap_ms = wave.enemy_launch_gap_ms.first;

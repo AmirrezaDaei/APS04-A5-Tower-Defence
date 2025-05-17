@@ -47,6 +47,8 @@ private:
     PlayerStats player_stats;
     GameState state;
     shared_ptr<ShopTower> chosen_tower = nullptr;
+    Texture game_over_texture;
+    Sprite Game_over_sprite;
 };
 
 #endif // define GAME_HPP
