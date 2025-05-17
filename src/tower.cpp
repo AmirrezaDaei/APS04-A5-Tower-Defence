@@ -24,19 +24,23 @@ GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &t
     radius_circle.setOrigin(radius_circle.getRadius(), radius_circle.getRadius());
     radius_circle.setFillColor(Color(173, 216, 230, 50));
     radius_circle.setPosition(position);
-    
 
-    ray_sprite.setTexture(ray_texture_); 
+    ray_sprite.setTexture(ray_texture_);
 }
 
-FireTower::FireTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_,Texture &ray_texture_ )
+FireTower::FireTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
     : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_) {}
 
 IceTower::IceTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
     : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_) {}
 
 Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
-    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_) {}
+    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_)
+{
+    bomb_radius_circle.setRadius(BOMB_RADIUS);                                    
+    bomb_radius_circle.setFillColor(Color(255, 0, 0, 128));                           
+    bomb_radius_circle.setOrigin(BOMB_RADIUS, BOMB_RADIUS);                    
+}
 
 ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_)
     : Tower(position_, price_, cooldown_, texture_, radius_), name(name_), size(size_)
@@ -57,13 +61,25 @@ void ShopTower::draw(RenderWindow &window)
     window.draw(sprite);
 }
 
-
 void GameTower::draw(RenderWindow &window)
 {
     if (clock.getElapsedTime().asSeconds() >= 0.2)
         shooting_ray = false;
     if (shooting_ray == true)
     {
+        window.draw(ray_sprite);
+    }
+    window.draw(radius_circle);
+    window.draw(sprite);
+}
+
+void Cannon::draw(RenderWindow &window)
+{
+    if (clock.getElapsedTime().asSeconds() >= 0.2)
+        shooting_ray = false;
+    if (shooting_ray == true)
+    {
+        window.draw(bomb_radius_circle);
         window.draw(ray_sprite);
     }
     window.draw(radius_circle);
@@ -215,7 +231,7 @@ void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies)
     map<float, shared_ptr<Balloon>> enemy_distance_map;
     for (auto enemy : enemies)
     {
-        if (this->isInRange(enemy->getPosition()))
+        if (this->isInRange(enemy->getPosition()) && enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false)
@@ -230,7 +246,7 @@ void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies)
     map<float, shared_ptr<Balloon>> enemy_distance_map;
     for (auto enemy : enemies)
     {
-        if (this->isInRange(enemy->getPosition()) && enemy->isFrozen() == false )
+        if (this->isInRange(enemy->getPosition()) && enemy->isFrozen() == false && enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false)
@@ -244,13 +260,18 @@ void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies)
     map<int, shared_ptr<Balloon>, greater<int>> enemy_casualties_map;
     for (auto enemy : enemies)
     {
-        if (this->isInRange(enemy->getPosition()) && enemy->isLockedOn() == false)
+        if (this->isInRange(enemy->getPosition()))
             enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies)] = enemy;
     }
     if (enemy_casualties_map.empty() == false)
     {
         locked_in_enemy = enemy_casualties_map.begin()->second;
         locked_in_enemy->setLockedOn();
+        for (auto enemy : enemies)
+        {
+            if (getDistance(locked_in_enemy->getPosition(), enemy->getPosition()) < BOMB_RADIUS)
+                bomb_casualties.push_back(enemy);
+        }
     }
 }
 
@@ -277,7 +298,7 @@ void FireTower::shootEnemy()
             clock.restart();
             shooting_ray = true;
             ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
-            getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
+                                getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
             ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
             ray_sprite.setPosition(position);
             ray_sprite.setRotation(sprite.getRotation());
@@ -298,7 +319,7 @@ void IceTower::shootEnemy()
             clock.restart();
             shooting_ray = true;
             ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
-            getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
+                                getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
             ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
             ray_sprite.setPosition(position);
             ray_sprite.setRotation(sprite.getRotation());
@@ -310,4 +331,25 @@ void IceTower::shootEnemy()
 
 void Cannon::shootEnemy()
 {
+    if (locked_in_enemy != nullptr)
+    {
+        float rotation = this->getRotation();
+        r_dir dir = normalizeRotation(rotation);
+        if (dir == ND)
+        {
+            for (auto enemy : bomb_casualties)
+                enemy->pop();
+            bomb_radius_circle.setPosition(locked_in_enemy->getPosition());
+            clock.restart();
+            shooting_ray = true;
+            ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
+                                getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
+            ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
+            ray_sprite.setPosition(position);
+            ray_sprite.setRotation(sprite.getRotation());
+            has_cooled_down = false;
+            locked_in_enemy = nullptr;
+            bomb_casualties.clear();
+        }
+    }
 }
