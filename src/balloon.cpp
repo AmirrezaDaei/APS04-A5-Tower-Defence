@@ -37,6 +37,11 @@ void Balloon::turnRight() {
     v_dir = new_dir;
 }
 
+void Balloon::freeze() {
+    is_frozen = true;
+    clock.restart();
+}
+
 void Normal::pop() {
     cout << "Normal" << endl;
 }

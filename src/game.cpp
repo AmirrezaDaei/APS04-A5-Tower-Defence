@@ -83,11 +83,11 @@ void Game::handleWave(float dt) {
     waves_time_gap += dt;
     if(is_wave_active) {
         balloons_time_gap += dt;
-        cout << balloons_time_gap << " " << gap << endl;
         if(balloons_time_gap >= gap) {
             generateRandomBalloon();
         }
-        if(pregnants_spawned >= waves_config[player_stats.round - 1].pregnant_count && normals_spawned >= waves_config[player_stats.round - 1].normal_count)
+        if(pregnants_spawned >= waves_config[player_stats.round - 1].pregnant_count &&
+            normals_spawned >= waves_config[player_stats.round - 1].normal_count)
             endWave();
     }
     else {
@@ -124,7 +124,6 @@ void Game::endWave() {
 }
 
 void Game::generateRandomBalloon() {
-    // cout << pregnants_spawned << " " << waves_config[player_stats.round - 1].pregnant_count << " " << normals_spawned << " " << waves_config[player_stats.round - 1].normal_count << endl;
     if(generateRandom(1, 2) == 1) {
         if(pregnants_spawned < waves_config[player_stats.round - 1].pregnant_count)
         spawnPregnant();
@@ -133,7 +132,7 @@ void Game::generateRandomBalloon() {
         if(normals_spawned < waves_config[player_stats.round - 1].normal_count)
         spawnNormal();
     }
-    gap = float(generateRandom(waves_config[player_stats.round - 1].min_gap_ms, waves_config[player_stats.round - 1].max_gap_ms)) / 1000;
+    gap = float(generateRandom(waves_config[player_stats.round - 1].min_gap_ms, waves_config[player_stats.round - 1].max_gap_ms)) / TO_SECONDS;
 }
 
 void Game::readWaveConfigs() {

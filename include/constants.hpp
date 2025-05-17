@@ -53,7 +53,7 @@ const float MAX_HEALTH = 40.f;
 const int INITIAL_MONEY = 420;
 
 const float ROTATION_SPEED = 135;
-
+const int TO_SECONDS = 1000;
 const float FREEZE_TIME = 1;
 
 

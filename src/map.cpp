@@ -150,10 +150,10 @@ void Map::handleTowersAiming()
             if (tower->readyToShoot())
             {
                 vector<shared_ptr<Balloon>> enemies;
-                    for (auto balloon : balloons)
-                        enemies.push_back(balloon);  
-                    if (enemies.size() != 0)
-                        tower->selectEnemy(enemies);
+                for (auto balloon : balloons)
+                    enemies.push_back(balloon);  
+                if (enemies.size() != 0)
+                    tower->selectEnemy(enemies);
             }
         }
         for (auto tower : towers)
