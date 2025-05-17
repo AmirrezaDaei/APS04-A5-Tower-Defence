@@ -123,7 +123,7 @@ void Game::run()
         }
         if (state == GAME_WON)
         {
-            if (clock.getElapsedTime().asSeconds() > 2)
+            if (clock.getElapsedTime().asSeconds() > WAITING_TIME)
             {
                 window.clear();
                 window.draw(you_win_sprite);

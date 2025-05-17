@@ -2,6 +2,7 @@
 #define CONSTS_HPP
 
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include <random>
 #include <SFML/Audio.hpp>
 using namespace std;
@@ -68,7 +69,24 @@ const float DAMAGE = 2;
 const float ROTATION_SPEED = 200;
 const int TO_SECONDS = 1000;
 const float FREEZE_TIME = 1;
+const float RAY_SHOWING_TIME = 0.2f;
+const float WAITING_TIME = 2;
 const int POINT = 20;
+
+const Color RADIUS_COLOR = Color(173, 216, 230, 50);
+const Color BOMB_RADIUS_COLOR = Color(255, 0, 0, 128);
+const Color UNAVAILBLE_TOWER_COLOR = Color(80, 80, 80);
+const Color DESCRIPTION_COLOR = Color(63, 73, 142);
+const Color BACKGROUND_COLOR = Color(200, 200, 200);
+const Color SCOREBOARD_COLOR = Color(238, 204, 91);
+const Color HB_BACKGROUND_COLOR = Color(211, 211, 211);
+const Color HB_COLOR = Color(144, 238, 144);
+
+const int DESCRIPTION_OUTLINE = -8;
+const int HIGHLIGHT_OUTLINE = -3;
+const int SCOREBOARD_OUTLINE = -5;
+const int HB_OUTLINE = 3;
+
 
 
 namespace t_info
@@ -115,5 +133,6 @@ enum GameState
 
 int generateRandom(int from, int to);
 void loadSound(Sound& sound, string filename);
+void createText(Text& text ,Font& font, int size, Color color);
 
 #endif // define CONSTS_HPP

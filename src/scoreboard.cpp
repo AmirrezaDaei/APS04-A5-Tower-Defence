@@ -18,13 +18,11 @@ ScoreBoard::ScoreBoard(RenderWindow &window)
 
     board.setSize(Vector2f(SHOP_WIDTH, SCORE_BOARD_HEIGHT));
     board.setPosition(window.getSize().x - SHOP_WIDTH, 0);
-    board.setFillColor(Color(238, 204, 91));
-    board.setOutlineThickness(-5);
+    board.setFillColor(SCOREBOARD_COLOR);
+    board.setOutlineThickness(SCOREBOARD_OUTLINE);
     board.setOutlineColor(Color::Black);
 
-    text.setFont(font);
-    text.setCharacterSize(25);
-    text.setFillColor(Color::Black);
+    createText(text, font, 25, Color::Black);
 }
 
 void ScoreBoard::drawScoreBoard(RenderWindow &window, PlayerStats player_stats)
@@ -35,18 +33,17 @@ void ScoreBoard::drawScoreBoard(RenderWindow &window, PlayerStats player_stats)
     text.setString("Round  " + to_string(player_stats.round) + "\nMoney:   " + to_string(player_stats.money));
 
     RectangleShape healthBarBackground(Vector2f(HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
-    healthBarBackground.setFillColor(Color(211, 211, 211));
+    healthBarBackground.setFillColor(HB_BACKGROUND_COLOR);
     FloatRect bounds = heart.getGlobalBounds();
     healthBarBackground.setPosition(window.getSize().x - SHOP_WIDTH + 1.5 * HEART_SIZE,
     bounds.top + bounds.width / 2 - HEALTHBAR_WIDTH / 2);
-    healthBarBackground.setOutlineThickness(3);
+    healthBarBackground.setOutlineThickness(HB_OUTLINE);
     healthBarBackground.setOutlineColor(Color::Black);
 
     RectangleShape healthBar(Vector2f((player_stats.health / MAX_HEALTH) * HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
-    healthBar.setFillColor(Color(144, 238, 144)); 
+    healthBar.setFillColor(HB_COLOR); 
     Vector2f rectPos = healthBarBackground.getPosition(); 
     healthBar.setPosition(rectPos.x, rectPos.y);
-
 
     window.draw(board);
     window.draw(text);

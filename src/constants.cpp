@@ -15,3 +15,10 @@ void loadSound(Sound& sound, string filename) {
     buffers.push_back(buffer);
     sound.setBuffer(buffers.back());
 }
+
+void createText(Text& text ,Font& font, int size, Color color)
+{
+    text.setFont(font);
+    text.setCharacterSize(size);
+    text.setFillColor(color);
+}

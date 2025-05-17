@@ -154,21 +154,21 @@ bool Map::plantTower(Vector2i mouspos, shared_ptr<ShopTower> tower)
                 {
                     Texture &ray_texture = texture_manager->getTexture(FIRE_RAY_FILENAME);
                     new_tower = make_shared<FireTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
-                                                       tower->getRadius(), ray_texture);
+                    tower->getRadius(), ray_texture);
                 }
 
                 if (tower->getName() == ICE_SHOOTER)
                 {
                     Texture &ray_texture = texture_manager->getTexture(ICE_RAY_FILENAME);
                     new_tower = make_shared<IceTower>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
-                                                      tower->getRadius(), ray_texture);
+                    tower->getRadius(), ray_texture);
                 }
 
                 if (tower->getName() == CANNON)
                 {
                     Texture &ray_texture = texture_manager->getTexture(CANNON_RAY_FILENAME);
                     new_tower = make_shared<Cannon>(position, tower->getPrice(), tower->getCoolDownTime(), tower->getTexture(),
-                                                    tower->getRadius(), ray_texture);
+                    tower->getRadius(), ray_texture);
                 }
 
                 towers.push_back(new_tower);

@@ -23,7 +23,7 @@ GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &t
 
     radius_circle.setRadius(radius);
     radius_circle.setOrigin(radius_circle.getRadius(), radius_circle.getRadius());
-    radius_circle.setFillColor(Color(173, 216, 230, 50));
+    radius_circle.setFillColor(RADIUS_COLOR);
     radius_circle.setPosition(position);
     ray_sprite.setTexture(ray_texture_);
 }
@@ -38,7 +38,7 @@ Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture
     : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_)
 {
     bomb_radius_circle.setRadius(BOMB_RADIUS);                                    
-    bomb_radius_circle.setFillColor(Color(255, 0, 0, 128));                           
+    bomb_radius_circle.setFillColor(BOMB_RADIUS_COLOR);                           
     bomb_radius_circle.setOrigin(BOMB_RADIUS, BOMB_RADIUS);                    
 }
 
@@ -57,13 +57,13 @@ void ShopTower::draw(RenderWindow &window)
     if (availble == true)
         sprite.setColor(Color::White);
     else
-        sprite.setColor(Color(80, 80, 80));
+        sprite.setColor(UNAVAILBLE_TOWER_COLOR);
     window.draw(sprite);
 }
 
 void GameTower::draw(RenderWindow &window)
 {
-    if (clock.getElapsedTime().asSeconds() >= 0.2)
+    if (clock.getElapsedTime().asSeconds() >= RAY_SHOWING_TIME)
         shooting_ray = false;
     if (shooting_ray == true)
     {
@@ -75,7 +75,7 @@ void GameTower::draw(RenderWindow &window)
 
 void Cannon::draw(RenderWindow &window)
 {
-    if (clock.getElapsedTime().asSeconds() >= 0.2)
+    if (clock.getElapsedTime().asSeconds() >= RAY_SHOWING_TIME)
         shooting_ray = false;
     if (shooting_ray == true)
     {
@@ -105,24 +105,20 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
     RectangleShape description(Vector2f(SHOP_WIDTH, DESCRIPTION_HEIGHT));
     description.setPosition(window.getSize().x - SHOP_WIDTH,
                             SCORE_BOARD_HEIGHT + bounds.height);
-    description.setFillColor(Color(63, 73, 142));
-    description.setOutlineThickness(-8);
-    description.setOutlineColor(Color(200, 200, 200));
+    description.setFillColor(DESCRIPTION_COLOR);
+    description.setOutlineThickness(DESCRIPTION_OUTLINE);
+    description.setOutlineColor(BACKGROUND_COLOR);
 
-    Text text;
-    Text title;
+    Text text, title;
     Font font;
     if (!font.loadFromFile(DESCRIBTION_FONT_FILENAME))
     {
         cerr << "Could not load scoreboard font\n";
     }
-    text.setFont(font);
-    text.setCharacterSize(12);
-    text.setFillColor(Color::White);
+
+    createText(text, font, 12, Color::White);
     text.setPosition(description.getPosition());
-    title.setFont(font);
-    title.setCharacterSize(12);
-    title.setFillColor(Color::White);
+    createText(title, font, 12, Color::White);
 
     std::ostringstream stream_for_radius;
     std::ostringstream stream_for_cooldown;
@@ -130,19 +126,17 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
     stream_for_cooldown << std::fixed << std::setprecision(1) << cooldown;
 
     string shooter_name;
-    if (name == NORMAL_SHOOTER)
-        shooter_name = NORMAL_SHOOTER_TITLE;
-    else if (name == ICE_SHOOTER)
-        shooter_name = ICE_SHOOTER_TITLE;
-    else if (name == CANNON)
-        shooter_name = CANNON_TITLE;
+    if (name == NORMAL_SHOOTER) shooter_name = NORMAL_SHOOTER_TITLE;
+
+    else if (name == ICE_SHOOTER) shooter_name = ICE_SHOOTER_TITLE;
+
+    else if (name == CANNON) shooter_name = CANNON_TITLE;
 
     title.setString("\n\n\n\n" + shooter_name);
     FloatRect textBounds = title.getLocalBounds();
     title.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
     title.setPosition(description.getPosition().x + SHOP_WIDTH / 2.f, description.getPosition().y);
     text.setString("\n\n\n COST: " + to_string(price) + "\n\n\n RADIUS: " + stream_for_radius.str() + "\n\n\n COOLDOWN: " + stream_for_cooldown.str() + " S");
-
     window.draw(description);
     window.draw(title);
     window.draw(text);
@@ -162,7 +156,7 @@ void ShopTower::highlight(RenderWindow &window)
     highlightRect.setPosition(bounds.left, bounds.top);
     highlightRect.setFillColor(Color::Transparent);
     highlightRect.setOutlineColor(Color::White);
-    highlightRect.setOutlineThickness(-3.f);
+    highlightRect.setOutlineThickness(HIGHLIGHT_OUTLINE);
     window.draw(highlightRect);
 }
 
