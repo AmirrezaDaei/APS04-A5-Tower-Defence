@@ -6,3 +6,12 @@ int generateRandom(int from, int to) {
     uniform_int_distribution<> dist(from, to);
     return dist(gen);
 }
+
+void loadSound(Sound& sound, string filename) {
+    static vector<SoundBuffer> buffers;
+    SoundBuffer buffer;
+    if (!buffer.loadFromFile(filename))
+        cerr << "Failed to load sound" << endl;
+    buffers.push_back(buffer);
+    sound.setBuffer(buffers.back());
+}

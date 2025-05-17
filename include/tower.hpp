@@ -63,6 +63,8 @@ public:
 protected:
     CircleShape radius_circle;
     Clock clock;
+    Sound laser;
+    Sound explosion;
     bool has_cooled_down = true;
     shared_ptr<Balloon> locked_in_enemy = nullptr;
     bool shooting_ray = false;

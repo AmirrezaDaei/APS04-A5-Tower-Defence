@@ -7,6 +7,7 @@ Tower::Tower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
     Vector2u tex_size = texture_.getSize();
     sprite.setScale(TOWER_SIZE / tex_size.x, TOWER_SIZE / tex_size.y);
     sprite.setPosition(position);
+
 }
 
 GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
@@ -24,7 +25,6 @@ GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &t
     radius_circle.setOrigin(radius_circle.getRadius(), radius_circle.getRadius());
     radius_circle.setFillColor(Color(173, 216, 230, 50));
     radius_circle.setPosition(position);
-
     ray_sprite.setTexture(ray_texture_);
 }
 
@@ -297,6 +297,8 @@ void FireTower::shootEnemy()
             locked_in_enemy->pop();
             clock.restart();
             shooting_ray = true;
+            loadSound(laser, LASER_SOUND_FILENAME);
+            laser.play();
             ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
                                 getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
             ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
@@ -309,7 +311,7 @@ void FireTower::shootEnemy()
 }
 void IceTower::shootEnemy()
 {
-    if (locked_in_enemy != nullptr)
+    if (locked_in_enemy != nullptr) 
     {
         float rotation = this->getRotation();
         r_dir dir = normalizeRotation(rotation);
@@ -318,6 +320,8 @@ void IceTower::shootEnemy()
             locked_in_enemy->freeze();
             clock.restart();
             shooting_ray = true;
+            loadSound(laser, LASER_SOUND_FILENAME);
+            laser.play();
             ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
                                 getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
             ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
@@ -342,6 +346,10 @@ void Cannon::shootEnemy()
             bomb_radius_circle.setPosition(locked_in_enemy->getPosition());
             clock.restart();
             shooting_ray = true;
+            loadSound(laser, LASER_SOUND_FILENAME);
+            laser.play();
+            loadSound(explosion, EXPLOSION_SOUND_FILENAME);
+            explosion.play();
             ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
                                 getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
             ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);

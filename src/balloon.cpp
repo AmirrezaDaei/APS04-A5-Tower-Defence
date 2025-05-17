@@ -52,4 +52,10 @@ void Balloon::turnRight() {
 void Balloon::freeze() {
     is_frozen = true;
     clock.restart();
+    loadSound(freezeSound, BALLOON_FREEZE_SOUND_FILENAME);
+    freezeSound.play();
+}
+
+void Balloon::pop() {
+    is_destroyed = true;
 }

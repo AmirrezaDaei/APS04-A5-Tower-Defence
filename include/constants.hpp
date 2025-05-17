@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <random>
+#include <SFML/Audio.hpp>
 using namespace std;
+using namespace sf;
 
 const float TILE_SIZE = 75.f;
 const float TOWER_SIZE = 65.f;
@@ -43,11 +45,14 @@ const string PREGNANT_BALLOON_FILENAME = "assets/sprites/PregnantBalloon.png";
 const string FROZEN_PREGNANT_BALLOON_FILENAME = "assets/sprites/FrozenPregnantBalloon.png";
 const string TOWERS_FILENAME = "towers.csv";
 const string MAP_FILENAME = "map.txt";
-
 const string SCORE_BOARD_FONT_FILENAME = "assets/sprites/fonts/anton.ttf";
 const string DESCRIBTION_FONT_FILENAME = "assets/sprites/fonts/PressStart2P.ttf";
+const string LASER_SOUND_FILENAME = "assets/music & soundTracks/laser-sound-fx_B_major.wav";
+const string EXPLOSION_SOUND_FILENAME = "assets/music & soundTracks/smoke-bomb-6761.ogg";
+const string BALLOON_POP_SOUND_FILENAME = "assets/music & soundTracks/balloon-pop-ni-sound-1-00-01.ogg";
+const string BALLOON_FREEZE_SOUND_FILENAME = "assets/music & soundTracks/ice-cracking-01 (mp3cut.net).ogg";
 
-const float BOMB_RADIUS = 80.f;
+const float BOMB_RADIUS = 40.f;
 
 const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";
@@ -57,10 +62,10 @@ const string NORMAL_SHOOTER_TITLE = "Fire Tower";
 const string ICE_SHOOTER_TITLE = "Ice Tower";
 const string CANNON_TITLE = "Cannon";
 
-const float MAX_HEALTH = 40.f;
-const int INITIAL_MONEY = 420;
+const float MAX_HEALTH = 20.f;
+const int INITIAL_MONEY = 100;
 const float DAMAGE = 2;
-const float ROTATION_SPEED = 135;
+const float ROTATION_SPEED = 200;
 const int TO_SECONDS = 1000;
 const float FREEZE_TIME = 1;
 const int POINT = 20;
@@ -109,5 +114,6 @@ enum GameState
 }; 
 
 int generateRandom(int from, int to);
+void loadSound(Sound& sound, string filename);
 
 #endif // define CONSTS_HPP

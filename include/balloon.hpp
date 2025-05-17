@@ -2,6 +2,7 @@
 #define BALLOON_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "constants.hpp"
 using namespace sf;
 
@@ -22,7 +23,7 @@ public:
     bool isFrozen() { return is_frozen; }
     bool isDestroyed() { return is_destroyed; }
     void freeze();
-    void pop() { is_destroyed = true; }
+    void pop();
 protected:
     Vector2i v_dir;
     Vector2f position;
@@ -32,6 +33,7 @@ protected:
     Texture frozen_texture;
     Sprite sprite;
     Sprite frozen_sprite;
+    Sound freezeSound;
     bool is_destroyed = false;
     bool is_frozen = false;
     bool locked_on = false;
