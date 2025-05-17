@@ -58,7 +58,7 @@ const float MAX_HEALTH = 40.f;
 const int INITIAL_MONEY = 420;
 
 const float ROTATION_SPEED = 135;
-
+const int TO_SECONDS = 1000;
 const float FREEZE_TIME = 3;
 
 
@@ -75,6 +75,14 @@ struct PlayerStats
     int round = 0;
     float health = MAX_HEALTH;
     int money = INITIAL_MONEY;
+};
+
+
+struct WaveConfig {
+    int normal_count = 0;
+    int pregnant_count = 0;
+    int min_gap_ms;
+    int max_gap_ms;
 };
 
 enum r_dir

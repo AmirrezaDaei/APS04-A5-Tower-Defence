@@ -18,8 +18,8 @@ public:
     bool isLockedOn() { return locked_on; }
     void setLockedOn() { locked_on = true; }
     bool isFrozen() { return is_frozen; }
-    void freeze() { is_frozen = true; clock.restart();}
-    // virtual void pop() = 0;
+    void freeze();
+    virtual void pop() = 0;
 protected:
     Vector2i v_dir;
     Vector2f position;
@@ -42,7 +42,7 @@ public:
     void pop();
 };
 
-class Pregnant : public Balloon{
+class Pregnant : public Balloon {
 public:
     Pregnant(Texture& texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture& frozen_texture_)
     : Balloon(texture_, position_, v_dir, speed, point_, frozen_texture_) {}

@@ -1,5 +1,5 @@
-#ifndef WAVE_CONFIGS_HPP_INCLUDE
-#define WAVE_CONFIGS_HPP_INCLUDE
+#ifndef WAVES_CONFIG_HPP_INCLUDE
+#define WAVES_CONFIG_HPP_INCLUDE
 
 #include <vector>
 #include <map>
@@ -9,8 +9,8 @@
 using namespace std;
 
 struct AttackWave {
-    map<string, int> enemiesCount;
-    pair<int, int> enemyLaunchGapMs;
+    map<string, int> enemies_count;
+    pair<int, int> enemy_launch_gap_ms;
 };
 
 const vector<AttackWave> ATTACKING_PLAN = {
