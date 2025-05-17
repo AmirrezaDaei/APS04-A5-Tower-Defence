@@ -53,16 +53,3 @@ void Balloon::freeze() {
     is_frozen = true;
     clock.restart();
 }
-
-void Normal::pop() {
-    is_destroyed = true;
-}
-
-void Pregnant::pop() {
-    is_destroyed = true;
-    // replicate();
-}
-
-void Pregnant() {
-
-}

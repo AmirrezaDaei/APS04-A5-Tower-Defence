@@ -87,6 +87,11 @@ struct WaveConfig {
     int max_gap_ms;
 };
 
+enum BalloonType {
+    PREGNANT,
+    NORMAL
+};
+
 enum r_dir
 {
     CW,

@@ -81,6 +81,10 @@ void Map::drawBalloons(RenderWindow &window, float dt) {
     for(auto it = balloons.begin(); it != balloons.end();) {
         auto& balloon = *it;
         if(balloon->isDestroyed()) {
+            if(balloon->getType() == PREGNANT) {
+                constructNormal(Vector2f(balloon->getPosition().x + float(generateRandom(0, 10)), balloon->getPosition().y + float(generateRandom(0, 10))));
+                constructNormal(Vector2f(balloon->getPosition().x + float(generateRandom(0, 10)), balloon->getPosition().y + float(generateRandom(0, 10))));
+            }
             balloons.erase(it);
             money += balloon->getPoint();
             continue;
