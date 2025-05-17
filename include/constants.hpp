@@ -22,6 +22,8 @@ const char START = 'S';
 const char FINISH = 'F';
 const char COMMA_SEPERATOR = ',';
 
+#define wall cerr<<"--------------------------------------"<<endl
+
 const string IMAGE_FORMAT = ".png";
 
 const string MUSIC_FILENAME = "assets/music & soundTracks/Zang_Bzn_Ambulaance.ogg";

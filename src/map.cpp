@@ -78,14 +78,12 @@ void Map::setStartDir(vector<string> map, int i, int j) {
 }
 
 void Map::drawBalloons(RenderWindow &window, float dt) {
+    vector<vector<shared_ptr<Balloon>>::iterator> destroyed;
+    vector<vector<shared_ptr<Balloon>>::iterator> finished;
     for(auto it = balloons.begin(); it != balloons.end();) {
         auto& balloon = *it;
         if(balloon->isDestroyed()) {
-            if(balloon->getType() == PREGNANT) {
-                constructNormal(Vector2f(balloon->getPosition().x + float(generateRandom(0, 10)), balloon->getPosition().y + float(generateRandom(0, 10))));
-                constructNormal(Vector2f(balloon->getPosition().x + float(generateRandom(0, 10)), balloon->getPosition().y + float(generateRandom(0, 10))));
-            }
-            balloons.erase(it);
+            destroyed.push_back(it);
             money += balloon->getPoint();
             continue;
         }
@@ -100,6 +98,7 @@ void Map::drawBalloons(RenderWindow &window, float dt) {
             else if(this->isPath(pos, left_dir))
                 balloon->turnLeft();
             else {
+                finished.push_back(it);
                 balloons.erase(it);
                 health -= DAMAGE;
                 continue;
@@ -108,6 +107,15 @@ void Map::drawBalloons(RenderWindow &window, float dt) {
         balloon->draw(window);
         ++it;
     }
+    // for(auto& it : finished) {
+    //     // wall;
+    //     balloons.erase(it);
+    // }
+    // for(auto& it : destroyed) {
+    //     constructNormal((*it)->getPosition());
+    //     constructNormal((*it)->getPosition());
+    //     balloons.erase(it);
+    // }
 }
 
 bool Map::isPath(Vector2f position, Vector2i v_dir) {

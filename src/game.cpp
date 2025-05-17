@@ -39,7 +39,7 @@ void Game::run()
     if(!music.openFromFile(MUSIC_FILENAME))
         cerr << "Unable to load music file" << endl;
     music.setLoop(true);
-    music.play(); 
+    // music.play();
     while (window.isOpen())
     {
         Event event;
