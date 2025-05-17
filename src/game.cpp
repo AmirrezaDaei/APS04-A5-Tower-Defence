@@ -27,8 +27,8 @@ Game::Game()
 void Game::updateWindow(float dt)
 {
     game_map->drawTiles(window);
-    game_map->drawBalloons(window, dt);
     game_map->drawTowers(window, dt);
+    game_map->drawBalloons(window, dt);
     score_board->drawScoreBoard(window, player_stats);
     game_shop->drawShop(window);
 }
@@ -81,8 +81,6 @@ void Game::run()
 
 void Game::handleWave(float dt) {
     waves_gap += dt;
-    cout << "wave: " << waves_gap << endl;
-    cout << "balloon: " << balloons_gap << endl;
     if(is_wave_active) {
         balloons_gap += dt;
         if(balloons_spawned < 8 && balloons_gap >= 0.7)

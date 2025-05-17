@@ -19,7 +19,7 @@ public:
     void setLockedOn() { locked_on = true; }
     bool isFrozen() { return is_frozen; }
     void freeze() { is_frozen = true; clock.restart();}
-    virtual void pop() = 0;
+    void pop();
 private:
     Vector2i v_dir;
     Vector2f position;

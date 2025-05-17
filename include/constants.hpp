@@ -29,6 +29,9 @@ const string SHOOTERS_FILEPATH = "assets/sprites/";
 const string HEART_FILENAME = "assets/sprites/heart2.png";
 const string BALLOON_FILENAME = "assets/sprites/mainBalloon.png";
 const string PREGNANT_FILENAME = "assets/sprites/cropped_heart_balloon.png";
+const string ICE_RAY_FILENAME = "assets/sprites/extra_sprite/projectiles/ice_ray2.png";
+const string FIRE_RAY_FILENAME = "assets/sprites/extra_sprite/projectiles/fire_ray.png";
+const string CANNON_RAY_FILENAME = "assets/sprites/extra_sprite/projectiles/cannon_ray.png";
 const string TOWERS_FILENAME = "towers.csv";
 const string MAP_FILENAME = "map.txt";
 
@@ -50,7 +53,7 @@ const int INITIAL_MONEY = 420;
 
 const float ROTATION_SPEED = 135;
 
-const float FREEZE_TIME = 1;
+const float FREEZE_TIME = 3;
 
 
 namespace t_info
