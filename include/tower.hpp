@@ -97,6 +97,7 @@ public:
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
     void draw(RenderWindow &window) override;
     void shootEnemy();
+
 private:
     vector<shared_ptr<Balloon>> bomb_casualties;
     CircleShape bomb_radius_circle;

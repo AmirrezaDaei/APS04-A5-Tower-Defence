@@ -6,9 +6,10 @@
 #include "constants.hpp"
 using namespace sf;
 
-class Balloon {
+class Balloon
+{
 public:
-    Balloon(Texture& texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture& frozen_texture_);
+    Balloon(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_);
     Vector2f getPosition() { return position; }
     Vector2i getVDir() { return v_dir; }
     float getSpeed() { return speed; }
@@ -24,6 +25,7 @@ public:
     bool isDestroyed() { return is_destroyed; }
     void freeze();
     void pop();
+
 protected:
     Vector2i v_dir;
     Vector2f position;
@@ -41,18 +43,22 @@ protected:
     BalloonType type;
 };
 
-class Normal : public Balloon {
+class Normal : public Balloon
+{
 public:
-    Normal(Texture& texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture& frozen_texture_)
-    : Balloon(texture_, position_, v_dir, speed, point_,frozen_texture_) {
+    Normal(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_)
+        : Balloon(texture_, position_, v_dir, speed, point_, frozen_texture_)
+    {
         type = NORMAL;
     }
 };
 
-class Pregnant : public Balloon {
+class Pregnant : public Balloon
+{
 public:
-    Pregnant(Texture& texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture& frozen_texture_)
-    : Balloon(texture_, position_, v_dir, speed, point_, frozen_texture_) {
+    Pregnant(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_)
+        : Balloon(texture_, position_, v_dir, speed, point_, frozen_texture_)
+    {
         type = PREGNANT;
     }
 };

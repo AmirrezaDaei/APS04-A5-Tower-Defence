@@ -12,7 +12,7 @@ const float TILE_SIZE = 75.f;
 const float TOWER_SIZE = 65.f;
 const float HEART_SIZE = 40.f;
 const float HEALTHBAR_LENGTH = 160.f;
-const float HEALTHBAR_WIDTH =  20.f;
+const float HEALTHBAR_WIDTH = 20.f;
 const float DESCRIPTION_HEIGHT = 150.f;
 const float BALLOON_SIZE = 50.f;
 const float PREGNANT_SIZE = 50.f;
@@ -57,6 +57,7 @@ const string BALLOON_POP_SOUND_FILENAME = "assets/music & soundTracks/balloon-po
 const string BALLOON_FREEZE_SOUND_FILENAME = "assets/music & soundTracks/ice-cracking-01 (mp3cut.net).ogg";
 
 const float BOMB_RADIUS = 30.f;
+const float BALLOON_SPEED = TILE_SIZE * 2;
 
 const int TOWER_COUNT = 3;
 const string NORMAL_SHOOTER = "normal_shooter";
@@ -90,8 +91,6 @@ const int HIGHLIGHT_OUTLINE = -3;
 const int SCOREBOARD_OUTLINE = -5;
 const int HB_OUTLINE = 3;
 
-
-
 namespace t_info
 {
     const int NAME = 0;
@@ -107,15 +106,16 @@ struct PlayerStats
     int money = INITIAL_MONEY;
 };
 
-
-struct WaveConfig {
+struct WaveConfig
+{
     int normal_count = 0;
     int pregnant_count = 0;
     int min_gap_ms;
     int max_gap_ms;
 };
 
-enum BalloonType {
+enum BalloonType
+{
     PREGNANT,
     NORMAL
 };
@@ -132,10 +132,10 @@ enum GameState
     PLAYING,
     GAME_WON,
     GAME_OVER
-}; 
+};
 
 int generateRandom(int from, int to);
-void loadSound(Sound& sound, string filename);
-void createText(Text& text ,Font& font, int size, Color color);
+void loadSound(Sound &sound, string filename);
+void createText(Text &text, Font &font, int size, Color color);
 
 #endif // define CONSTS_HPP

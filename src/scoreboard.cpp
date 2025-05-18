@@ -14,7 +14,7 @@ ScoreBoard::ScoreBoard(RenderWindow &window)
     Vector2u tex_size = heart_texture.getSize();
     heart.setScale(HEART_SIZE / tex_size.x, HEART_SIZE / tex_size.y);
     heart.setPosition(window.getSize().x - (SHOP_WIDTH - SHOP_WIDTH / 25),
-    SCORE_BOARD_HEIGHT- 1.5 * HEART_SIZE);
+                      SCORE_BOARD_HEIGHT - 1.5 * HEART_SIZE);
 
     board.setSize(Vector2f(SHOP_WIDTH, SCORE_BOARD_HEIGHT));
     board.setPosition(window.getSize().x - SHOP_WIDTH, 0);
@@ -36,13 +36,13 @@ void ScoreBoard::drawScoreBoard(RenderWindow &window, PlayerStats player_stats)
     healthBarBackground.setFillColor(HB_BACKGROUND_COLOR);
     FloatRect bounds = heart.getGlobalBounds();
     healthBarBackground.setPosition(window.getSize().x - SHOP_WIDTH + 1.5 * HEART_SIZE,
-    bounds.top + bounds.width / 2 - HEALTHBAR_WIDTH / 2);
+                                    bounds.top + bounds.width / 2 - HEALTHBAR_WIDTH / 2);
     healthBarBackground.setOutlineThickness(HB_OUTLINE);
     healthBarBackground.setOutlineColor(Color::Black);
 
     RectangleShape healthBar(Vector2f((player_stats.health / MAX_HEALTH) * HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
-    healthBar.setFillColor(HB_COLOR); 
-    Vector2f rectPos = healthBarBackground.getPosition(); 
+    healthBar.setFillColor(HB_COLOR);
+    Vector2f rectPos = healthBarBackground.getPosition();
     healthBar.setPosition(rectPos.x, rectPos.y);
 
     window.draw(board);

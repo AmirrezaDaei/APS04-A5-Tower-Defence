@@ -1,7 +1,7 @@
 #include "tile.hpp"
 
-Tile::Tile(char type_, Vector2f position_, Texture& texture_) : type(type_), 
-position(position_), texture(texture_), tower(nullptr) 
+Tile::Tile(char type_, Vector2f position_, Texture &texture_) : type(type_),
+                                                                position(position_), texture(texture_), tower(nullptr)
 {
     sprite.setTexture(texture_);
     Vector2u tex_size = texture_.getSize();
@@ -9,7 +9,7 @@ position(position_), texture(texture_), tower(nullptr)
     sprite.setPosition(position);
 }
 
-void Tile::draw(RenderWindow& window)
+void Tile::draw(RenderWindow &window)
 {
     window.draw(sprite);
 }

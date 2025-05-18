@@ -11,7 +11,8 @@ using namespace sf;
 class TextureManager
 {
 public:
-    Texture& getTexture(string filename);
+    Texture &getTexture(string filename);
+
 private:
     map<string, Texture> textures;
 };

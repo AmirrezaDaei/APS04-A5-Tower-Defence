@@ -8,8 +8,8 @@ using namespace sf;
 class ScoreBoard
 {
 public:
-    ScoreBoard(RenderWindow& window);
-    void drawScoreBoard(RenderWindow& window, PlayerStats player_stats);
+    ScoreBoard(RenderWindow &window);
+    void drawScoreBoard(RenderWindow &window, PlayerStats player_stats);
 
 private:
     Font font;

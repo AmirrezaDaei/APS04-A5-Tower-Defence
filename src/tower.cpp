@@ -7,7 +7,6 @@ Tower::Tower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
     Vector2u tex_size = texture_.getSize();
     sprite.setScale(TOWER_SIZE / tex_size.x, TOWER_SIZE / tex_size.y);
     sprite.setPosition(position);
-
 }
 
 GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
@@ -37,9 +36,9 @@ IceTower::IceTower(Vector2f position_, int price_, float cooldown_, Texture &tex
 Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
     : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_)
 {
-    bomb_radius_circle.setRadius(BOMB_RADIUS);                                    
-    bomb_radius_circle.setFillColor(BOMB_RADIUS_COLOR);                           
-    bomb_radius_circle.setOrigin(BOMB_RADIUS, BOMB_RADIUS);                    
+    bomb_radius_circle.setRadius(BOMB_RADIUS);
+    bomb_radius_circle.setFillColor(BOMB_RADIUS_COLOR);
+    bomb_radius_circle.setOrigin(BOMB_RADIUS, BOMB_RADIUS);
 }
 
 ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_)
@@ -126,11 +125,14 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
     stream_for_cooldown << std::fixed << std::setprecision(1) << cooldown;
 
     string shooter_name;
-    if (name == NORMAL_SHOOTER) shooter_name = NORMAL_SHOOTER_TITLE;
+    if (name == NORMAL_SHOOTER)
+        shooter_name = NORMAL_SHOOTER_TITLE;
 
-    else if (name == ICE_SHOOTER) shooter_name = ICE_SHOOTER_TITLE;
+    else if (name == ICE_SHOOTER)
+        shooter_name = ICE_SHOOTER_TITLE;
 
-    else if (name == CANNON) shooter_name = CANNON_TITLE;
+    else if (name == CANNON)
+        shooter_name = CANNON_TITLE;
 
     title.setString("\n\n\n\n" + shooter_name);
     FloatRect textBounds = title.getLocalBounds();
@@ -305,7 +307,7 @@ void FireTower::shootEnemy()
 }
 void IceTower::shootEnemy()
 {
-    if (locked_in_enemy != nullptr) 
+    if (locked_in_enemy != nullptr)
     {
         float rotation = this->getRotation();
         r_dir dir = normalizeRotation(rotation);

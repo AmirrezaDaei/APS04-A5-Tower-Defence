@@ -12,7 +12,7 @@ Game::Game()
     int map_height = map.size();
     int map_width = map[0].size();
 
-    window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + SHOP_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Tower Defence",
+    window.create(VideoMode((unsigned int)(TILE_SIZE * map_width + SHOP_WIDTH), (unsigned int)(TILE_SIZE * map_height)), "Blooooons Defence",
                   Style::Titlebar | Style::Close);
     VideoMode desktop = VideoMode::getDesktopMode();
     window.setPosition(Vector2i((desktop.width - window.getSize().x) / 2, (desktop.height - window.getSize().y) / 2));
@@ -27,14 +27,13 @@ Game::Game()
     Game_over_sprite.setTexture(game_over_texture);
     Game_over_sprite.setOrigin(game_over_texture.getSize().x / 2.0f, game_over_texture.getSize().y / 2.0f);
     Game_over_sprite.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
-    Game_over_sprite.scale(window.getSize().x /game_over_texture.getSize().x, window.getSize().y /game_over_texture.getSize().y);
+    Game_over_sprite.scale(window.getSize().x / game_over_texture.getSize().x, window.getSize().y / game_over_texture.getSize().y);
 
     you_win_texture = texture_manager->getTexture(YOU_WIN_DISPLAY_FILENAME);
     you_win_sprite.setTexture(you_win_texture);
     you_win_sprite.setOrigin(you_win_texture.getSize().x / 2.0f, you_win_texture.getSize().y / 2.0f);
     you_win_sprite.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
     you_win_sprite.scale(window.getSize().x / you_win_texture.getSize().x, window.getSize().y / you_win_texture.getSize().y);
-
 
     state = PLAYING;
 }
@@ -50,6 +49,7 @@ void Game::updateWindow(float dt)
 
 void Game::run()
 {
+    // dige ina ro comment nagir bekhoda baraye neshun dadane!!
     // if (!music.openFromFile(KOKALAK_MUSIC_FILENAME))
     //     cerr << "Unable to load music file" << endl;
     if (!music.openFromFile(NAMELESS_KING_MUSIC_FILENAME))
@@ -113,19 +113,20 @@ void Game::run()
             updateWindow(dt);
             window.display();
             if (player_stats.round == ATTACKING_PLAN.size() && game_map->isBalloonsPopped() && is_wave_active == false)
-            {   
+            {
                 clock.restart();
                 state = GAME_WON;
                 music.pause();
             }
         }
-        
+
         if (state == GAME_OVER)
         {
             window.clear();
             window.draw(Game_over_sprite);
             window.display();
-            if (!hasPlayedLoseMusic) {
+            if (!hasPlayedLoseMusic)
+            {
                 lose.play();
                 hasPlayedLoseMusic = true;
             }
@@ -136,7 +137,8 @@ void Game::run()
                 window.clear();
                 window.draw(you_win_sprite);
                 window.display();
-                if (!hasPlayedWinMusic) {
+                if (!hasPlayedWinMusic)
+                {
                     win.play();
                     hasPlayedWinMusic = true;
                 }
@@ -151,9 +153,7 @@ void Game::handleWave(float dt)
     {
         balloons_time_gap += dt;
         if (balloons_time_gap >= gap)
-        {
             generateRandomBalloon();
-        }
         if (pregnants_spawned >= waves_config[player_stats.round - 1].pregnant_count &&
             normals_spawned >= waves_config[player_stats.round - 1].normal_count)
             endWave();
@@ -171,7 +171,6 @@ void Game::spawnNormal()
 {
     normals_spawned++;
     game_map->constructNormal(game_map->getStartPoint(), game_map->getStartVDir());
-    cout << game_map->getStartPoint().x << " " << game_map->getStartPoint().y << " " << game_map->getStartVDir().x << " " << game_map->getStartVDir().y << endl;
     balloons_time_gap = 0.f;
 }
 
