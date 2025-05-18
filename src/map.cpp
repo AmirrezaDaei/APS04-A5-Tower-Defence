@@ -62,23 +62,35 @@ void Map::drawTowers(RenderWindow &window, float dt)
     }
 }
 
+// void Map::setStartDir(vector<string> map, int i, int j)
+// {
+//     if (i + 1 < map.size())
+//         if (map[i + 1][j] == GRASS)
+//             start_dir = Vector2i(1, 0);
+
+//     if (j + 1 < map[0].size())
+//         if (map[i][j + 1] == GRASS)
+//             start_dir = Vector2i(0, -1);
+
+//     if (i - 1 >= 0)
+//         if (map[i - 1][j] == GRASS)
+//             start_dir = Vector2i(-1, 0);
+
+//     if (j - 1 >= 0)
+//         if (map[i][j - 1] == GRASS)
+//             start_dir = Vector2i(0, 1);
+// }
+
 void Map::setStartDir(vector<string> map, int i, int j)
 {
-    if (i + 1 < map.size())
-        if (map[i + 1][j] == GRASS)
-            start_dir = Vector2i(1, 0);
-
-    if (j + 1 < map[0].size())
-        if (map[i][j + 1] == GRASS)
-            start_dir = Vector2i(0, -1);
-
-    if (i - 1 >= 0)
-        if (map[i - 1][j] == GRASS)
-            start_dir = Vector2i(-1, 0);
-
-    if (j - 1 >= 0)
-        if (map[i][j - 1] == GRASS)
-            start_dir = Vector2i(0, 1);
+    if(i + 1 < map.size() && map[i + 1][j] == GRASS)
+        start_dir = Vector2i(0, 1);
+    else if(j + 1 < map[0].size() && map[i][j + 1] == GRASS)
+        start_dir = Vector2i(1, 0);
+    else if(i - 1 >= 0 && map[i - 1][j] == GRASS)
+        start_dir = Vector2i(0, -1);
+    else if(j - 1 >= 0 && map[i][j - 1] == GRASS)
+        start_dir = Vector2i(-1, 0);
 }
 
 void Map::drawBalloons(RenderWindow &window, float dt) {

@@ -171,6 +171,7 @@ void Game::spawnNormal()
 {
     normals_spawned++;
     game_map->constructNormal(game_map->getStartPoint(), game_map->getStartVDir());
+    cout << game_map->getStartPoint().x << " " << game_map->getStartPoint().y << " " << game_map->getStartVDir().x << " " << game_map->getStartVDir().y << endl;
     balloons_time_gap = 0.f;
 }
 
