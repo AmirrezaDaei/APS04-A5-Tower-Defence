@@ -50,8 +50,13 @@ void Game::updateWindow(float dt)
 
 void Game::run()
 {
-    Music music;
-    if (!music.openFromFile(MUSIC_FILENAME))
+    // if (!music.openFromFile(KOKALAK_MUSIC_FILENAME))
+    //     cerr << "Unable to load music file" << endl;
+    if (!music.openFromFile(NAMELESS_KING_MUSIC_FILENAME))
+        cerr << "Unable to load music file" << endl;
+    if (!win.openFromFile(DR_STOP_SOUND_FILENAME))
+        cerr << "Unable to load music file" << endl;
+    if (!lose.openFromFile(YOU_DIED_SOUND_FILENAME))
         cerr << "Unable to load music file" << endl;
     music.setLoop(true);
     music.play();
@@ -120,16 +125,22 @@ void Game::run()
             window.clear();
             window.draw(Game_over_sprite);
             window.display();
+            if (!hasPlayedLoseMusic) {
+                lose.play();
+                hasPlayedLoseMusic = true;
+            }
         }
         if (state == GAME_WON)
-        {
             if (clock.getElapsedTime().asSeconds() > WAITING_TIME)
             {
                 window.clear();
                 window.draw(you_win_sprite);
-                window.display(); 
+                window.display();
+                if (!hasPlayedWinMusic) {
+                    win.play();
+                    hasPlayedWinMusic = true;
+                }
             }
-        }
     }
 }
 

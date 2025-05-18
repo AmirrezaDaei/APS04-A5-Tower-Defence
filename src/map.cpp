@@ -35,7 +35,7 @@ void Map::constructNormal(Vector2f position, Vector2i start_v_dir)
 {
     Texture &texture = texture_manager->getTexture(RED_NORMAL_BALLOON_FILENAME);
     Texture &frozen_texture = texture_manager->getTexture(FROZEN_NORMAL_BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Normal>(texture, position, start_v_dir, TILE_SIZE, POINT, frozen_texture);
+    shared_ptr<Balloon> new_balloon = make_shared<Normal>(texture, position, start_v_dir, TILE_SIZE * 2, POINT, frozen_texture);
     balloons.push_back(new_balloon);
 }
 
@@ -43,7 +43,7 @@ void Map::constructPregnant(Vector2f position, Vector2i start_v_dir)
 {
     Texture &texture = texture_manager->getTexture(PREGNANT_BALLOON_FILENAME);
     Texture &frozen_texture = texture_manager->getTexture(FROZEN_PREGNANT_BALLOON_FILENAME);
-    shared_ptr<Balloon> new_balloon = make_shared<Pregnant>(texture, position, start_v_dir, TILE_SIZE, POINT, frozen_texture);
+    shared_ptr<Balloon> new_balloon = make_shared<Pregnant>(texture, position, start_v_dir, TILE_SIZE * 2, POINT, frozen_texture);
     balloons.push_back(new_balloon);
 }
 

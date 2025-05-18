@@ -24,6 +24,10 @@ public:
 
 private:
     Music music;
+    Music win;
+    Music lose;
+    bool hasPlayedLoseMusic = false;
+    bool hasPlayedWinMusic = false;
     void updateWindow(float dt);
     void handleWave(float dt);
     void spawnNormal();
