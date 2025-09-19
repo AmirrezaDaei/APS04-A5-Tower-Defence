@@ -1,20 +1,20 @@
 #include "tower.hpp"
 
 Tower::Tower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_)
-    : position(position_), price(price_), cooldown(cooldown_), texture(texture_), radius(radius_)
-{
+    : position(position_), price(price_), cooldown(cooldown_), texture(texture_), radius(radius_) {
     sprite.setTexture(texture_);
     Vector2u tex_size = texture_.getSize();
     sprite.setScale(TOWER_SIZE / tex_size.x, TOWER_SIZE / tex_size.y);
     sprite.setPosition(position);
 }
 
-GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
-    : Tower(position_, price_, cooldown_, texture_, radius_), ray_texture(ray_texture_)
-{
+GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
+    float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
+    : Tower(position_, price_, cooldown_, texture_, radius_),
+      ray_texture(ray_texture_),
+      sound_manager(sound_manager_) {
     FloatRect bounds = sprite.getLocalBounds();
-    sprite.setOrigin(bounds.left + bounds.width / 2.f,
-                     bounds.top + bounds.height / 2.f);
+    sprite.setOrigin(bounds.left + bounds.width / 2.f, bounds.top + bounds.height / 2.f);
     sprite.setTexture(texture_);
     Vector2u tex_size = texture_.getSize();
     sprite.setScale(TOWER_SIZE / tex_size.x, TOWER_SIZE / tex_size.y);
@@ -25,31 +25,35 @@ GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &t
     radius_circle.setFillColor(RADIUS_COLOR);
     radius_circle.setPosition(position);
     ray_sprite.setTexture(ray_texture_);
+
+    sound_manager->loadSound(LASER_SOUND_FILENAME);
 }
 
-FireTower::FireTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
-    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_) {}
+FireTower::FireTower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
+    float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
+    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_) {}
 
-IceTower::IceTower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
-    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_) {}
+IceTower::IceTower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
+    float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
+    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_) {}
 
-Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_)
-    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_)
-{
-    bomb_radius_circle.setRadius(BOMB_RADIUS);
-    bomb_radius_circle.setFillColor(BOMB_RADIUS_COLOR);
-    bomb_radius_circle.setOrigin(BOMB_RADIUS, BOMB_RADIUS);
+Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_,
+    Texture &ray_texture_, Texture &explosion_texture_, shared_ptr<SoundManager> sound_manager_)
+    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_),
+      explosion_texture(explosion_texture_) {
+    explosion_sprite.setTexture(explosion_texture_);
+    Vector2u tex_size = explosion_texture_.getSize();
+    explosion_sprite.setScale(2 * BOMB_RADIUS / tex_size.x, 2 * BOMB_RADIUS / tex_size.y);
 }
 
-ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_)
-    : Tower(position_, price_, cooldown_, texture_, radius_), name(name_), size(size_)
-{
+ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_,
+    Texture &texture_, float radius_)
+    : Tower(position_, price_, cooldown_, texture_, radius_), name(name_), size(size_) {
     FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(bounds.left, bounds.top);
 }
 
-void ShopTower::draw(RenderWindow &window)
-{
+void ShopTower::draw(RenderWindow &window) {
     Vector2u tex_size = texture.getSize();
     sprite.setScale(size / tex_size.x, size / tex_size.y);
 
@@ -60,33 +64,26 @@ void ShopTower::draw(RenderWindow &window)
     window.draw(sprite);
 }
 
-void GameTower::draw(RenderWindow &window)
-{
-    if (clock.getElapsedTime().asSeconds() >= RAY_SHOWING_TIME)
-        shooting_ray = false;
-    if (shooting_ray == true)
-    {
+void GameTower::draw(RenderWindow &window) {
+    if (clock.getElapsedTime().asSeconds() >= RAY_SHOWING_TIME) shooting_ray = false;
+    if (shooting_ray == true) {
         window.draw(ray_sprite);
     }
     window.draw(radius_circle);
     window.draw(sprite);
 }
 
-void Cannon::draw(RenderWindow &window)
-{
-    if (clock.getElapsedTime().asSeconds() >= RAY_SHOWING_TIME)
-        shooting_ray = false;
-    if (shooting_ray == true)
-    {
-        window.draw(bomb_radius_circle);
+void Cannon::draw(RenderWindow &window) {
+    if (clock.getElapsedTime().asSeconds() >= RAY_SHOWING_TIME) shooting_ray = false;
+    if (shooting_ray == true) {
         window.draw(ray_sprite);
+        window.draw(explosion_sprite);
     }
     window.draw(radius_circle);
     window.draw(sprite);
 }
 
-bool Tower::containsMouse(Vector2i mouse_pos)
-{
+bool Tower::containsMouse(Vector2i mouse_pos) {
     FloatRect spriteBounds = sprite.getGlobalBounds();
     float centerWidth = spriteBounds.width * 0.75f;
     float centerHeight = spriteBounds.height * 0.75f;
@@ -98,20 +95,17 @@ bool Tower::containsMouse(Vector2i mouse_pos)
     return centerRect.contains(mouse_pos.x, mouse_pos.y);
 }
 
-void ShopTower::handleBeingHovered(RenderWindow &window)
-{
+void ShopTower::handleBeingHovered(RenderWindow &window) {
     FloatRect bounds = sprite.getGlobalBounds();
     RectangleShape description(Vector2f(SHOP_WIDTH, DESCRIPTION_HEIGHT));
-    description.setPosition(window.getSize().x - SHOP_WIDTH,
-                            SCORE_BOARD_HEIGHT + bounds.height);
+    description.setPosition(window.getSize().x - SHOP_WIDTH, SCORE_BOARD_HEIGHT + bounds.height);
     description.setFillColor(DESCRIPTION_COLOR);
     description.setOutlineThickness(DESCRIPTION_OUTLINE);
     description.setOutlineColor(BACKGROUND_COLOR);
 
     Text text, title;
     Font font;
-    if (!font.loadFromFile(DESCRIBTION_FONT_FILENAME))
-    {
+    if (!font.loadFromFile(DESCRIBTION_FONT_FILENAME)) {
         cerr << "Could not load scoreboard font\n";
     }
 
@@ -136,21 +130,20 @@ void ShopTower::handleBeingHovered(RenderWindow &window)
 
     title.setString("\n\n\n\n" + shooter_name);
     FloatRect textBounds = title.getLocalBounds();
-    title.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
+    title.setOrigin(
+        textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
     title.setPosition(description.getPosition().x + SHOP_WIDTH / 2.f, description.getPosition().y);
-    text.setString("\n\n\n COST: " + to_string(price) + "\n\n\n RADIUS: " + stream_for_radius.str() + "\n\n\n COOLDOWN: " + stream_for_cooldown.str() + " S");
+    text.setString("\n\n\n COST: " + to_string(price) +
+                   "\n\n\n RADIUS: " + stream_for_radius.str() +
+                   "\n\n\n COOLDOWN: " + stream_for_cooldown.str() + " S");
     window.draw(description);
     window.draw(title);
     window.draw(text);
 }
 
-void ShopTower::setAvailblity(bool status)
-{
-    availble = status;
-}
+void ShopTower::setAvailblity(bool status) { availble = status; }
 
-void ShopTower::highlight(RenderWindow &window)
-{
+void ShopTower::highlight(RenderWindow &window) {
     FloatRect bounds = sprite.getGlobalBounds();
 
     RectangleShape highlightRect;
@@ -162,8 +155,7 @@ void ShopTower::highlight(RenderWindow &window)
     window.draw(highlightRect);
 }
 
-bool GameTower::readyToShoot()
-{
+bool GameTower::readyToShoot() {
     if (has_cooled_down == false && clock.getElapsedTime().asSeconds() >= cooldown)
         has_cooled_down = true;
 
@@ -173,21 +165,17 @@ bool GameTower::readyToShoot()
         return false;
 }
 
-r_dir normalizeRotation(float angle)
-{
+r_dir normalizeRotation(float angle) {
     angle = fmod(angle, 360.0f);
-    if (angle < 0)
-        angle += 360.0f;
-    if (angle < 1)
-        return ND;
+    if (angle < 0) angle += 360.0f;
+    if (angle < 1) return ND;
     float cw = 360.0f - angle;
     float ccw = angle;
 
     return (cw < ccw) ? CW : CCW;
 }
 
-float GameTower::getRotation()
-{
+float GameTower::getRotation() {
     float alpha1 = sprite.getRotation();
     double x = locked_in_enemy->getPosition().x - position.x;
     double y = position.y - locked_in_enemy->getPosition().y;
@@ -197,10 +185,8 @@ float GameTower::getRotation()
     return rotation;
 }
 
-void GameTower::rotateTower(float dt)
-{
-    if (locked_in_enemy != nullptr)
-    {
+void GameTower::rotateTower(float dt) {
+    if (locked_in_enemy != nullptr) {
         float rotation = this->getRotation();
         r_dir direction = normalizeRotation(rotation);
         if (direction == CW)
@@ -210,150 +196,125 @@ void GameTower::rotateTower(float dt)
     }
 }
 
-bool GameTower::isInRange(Vector2f pos)
-{
+bool GameTower::isInRange(Vector2f pos) {
     float distance = getDistance(position, pos);
     return distance < radius;
 }
 
-float getDistance(Vector2f pos1, Vector2f pos2)
-{
+float getDistance(Vector2f pos1, Vector2f pos2) {
     float distance = sqrt(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2));
     return distance;
 }
 
-void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies)
-{
+void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies) {
     map<float, shared_ptr<Balloon>> enemy_distance_map;
-    for (auto enemy : enemies)
-    {
+    for (auto enemy : enemies) {
         if (this->isInRange(enemy->getPosition()) && enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
-    if (enemy_distance_map.empty() == false)
-    {
+    if (enemy_distance_map.empty() == false) {
         locked_in_enemy = enemy_distance_map.begin()->second;
         locked_in_enemy->setLockedOn();
     }
 }
 
-void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies)
-{
+void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies) {
     map<float, shared_ptr<Balloon>> enemy_distance_map;
-    for (auto enemy : enemies)
-    {
-        if (this->isInRange(enemy->getPosition()) && enemy->isFrozen() == false && enemy->isLockedOn() == false)
+    for (auto enemy : enemies) {
+        if (this->isInRange(enemy->getPosition()) && enemy->getState() != FROZEN &&
+            enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
-    if (enemy_distance_map.empty() == false)
-    {
+    if (enemy_distance_map.empty() == false) {
         locked_in_enemy = enemy_distance_map.begin()->second;
     }
 }
 
-void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies)
-{
+void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies) {
     map<int, shared_ptr<Balloon>, greater<int>> enemy_casualties_map;
-    for (auto enemy : enemies)
-    {
+    for (auto enemy : enemies) {
         if (this->isInRange(enemy->getPosition()))
             enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies)] = enemy;
     }
-    if (enemy_casualties_map.empty() == false)
-    {
+    if (enemy_casualties_map.empty() == false) {
         locked_in_enemy = enemy_casualties_map.begin()->second;
         locked_in_enemy->setLockedOn();
-        for (auto enemy : enemies)
-        {
+        for (auto enemy : enemies) {
             if (getDistance(locked_in_enemy->getPosition(), enemy->getPosition()) < BOMB_RADIUS)
                 bomb_casualties.push_back(enemy);
         }
     }
 }
 
-int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies)
-{
+int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies) {
     CircleShape bomb_radius(BOMB_RADIUS);
     bomb_radius.setPosition(bomb_pos);
     int count = 0;
     for (auto enemy : enemies)
-        if (getDistance(bomb_pos, enemy->getPosition()) < BOMB_RADIUS)
-            count++;
+        if (getDistance(bomb_pos, enemy->getPosition()) < BOMB_RADIUS) count++;
     return count;
 }
 
-void FireTower::shootEnemy()
-{
-    if (locked_in_enemy != nullptr)
-    {
+void GameTower::handleLaser() {
+    sound_manager->playSound(LASER_SOUND_FILENAME);
+    ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
+        getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
+    ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
+    ray_sprite.setPosition(position);
+    ray_sprite.setRotation(sprite.getRotation());
+}
+
+void FireTower::shootEnemy() {
+    if (locked_in_enemy != nullptr) {
         float rotation = this->getRotation();
         r_dir dir = normalizeRotation(rotation);
-        if (dir == ND)
-        {
+        if (dir == ND && this->isInRange(locked_in_enemy->getPosition())) {
             locked_in_enemy->pop();
             clock.restart();
             shooting_ray = true;
-            loadSound(laser, LASER_SOUND_FILENAME);
-            laser.play();
-            ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
-                                getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
-            ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
-            ray_sprite.setPosition(position);
-            ray_sprite.setRotation(sprite.getRotation());
+            handleLaser();
             has_cooled_down = false;
+            locked_in_enemy = nullptr;
+        } else if (dir == ND && !this->isInRange(locked_in_enemy->getPosition())) {
             locked_in_enemy = nullptr;
         }
     }
 }
-void IceTower::shootEnemy()
-{
-    if (locked_in_enemy != nullptr)
-    {
+void IceTower::shootEnemy() {
+    if (locked_in_enemy != nullptr) {
         float rotation = this->getRotation();
         r_dir dir = normalizeRotation(rotation);
-        if (dir == ND)
-        {
+        if (dir == ND && this->isInRange(locked_in_enemy->getPosition())) {
             locked_in_enemy->freeze();
             clock.restart();
             shooting_ray = true;
-            loadSound(laser, LASER_SOUND_FILENAME);
-            laser.play();
-            ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
-                                getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
-            ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
-            ray_sprite.setPosition(position);
-            ray_sprite.setRotation(sprite.getRotation());
+            handleLaser();
             has_cooled_down = false;
+            locked_in_enemy = nullptr;
+        } else if (dir == ND && !this->isInRange(locked_in_enemy->getPosition())) {
             locked_in_enemy = nullptr;
         }
     }
 }
 
-void Cannon::shootEnemy()
-{
-    if (locked_in_enemy != nullptr)
-    {
+void Cannon::shootEnemy() {
+    if (locked_in_enemy != nullptr) {
         float rotation = this->getRotation();
         r_dir dir = normalizeRotation(rotation);
-        if (dir == ND)
-        {
-            for (auto enemy : bomb_casualties)
-                enemy->pop();
-            bomb_radius_circle.setPosition(locked_in_enemy->getPosition());
+        if (dir == ND && this->isInRange(locked_in_enemy->getPosition())) {
+            for (auto enemy : bomb_casualties) enemy->pop();
+            FloatRect bounds = explosion_sprite.getLocalBounds();
+            explosion_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+            explosion_sprite.setPosition(locked_in_enemy->getPosition());
             clock.restart();
             shooting_ray = true;
-            loadSound(laser, LASER_SOUND_FILENAME);
-            laser.play();
-            loadSound(explosion, EXPLOSION_SOUND_FILENAME);
-            explosion.play();
-            ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
-                                getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
-            ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
-            ray_sprite.setPosition(position);
-            ray_sprite.setRotation(sprite.getRotation());
+            sound_manager->playSound(EXPLOSION_SOUND_FILENAME);
+            handleLaser();
             has_cooled_down = false;
             locked_in_enemy = nullptr;
             bomb_casualties.clear();
+        } else if (dir == ND && !this->isInRange(locked_in_enemy->getPosition())) {
+            locked_in_enemy = nullptr;
         }
     }
 }

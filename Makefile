@@ -7,7 +7,10 @@ FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 EXE = TD
 
+FORMAT = clang-format -style=file -i
+
 SOURCES := $(wildcard $(SRCDIR)/*.cpp)
+HEADERS := $(wildcard $(INCDIR)/*.hpp)
 OBJECTS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
 
 
@@ -21,6 +24,10 @@ $(EXE): $(OBJECTS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp 
 	$(CXX) -c $< -o $@
+
+format:
+	$(FORMAT) $(SOURCES) $(HEADERS)
+
 
 clean:
 	rm -f $(OBJDIR)/*.o $(EXE)

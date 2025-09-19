@@ -3,13 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+
 #include "constants.hpp"
 #include "tower.hpp"
 
 using namespace sf;
 
-class Tile
-{
+class Tile {
 public:
     Tile(char type_, Vector2f position_, Texture &texture_);
     Sprite getSprite() { return sprite; }
@@ -27,4 +27,4 @@ private:
     Sprite sprite;
 };
 
-#endif // define TILE_HPP
+#endif  // define TILE_HPP

@@ -1,23 +1,24 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <memory>
 #include <SFML/Audio.hpp>
-#include "map.hpp"
-#include "shop.hpp"
-#include "scoreboard.hpp"
-#include "tile.hpp"
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <soundmanager.hpp>
+#include <vector>
+
 #include "balloon.hpp"
-#include "waves_config.hpp"
 #include "constants.hpp"
+#include "map.hpp"
+#include "scoreboard.hpp"
+#include "shop.hpp"
+#include "tile.hpp"
+#include "waves_config.hpp"
 
 using namespace std;
 
-class Game
-{
+class Game {
 public:
     Game();
     void run();
@@ -47,6 +48,7 @@ private:
     shared_ptr<Map> game_map;
     shared_ptr<Shop> game_shop;
     shared_ptr<ScoreBoard> score_board;
+    shared_ptr<SoundManager> sound_manager;
     RenderWindow window;
     PlayerStats player_stats;
     GameState state;
@@ -57,4 +59,4 @@ private:
     Sprite you_win_sprite;
 };
 
-#endif // define GAME_HPP
+#endif  // define GAME_HPP

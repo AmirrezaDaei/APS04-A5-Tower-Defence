@@ -2,13 +2,13 @@
 #define SHOP_HPP
 
 #include <fstream>
-#include <sstream>
 #include <memory>
-#include "tower.hpp"
-#include "texturemanager.hpp"
+#include <sstream>
 
-class Shop
-{
+#include "texturemanager.hpp"
+#include "tower.hpp"
+
+class Shop {
 public:
     Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow &window, int &money_);
     void drawShop(RenderWindow &window);
@@ -25,4 +25,4 @@ private:
     shared_ptr<ShopTower> tower_to_buy = nullptr;
 };
 
-#endif // define SHOP_HPP
+#endif  // define SHOP_HPP

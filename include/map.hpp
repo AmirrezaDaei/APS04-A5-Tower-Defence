@@ -1,28 +1,31 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include <vector>
-#include <memory>
 #include <cmath>
-#include <random>
+#include <iostream>
 #include <list>
-#include "texturemanager.hpp"
-#include "tower.hpp"
-#include "tile.hpp"
-#include "constants.hpp"
+#include <memory>
+#include <random>
+#include <vector>
+
 #include "balloon.hpp"
+#include "constants.hpp"
+#include "soundmanager.hpp"
+#include "texturemanager.hpp"
+#include "tile.hpp"
+#include "tower.hpp"
 #include "waves_config.hpp"
 
 using namespace std;
 using namespace sf;
 
-class Map
-{
+class Map {
 public:
-    Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager, int &money_, float &health_);
+    Map(int map_width_, int map_height_, vector<string> map,
+        shared_ptr<TextureManager> texture_manager_, shared_ptr<SoundManager> sound_manager_,
+        int &money_, float &health_);
     Vector2f getStartPoint() { return start_point; }
     void constructNormal(Vector2f position, Vector2i start_v_dir);
     void constructPregnant(Vector2f position, Vector2i start_v_dir);
@@ -39,6 +42,7 @@ public:
 
 private:
     shared_ptr<TextureManager> texture_manager;
+    shared_ptr<SoundManager> sound_manager;
     Vector2f start_point;
     Vector2f finish_point;
     Vector2i start_dir;
@@ -52,4 +56,4 @@ private:
     int map_width;
 };
 
-#endif // define MAP_HPP
+#endif  // define MAP_HPP

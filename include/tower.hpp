@@ -2,16 +2,17 @@
 #define TOWER_HPP
 
 #include <SFML/Graphics.hpp>
-#include <sstream>
+#include <cmath>
 #include <iomanip>
 #include <memory>
-#include <cmath>
+#include <sstream>
+
 #include "balloon.hpp"
 #include "constants.hpp"
+#include "soundmanager.hpp"
 using namespace sf;
 
-class Tower
-{
+class Tower {
 public:
     Tower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_);
     void virtual draw(RenderWindow &window) = 0;
@@ -28,10 +29,10 @@ protected:
     Sprite sprite;
 };
 
-class ShopTower : public Tower
-{
+class ShopTower : public Tower {
 public:
-    ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_);
+    ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_,
+        Texture &texture_, float radius_);
     void draw(RenderWindow &window);
     string getName() { return name; }
     int getPrice() { return price; }
@@ -48,10 +49,10 @@ private:
 
 r_dir normalizeRotation(float angle);
 
-class GameTower : public Tower
-{
+class GameTower : public Tower {
 public:
-    GameTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_);
+    GameTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
+        Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_);
     void virtual draw(RenderWindow &window);
     bool readyToShoot();
     bool isInRange(Vector2f pos);
@@ -59,9 +60,11 @@ public:
     float getRotation();
     void virtual shootEnemy() = 0;
     void rotateTower(float dt);
+    void handleLaser();
 
 protected:
     CircleShape radius_circle;
+    shared_ptr<SoundManager> sound_manager;
     Clock clock;
     Sound laser;
     Sound explosion;
@@ -72,39 +75,38 @@ protected:
     Sprite ray_sprite;
 };
 
-class FireTower : public GameTower
-{
+class FireTower : public GameTower {
 public:
-    FireTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_);
+    FireTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
+        Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
     void shootEnemy();
 };
 
-class IceTower : public GameTower
-{
+class IceTower : public GameTower {
 public:
-    IceTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_);
+    IceTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
+        Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
     void shootEnemy();
-
-private:
 };
 
-class Cannon : public GameTower
-{
+class Cannon : public GameTower {
 public:
-    Cannon(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_);
+    Cannon(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
+        Texture &ray_texture_, Texture &explosion_texture, shared_ptr<SoundManager> sound_manager_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
     void draw(RenderWindow &window) override;
     void shootEnemy();
 
 private:
     vector<shared_ptr<Balloon>> bomb_casualties;
-    CircleShape bomb_radius_circle;
+    Texture explosion_texture;
+    Sprite explosion_sprite;
 };
 
 float getDistance(Vector2f pos1, Vector2f pos2);
 
 int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies_in_range);
 
-#endif // define TOWER_HPP
+#endif  // define TOWER_HPP
