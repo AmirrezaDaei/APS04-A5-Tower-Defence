@@ -8,11 +8,9 @@ Tower::Tower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
     sprite.setPosition(position);
 }
 
-GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
-    float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
-    : Tower(position_, price_, cooldown_, texture_, radius_),
-      ray_texture(ray_texture_),
-      sound_manager(sound_manager_) {
+GameTower::GameTower(
+    Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
+    : Tower(position_, price_, cooldown_, texture_, radius_), ray_texture(ray_texture_), sound_manager(sound_manager_) {
     FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(bounds.left + bounds.width / 2.f, bounds.top + bounds.height / 2.f);
     sprite.setTexture(texture_);
@@ -29,25 +27,23 @@ GameTower::GameTower(Vector2f position_, int price_, float cooldown_, Texture &t
     sound_manager->loadSound(LASER_SOUND_FILENAME);
 }
 
-FireTower::FireTower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
-    float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
+FireTower::FireTower(
+    Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
     : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_) {}
 
-IceTower::IceTower(Vector2f position_, int price_, float cooldown_, Texture &texture_,
-    float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
+IceTower::IceTower(
+    Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
     : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_) {}
 
-Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_,
-    Texture &ray_texture_, Texture &explosion_texture_, shared_ptr<SoundManager> sound_manager_)
-    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_),
-      explosion_texture(explosion_texture_) {
+Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_, Texture &explosion_texture_,
+    shared_ptr<SoundManager> sound_manager_)
+    : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_), explosion_texture(explosion_texture_) {
     explosion_sprite.setTexture(explosion_texture_);
     Vector2u tex_size = explosion_texture_.getSize();
     explosion_sprite.setScale(2 * BOMB_RADIUS / tex_size.x, 2 * BOMB_RADIUS / tex_size.y);
 }
 
-ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_,
-    Texture &texture_, float radius_)
+ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_)
     : Tower(position_, price_, cooldown_, texture_, radius_), name(name_), size(size_) {
     FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(bounds.left, bounds.top);
@@ -130,12 +126,10 @@ void ShopTower::handleBeingHovered(RenderWindow &window) {
 
     title.setString("\n\n\n\n" + shooter_name);
     FloatRect textBounds = title.getLocalBounds();
-    title.setOrigin(
-        textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
+    title.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
     title.setPosition(description.getPosition().x + SHOP_WIDTH / 2.f, description.getPosition().y);
-    text.setString("\n\n\n COST: " + to_string(price) +
-                   "\n\n\n RADIUS: " + stream_for_radius.str() +
-                   "\n\n\n COOLDOWN: " + stream_for_cooldown.str() + " S");
+    text.setString(
+        "\n\n\n COST: " + to_string(price) + "\n\n\n RADIUS: " + stream_for_radius.str() + "\n\n\n COOLDOWN: " + stream_for_cooldown.str() + " S");
     window.draw(description);
     window.draw(title);
     window.draw(text);
@@ -156,8 +150,7 @@ void ShopTower::highlight(RenderWindow &window) {
 }
 
 bool GameTower::readyToShoot() {
-    if (has_cooled_down == false && clock.getElapsedTime().asSeconds() >= cooldown)
-        has_cooled_down = true;
+    if (has_cooled_down == false && clock.getElapsedTime().asSeconds() >= cooldown) has_cooled_down = true;
 
     if (locked_in_enemy == nullptr && has_cooled_down == true)
         return true;
@@ -221,8 +214,7 @@ void FireTower::selectEnemy(vector<shared_ptr<Balloon>> enemies) {
 void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies) {
     map<float, shared_ptr<Balloon>> enemy_distance_map;
     for (auto enemy : enemies) {
-        if (this->isInRange(enemy->getPosition()) && enemy->getState() != FROZEN &&
-            enemy->isLockedOn() == false)
+        if (this->isInRange(enemy->getPosition()) && enemy->getState() != FROZEN && enemy->isLockedOn() == false)
             enemy_distance_map[getDistance(position, enemy->getPosition())] = enemy;
     }
     if (enemy_distance_map.empty() == false) {
@@ -233,15 +225,13 @@ void IceTower::selectEnemy(vector<shared_ptr<Balloon>> enemies) {
 void Cannon::selectEnemy(vector<shared_ptr<Balloon>> enemies) {
     map<int, shared_ptr<Balloon>, greater<int>> enemy_casualties_map;
     for (auto enemy : enemies) {
-        if (this->isInRange(enemy->getPosition()))
-            enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies)] = enemy;
+        if (this->isInRange(enemy->getPosition())) enemy_casualties_map[getBombCasualties(enemy->getPosition(), enemies)] = enemy;
     }
     if (enemy_casualties_map.empty() == false) {
         locked_in_enemy = enemy_casualties_map.begin()->second;
         locked_in_enemy->setLockedOn();
         for (auto enemy : enemies) {
-            if (getDistance(locked_in_enemy->getPosition(), enemy->getPosition()) < BOMB_RADIUS)
-                bomb_casualties.push_back(enemy);
+            if (getDistance(locked_in_enemy->getPosition(), enemy->getPosition()) < BOMB_RADIUS) bomb_casualties.push_back(enemy);
         }
     }
 }
@@ -257,8 +247,7 @@ int getBombCasualties(Vector2f bomb_pos, vector<shared_ptr<Balloon>> enemies) {
 
 void GameTower::handleLaser() {
     sound_manager->playSound(LASER_SOUND_FILENAME);
-    ray_sprite.setScale(TOWER_SIZE / texture.getSize().x,
-        getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
+    ray_sprite.setScale(TOWER_SIZE / texture.getSize().x, getDistance(position, locked_in_enemy->getPosition()) / ray_texture.getSize().y);
     ray_sprite.setOrigin(ray_sprite.getLocalBounds().width / 2, ray_sprite.getLocalBounds().height);
     ray_sprite.setPosition(position);
     ray_sprite.setRotation(sprite.getRotation());

@@ -1,7 +1,7 @@
 #include "balloon.hpp"
 
-Balloon::Balloon(Texture &texture_, Vector2f position_, Vector2i v_dir_, float speed_, int point_,
-    Texture &frozen_texture_, shared_ptr<SoundManager> sound_manager_)
+Balloon::Balloon(Texture &texture_, Vector2f position_, Vector2i v_dir_, float speed_, int point_, Texture &frozen_texture_,
+    shared_ptr<SoundManager> sound_manager_)
     : texture(texture_),
       position(position_),
       v_dir(v_dir_),
@@ -16,27 +16,24 @@ Balloon::Balloon(Texture &texture_, Vector2f position_, Vector2i v_dir_, float s
     sprite.setOrigin(tex_size.x / 2, tex_size.y * 2 / 3);
 
     frozen_sprite.setTexture(frozen_texture_);
-    frozen_sprite.setScale(
-        BALLOON_SIZE / frozen_texture_.getSize().x, BALLOON_SIZE / frozen_texture_.getSize().x);
+    frozen_sprite.setScale(BALLOON_SIZE / frozen_texture_.getSize().x, BALLOON_SIZE / frozen_texture_.getSize().x);
     frozen_sprite.setOrigin(frozen_texture_.getSize().x / 2, frozen_texture_.getSize().y * 2 / 3);
 
     sound_manager->loadSound(BALLOON_FREEZE_SOUND_FILENAME);
     sound_manager->loadSound(BALLOON_POP_SOUND_FILENAME);
 }
 
-Normal::Normal(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_,
-    Texture &frozen_texture_, Texture &popped_texture_, shared_ptr<SoundManager> sound_manager_)
-    : Balloon(texture_, position_, v_dir, speed, point_, frozen_texture_, sound_manager_),
-      popped_texture(popped_texture_) {
+Normal::Normal(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_, Texture &popped_texture_,
+    shared_ptr<SoundManager> sound_manager_)
+    : Balloon(texture_, position_, v_dir, speed, point_, frozen_texture_, sound_manager_), popped_texture(popped_texture_) {
     type = NORMAL;
     popped_sprite.setTexture(popped_texture_);
-    popped_sprite.setScale(1.5 * BALLOON_SIZE / popped_texture_.getSize().x,
-        1.5 * BALLOON_SIZE / popped_texture_.getSize().x);
+    popped_sprite.setScale(1.5 * BALLOON_SIZE / popped_texture_.getSize().x, 1.5 * BALLOON_SIZE / popped_texture_.getSize().x);
     popped_sprite.setOrigin(popped_texture_.getSize().x / 2, popped_texture_.getSize().y / 2);
 }
 
-Pregnant::Pregnant(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_,
-    Texture &frozen_texture_, shared_ptr<SoundManager> sound_manager_)
+Pregnant::Pregnant(
+    Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_, shared_ptr<SoundManager> sound_manager_)
     : Balloon(texture_, position_, v_dir, speed, point_, frozen_texture_, sound_manager_) {
     type = PREGNANT;
 }

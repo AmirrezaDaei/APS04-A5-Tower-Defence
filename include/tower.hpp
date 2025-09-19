@@ -31,8 +31,7 @@ protected:
 
 class ShopTower : public Tower {
 public:
-    ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_,
-        Texture &texture_, float radius_);
+    ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_);
     void draw(RenderWindow &window);
     string getName() { return name; }
     int getPrice() { return price; }
@@ -51,8 +50,8 @@ r_dir normalizeRotation(float angle);
 
 class GameTower : public Tower {
 public:
-    GameTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
-        Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_);
+    GameTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_,
+        shared_ptr<SoundManager> sound_manager_);
     void virtual draw(RenderWindow &window);
     bool readyToShoot();
     bool isInRange(Vector2f pos);
@@ -77,24 +76,24 @@ protected:
 
 class FireTower : public GameTower {
 public:
-    FireTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
-        Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_);
+    FireTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_,
+        shared_ptr<SoundManager> sound_manager_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
     void shootEnemy();
 };
 
 class IceTower : public GameTower {
 public:
-    IceTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
-        Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_);
+    IceTower(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_,
+        shared_ptr<SoundManager> sound_manager_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
     void shootEnemy();
 };
 
 class Cannon : public GameTower {
 public:
-    Cannon(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_,
-        Texture &ray_texture_, Texture &explosion_texture, shared_ptr<SoundManager> sound_manager_);
+    Cannon(Vector2f position_, int price_, float cool_down_, Texture &texture_, float radius_, Texture &ray_texture_, Texture &explosion_texture,
+        shared_ptr<SoundManager> sound_manager_);
     void selectEnemy(vector<shared_ptr<Balloon>> enemies);
     void draw(RenderWindow &window) override;
     void shootEnemy();

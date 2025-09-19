@@ -31,8 +31,7 @@ const string GAME_OVER_DISPLAY_FILENAME = "assets/sprites/game_over.png";
 const string YOU_WIN_DISPLAY_FILENAME = "assets/sprites/you_win.png";
 const string KOKALAK_MUSIC_FILENAME = "assets/music & soundTracks/Zang_Bzn_Ambulaance.ogg";
 const string NAMELESS_KING_MUSIC_FILENAME = "assets/music & soundTracks/Nameless King .ogg";
-const string YOU_DIED_SOUND_FILENAME =
-    "assets/music & soundTracks/dark-souls--you-died--sound-effect-made-with-Voicemod.ogg";
+const string YOU_DIED_SOUND_FILENAME = "assets/music & soundTracks/dark-souls--you-died--sound-effect-made-with-Voicemod.ogg";
 const string DR_STOP_SOUND_FILENAME = "assets/music & soundTracks/dr-stop-2.ogg";
 const string BUILDABLE_TILE_FILENAME = "assets/sprites/buildable_tile.png";
 const string PATH_TILE_FILENAME = "assets/sprites/path_tile.png";
@@ -57,8 +56,7 @@ const string SCORE_BOARD_FONT_FILENAME = "assets/fonts/anton.ttf";
 const string DESCRIBTION_FONT_FILENAME = "assets/fonts/PressStart2P.ttf";
 const string LASER_SOUND_FILENAME = "assets/music & soundTracks/laser-sound-fx_B_major.wav";
 const string EXPLOSION_SOUND_FILENAME = "assets/music & soundTracks/explosion-80108.wav";
-const string BALLOON_FREEZE_SOUND_FILENAME =
-    "assets/music & soundTracks/ice-cracking-01 (mp3cut.net).ogg";
+const string BALLOON_FREEZE_SOUND_FILENAME = "assets/music & soundTracks/ice-cracking-01 (mp3cut.net).ogg";
 const string BALLOON_POP_SOUND_FILENAME = "assets/music & soundTracks/balloon-burst-383750.wav";
 
 const float BOMB_RADIUS = 50.f;

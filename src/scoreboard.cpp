@@ -10,8 +10,7 @@ ScoreBoard::ScoreBoard(RenderWindow &window) {
     heart.setTexture(heart_texture);
     Vector2u tex_size = heart_texture.getSize();
     heart.setScale(HEART_SIZE / tex_size.x, HEART_SIZE / tex_size.y);
-    heart.setPosition(
-        window.getSize().x - (SHOP_WIDTH - SHOP_WIDTH / 25), SCORE_BOARD_HEIGHT - 1.5 * HEART_SIZE);
+    heart.setPosition(window.getSize().x - (SHOP_WIDTH - SHOP_WIDTH / 25), SCORE_BOARD_HEIGHT - 1.5 * HEART_SIZE);
 
     board.setSize(Vector2f(SHOP_WIDTH, SCORE_BOARD_HEIGHT));
     board.setPosition(window.getSize().x - SHOP_WIDTH, 0);
@@ -24,22 +23,18 @@ ScoreBoard::ScoreBoard(RenderWindow &window) {
 
 void ScoreBoard::drawScoreBoard(RenderWindow &window, PlayerStats player_stats) {
     FloatRect textBounds = text.getLocalBounds();
-    text.setOrigin(
-        textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
+    text.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
     text.setPosition(window.getSize().x - SHOP_WIDTH / 2, SHOP_WIDTH / 5);
-    text.setString(
-        "Round  " + to_string(player_stats.round) + "\nMoney:   " + to_string(player_stats.money));
+    text.setString("Round  " + to_string(player_stats.round) + "\nMoney:   " + to_string(player_stats.money));
 
     RectangleShape healthBarBackground(Vector2f(HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
     healthBarBackground.setFillColor(HB_BACKGROUND_COLOR);
     FloatRect bounds = heart.getGlobalBounds();
-    healthBarBackground.setPosition(window.getSize().x - SHOP_WIDTH + 1.5 * HEART_SIZE,
-        bounds.top + bounds.width / 2 - HEALTHBAR_WIDTH / 2);
+    healthBarBackground.setPosition(window.getSize().x - SHOP_WIDTH + 1.5 * HEART_SIZE, bounds.top + bounds.width / 2 - HEALTHBAR_WIDTH / 2);
     healthBarBackground.setOutlineThickness(HB_OUTLINE);
     healthBarBackground.setOutlineColor(Color::Black);
 
-    RectangleShape healthBar(
-        Vector2f((player_stats.health / MAX_HEALTH) * HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
+    RectangleShape healthBar(Vector2f((player_stats.health / MAX_HEALTH) * HEALTHBAR_LENGTH, HEALTHBAR_WIDTH));
     healthBar.setFillColor(HB_COLOR);
     Vector2f rectPos = healthBarBackground.getPosition();
     healthBar.setPosition(rectPos.x, rectPos.y);

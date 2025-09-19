@@ -11,8 +11,8 @@ using namespace sf;
 
 class Balloon {
 public:
-    Balloon(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_,
-        Texture &frozen_texture_, shared_ptr<SoundManager> sound_manager_);
+    Balloon(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_,
+        shared_ptr<SoundManager> sound_manager_);
     Vector2f getPosition() { return position; }
     Vector2i getVDir() { return v_dir; }
     float getSpeed() { return speed; }
@@ -46,8 +46,7 @@ protected:
 
 class Normal : public Balloon {
 public:
-    Normal(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_,
-        Texture &frozen_texture_, Texture &popped_texture_,
+    Normal(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_, Texture &popped_texture_,
         shared_ptr<SoundManager> sound_manager_);
     void draw(RenderWindow &window);
 
@@ -58,8 +57,8 @@ private:
 
 class Pregnant : public Balloon {
 public:
-    Pregnant(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_,
-        Texture &frozen_texture_, shared_ptr<SoundManager> sound_manager_);
+    Pregnant(Texture &texture_, Vector2f position_, Vector2i v_dir, float speed, int point_, Texture &frozen_texture_,
+        shared_ptr<SoundManager> sound_manager_);
 };
 
 #endif  // define BALLOON_HPP

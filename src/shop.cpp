@@ -15,14 +15,11 @@ Shop::Shop(shared_ptr<TextureManager> texture_manager_, RenderWindow &window, in
         while (getline(iss, word, COMMA_SEPERATOR)) words.push_back(word);
 
         float size = static_cast<float>(SHOP_WIDTH / TOWER_COUNT);
-        Texture &texture =
-            texture_manager->getTexture(SHOOTERS_FILEPATH + words[t_info::NAME] + IMAGE_FORMAT);
-        Vector2f position(static_cast<float>(window.getSize().x - SHOP_WIDTH) + count * size,
-            static_cast<float>(SCORE_BOARD_HEIGHT));
+        Texture &texture = texture_manager->getTexture(SHOOTERS_FILEPATH + words[t_info::NAME] + IMAGE_FORMAT);
+        Vector2f position(static_cast<float>(window.getSize().x - SHOP_WIDTH) + count * size, static_cast<float>(SCORE_BOARD_HEIGHT));
 
-        shared_ptr<ShopTower> new_tower =
-            make_shared<ShopTower>(position, words[t_info::NAME], stoi(words[t_info::PRICE]), size,
-                stof(words[t_info::COOLDOWN]), texture, stof(words[t_info::RADIUS]));
+        shared_ptr<ShopTower> new_tower = make_shared<ShopTower>(
+            position, words[t_info::NAME], stoi(words[t_info::PRICE]), size, stof(words[t_info::COOLDOWN]), texture, stof(words[t_info::RADIUS]));
 
         towers_in_shop.push_back(new_tower);
         count++;

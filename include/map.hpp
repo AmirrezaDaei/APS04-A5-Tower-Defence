@@ -23,8 +23,7 @@ using namespace sf;
 
 class Map {
 public:
-    Map(int map_width_, int map_height_, vector<string> map,
-        shared_ptr<TextureManager> texture_manager_, shared_ptr<SoundManager> sound_manager_,
+    Map(int map_width_, int map_height_, vector<string> map, shared_ptr<TextureManager> texture_manager_, shared_ptr<SoundManager> sound_manager_,
         int &money_, float &health_);
     Vector2f getStartPoint() { return start_point; }
     void constructNormal(Vector2f position, Vector2i start_v_dir);
