@@ -34,6 +34,8 @@ public:
     ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_);
     void draw(RenderWindow &window);
     string getName() { return name; }
+    void setDescText();
+    void setShooterTitle();
     int getPrice() { return price; }
     Texture &getTexture() { return texture; }
     void handleBeingHovered(RenderWindow &window);
@@ -42,6 +44,12 @@ public:
 
 private:
     string name;
+    string shooter_title;
+    Font font;
+    Text desc_text;
+    Text title;
+    RectangleShape description;
+    RectangleShape highlightRect;
     float size;
     bool availble;
 };

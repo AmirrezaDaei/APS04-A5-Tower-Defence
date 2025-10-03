@@ -71,7 +71,7 @@ const string ICE_SHOOTER_TITLE = "Ice Tower";
 const string CANNON_TITLE = "Cannon";
 
 const float MAX_HEALTH = 100.f;
-const int INITIAL_MONEY = 2000;
+const int INITIAL_MONEY = 200;
 const float DAMAGE = 2;
 const float ROTATION_SPEED = 300;
 const int TO_SECONDS = 1000;
@@ -125,5 +125,10 @@ enum GameState { PLAYING, GAME_WON, GAME_OVER };
 
 int generateRandom(int from, int to);
 void createText(Text &text, Font &font, int size, Color color);
+void setSprite(Sprite &sprite, Texture& texture,float size, Vector2f position = Vector2f(0.f, 0.f));
+void setNormalizedOrigin(Sprite& sprite, float normX, float normY);
+void setCircle(CircleShape& circle, float radius, Color color, Vector2f position = Vector2f(0.f, 0.f));
+void handleRect(RectangleShape& rect,Vector2f size, Color fill_color, float outline_thikness, Color outline_color, Vector2f position = Vector2f(0.f, 0.f));
+
 
 #endif  // define CONSTS_HPP

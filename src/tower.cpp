@@ -2,26 +2,16 @@
 
 Tower::Tower(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_)
     : position(position_), price(price_), cooldown(cooldown_), texture(texture_), radius(radius_) {
-    sprite.setTexture(texture_);
-    Vector2u tex_size = texture_.getSize();
-    sprite.setScale(TOWER_SIZE / tex_size.x, TOWER_SIZE / tex_size.y);
-    sprite.setPosition(position);
+    setSprite(sprite, texture_, TOWER_SIZE, position);
 }
 
 GameTower::GameTower(
     Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_, shared_ptr<SoundManager> sound_manager_)
     : Tower(position_, price_, cooldown_, texture_, radius_), ray_texture(ray_texture_), sound_manager(sound_manager_) {
-    FloatRect bounds = sprite.getLocalBounds();
-    sprite.setOrigin(bounds.left + bounds.width / 2.f, bounds.top + bounds.height / 2.f);
-    sprite.setTexture(texture_);
-    Vector2u tex_size = texture_.getSize();
-    sprite.setScale(TOWER_SIZE / tex_size.x, TOWER_SIZE / tex_size.y);
-    sprite.setPosition(position);
+    setNormalizedOrigin(sprite, 0.5, 0.5);
 
-    radius_circle.setRadius(radius);
-    radius_circle.setOrigin(radius_circle.getRadius(), radius_circle.getRadius());
-    radius_circle.setFillColor(RADIUS_COLOR);
-    radius_circle.setPosition(position);
+    setCircle(radius_circle, radius, RADIUS_COLOR, position);
+
     ray_sprite.setTexture(ray_texture_);
 
     sound_manager->loadSound(LASER_SOUND_FILENAME);
@@ -38,26 +28,54 @@ IceTower::IceTower(
 Cannon::Cannon(Vector2f position_, int price_, float cooldown_, Texture &texture_, float radius_, Texture &ray_texture_, Texture &explosion_texture_,
     shared_ptr<SoundManager> sound_manager_)
     : GameTower(position_, price_, cooldown_, texture_, radius_, ray_texture_, sound_manager_), explosion_texture(explosion_texture_) {
-    explosion_sprite.setTexture(explosion_texture_);
-    Vector2u tex_size = explosion_texture_.getSize();
-    explosion_sprite.setScale(2 * BOMB_RADIUS / tex_size.x, 2 * BOMB_RADIUS / tex_size.y);
+    setSprite(explosion_sprite, explosion_texture_, 2 * BOMB_RADIUS);
 }
 
 ShopTower::ShopTower(Vector2f position_, string name_, int price_, float size_, float cooldown_, Texture &texture_, float radius_)
     : Tower(position_, price_, cooldown_, texture_, radius_), name(name_), size(size_) {
-    FloatRect bounds = sprite.getLocalBounds();
-    sprite.setOrigin(bounds.left, bounds.top);
+    setNormalizedOrigin(sprite, 0, 0);
+    Vector2u tex_size = texture.getSize();
+    sprite.setScale(size / tex_size.x, size / tex_size.y);
+    FloatRect bounds = sprite.getGlobalBounds();
+    
+    if (!font.loadFromFile(DESCRIBTION_FONT_FILENAME)) {
+        cerr << "Could not load scoreboard font\n";
+    }
+
+    handleRect(description, Vector2f(SHOP_WIDTH, DESCRIPTION_HEIGHT), DESCRIPTION_COLOR, DESCRIPTION_OUTLINE, BACKGROUND_COLOR);
+    createText(desc_text, font, 12, Color::White);
+    createText(title, font, 12, Color::White);
+    setDescText();
+    handleRect(highlightRect, Vector2f(bounds.width, bounds.height), Color::Transparent, HIGHLIGHT_OUTLINE, Color::White, Vector2f(bounds.left, bounds.top));
 }
 
 void ShopTower::draw(RenderWindow &window) {
-    Vector2u tex_size = texture.getSize();
-    sprite.setScale(size / tex_size.x, size / tex_size.y);
-
     if (availble == true)
         sprite.setColor(Color::White);
     else
         sprite.setColor(UNAVAILBLE_TOWER_COLOR);
     window.draw(sprite);
+}
+
+void ShopTower::setShooterTitle() {
+    if (name == NORMAL_SHOOTER)
+        shooter_title = NORMAL_SHOOTER_TITLE;
+
+    else if (name == ICE_SHOOTER)
+        shooter_title = ICE_SHOOTER_TITLE;
+
+    else if (name == CANNON)
+        shooter_title = CANNON_TITLE;
+}
+
+void ShopTower::setDescText() {
+    std::ostringstream stream_for_radius;
+    std::ostringstream stream_for_cooldown;
+    stream_for_radius << std::fixed << std::setprecision(0) << radius;
+    stream_for_cooldown << std::fixed << std::setprecision(1) << cooldown;
+    title.setString("\n\n\n\n" + shooter_title);
+    desc_text.setString(
+        "\n\n\n COST: " + to_string(price) + "\n\n\n RADIUS: " + stream_for_radius.str() + "\n\n\n COOLDOWN: " + stream_for_cooldown.str() + " S");
 }
 
 void GameTower::draw(RenderWindow &window) {
@@ -93,59 +111,21 @@ bool Tower::containsMouse(Vector2i mouse_pos) {
 
 void ShopTower::handleBeingHovered(RenderWindow &window) {
     FloatRect bounds = sprite.getGlobalBounds();
-    RectangleShape description(Vector2f(SHOP_WIDTH, DESCRIPTION_HEIGHT));
     description.setPosition(window.getSize().x - SHOP_WIDTH, SCORE_BOARD_HEIGHT + bounds.height);
-    description.setFillColor(DESCRIPTION_COLOR);
-    description.setOutlineThickness(DESCRIPTION_OUTLINE);
-    description.setOutlineColor(BACKGROUND_COLOR);
 
-    Text text, title;
-    Font font;
-    if (!font.loadFromFile(DESCRIBTION_FONT_FILENAME)) {
-        cerr << "Could not load scoreboard font\n";
-    }
-
-    createText(text, font, 12, Color::White);
-    text.setPosition(description.getPosition());
-    createText(title, font, 12, Color::White);
-
-    std::ostringstream stream_for_radius;
-    std::ostringstream stream_for_cooldown;
-    stream_for_radius << std::fixed << std::setprecision(0) << radius;
-    stream_for_cooldown << std::fixed << std::setprecision(1) << cooldown;
-
-    string shooter_name;
-    if (name == NORMAL_SHOOTER)
-        shooter_name = NORMAL_SHOOTER_TITLE;
-
-    else if (name == ICE_SHOOTER)
-        shooter_name = ICE_SHOOTER_TITLE;
-
-    else if (name == CANNON)
-        shooter_name = CANNON_TITLE;
-
-    title.setString("\n\n\n\n" + shooter_name);
     FloatRect textBounds = title.getLocalBounds();
     title.setOrigin(textBounds.left + textBounds.width / 2.f, textBounds.top + textBounds.height / 2.f);
     title.setPosition(description.getPosition().x + SHOP_WIDTH / 2.f, description.getPosition().y);
-    text.setString(
-        "\n\n\n COST: " + to_string(price) + "\n\n\n RADIUS: " + stream_for_radius.str() + "\n\n\n COOLDOWN: " + stream_for_cooldown.str() + " S");
+    desc_text.setPosition(description.getPosition());
+
     window.draw(description);
     window.draw(title);
-    window.draw(text);
+    window.draw(desc_text);
 }
 
 void ShopTower::setAvailblity(bool status) { availble = status; }
 
 void ShopTower::highlight(RenderWindow &window) {
-    FloatRect bounds = sprite.getGlobalBounds();
-
-    RectangleShape highlightRect;
-    highlightRect.setSize(Vector2f(bounds.width, bounds.height));
-    highlightRect.setPosition(bounds.left, bounds.top);
-    highlightRect.setFillColor(Color::Transparent);
-    highlightRect.setOutlineColor(Color::White);
-    highlightRect.setOutlineThickness(HIGHLIGHT_OUTLINE);
     window.draw(highlightRect);
 }
 
